@@ -78,7 +78,6 @@ export default function Home() {
 
     let offset = 0;
     const distributePlayers = (players, offset) => {
-
       players.forEach((player, index) => {
         teams[(index + offset) % numTeams].push(player);
       });
@@ -126,18 +125,18 @@ export default function Home() {
         </div>
         <div>
           <h2>Players in Attendance</h2>
-          <button onClick={clearAttendance}>Clear All</button>
+          <button onClick={clearAttendance} className={styles.clearButton}>Clear All</button>
           {attendance.map(player => (
-            <div key={player.name} className={styles.playerPanel}>
-              <span>{player.name}</span>
-              <button onClick={() => removePlayerFromAttendance(player)}>X</button>
+            <div key={player.name} className='playerPanel'>
+              <div>{player.name}</div>
+              <div><button onClick={() => removePlayerFromAttendance(player)} className={styles.removeButton}>X</button></div>
             </div>
           ))}
         </div>
-        <button onClick={createTeams}>Create Teams</button>
+        <button onClick={createTeams} className={styles.createButton}>Create Teams</button>
         <div>
           <h2>Teams</h2>
-          <button onClick={clearTeams}>Reset Teams</button>
+          <button onClick={clearTeams} className={styles.clearButton}>Clear Teams</button>
           {teams.map((team, index) => (
             <div key={index}>
               <h3>Team {index + 1}</h3>
@@ -184,11 +183,15 @@ export default function Home() {
         }
         .playerButton {
           padding: 10px;
-          background-color: #0070f3;
+          background-color: #418fde;
           color: white;
           border: none;
           border-radius: 5px;
           cursor: pointer;
+          transition: background-color 0.3s;
+        }
+        .playerButton:hover {
+          background-color: #357acb;
         }
         .disabledButton {
           padding: 10px;
@@ -201,10 +204,46 @@ export default function Home() {
         .playerPanel {
           display: flex;
           justify-content: space-between;
-          align-items: center;
+          align-items: justify;
           border: 1px solid #ccc;
           padding: 10px;
-          margin: 5px 0;
+          margin: 10px 5px;
+          background-color: #f9f9f9;
+          border-radius: 5px;
+          position: relative;
+        }
+        .removeButton {
+          background-color: #fdda24;
+          color: black;
+          border: none;
+          border-radius: 50%;
+          width: 20px;
+          height: 20px;
+          display: flex;
+          margin-left: 10px;
+          padding-left: 10px;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+          position: absolute;
+          top: 5px;
+          right: 5px;
+        }
+        .removeButton:hover {
+          background-color: #e6c020;
+        }
+        .clearButton, .createButton {
+          padding: 10px;
+          background-color: #fdda24;
+          color: black;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+          margin: 5px;
+        }
+        .clearButton:hover, .createButton:hover {
+          background-color: #e6c020;
         }
       `}</style>
     </div>
