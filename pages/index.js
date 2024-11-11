@@ -78,12 +78,13 @@ export default function Home() {
 
     let offset = 0;
     const distributePlayers = (players, offset) => {
+
       players.forEach((player, index) => {
         teams[(index + offset) % numTeams].push(player);
       });
-      console.log("offset", offset);
+      const newOffset = (players.length + offset) % numTeams;
       // Return the offset for the next group of players
-      return players.length % numTeams;
+      return newOffset;
     };
 
     offset = distributePlayers(extraordinaryPlayers, offset);
@@ -111,13 +112,18 @@ export default function Home() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
-        <ul>
+        <div className={styles.grid}>
           {filteredPlayers.map(player => (
-            <li key={player.name} onClick={() => addPlayerToAttendance(player)}>
+            <button
+              key={player.name}
+              onClick={() => addPlayerToAttendance(player)}
+              disabled={attendance.some(p => p.name === player.name)}
+              className={attendance.some(p => p.name === player.name) ? styles.disabledButton : styles.playerButton}
+            >
               {player.name}
-            </li>
+            </button>
           ))}
-        </ul>
+        </div>
         <div>
           <h2>Players in Attendance</h2>
           <button onClick={clearAttendance}>Clear All</button>
@@ -131,7 +137,7 @@ export default function Home() {
         <button onClick={createTeams}>Create Teams</button>
         <div>
           <h2>Teams</h2>
-          <button onClick={clearTeams}>Clear Teams</button>
+          <button onClick={clearTeams}>Reset Teams</button>
           {teams.map((team, index) => (
             <div key={index}>
               <h3>Team {index + 1}</h3>
@@ -169,6 +175,28 @@ export default function Home() {
           width: 100%;
           height: 100px;
           border-top: 1px solid #eaeaea;
+        }
+        .grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+          gap: 10px;
+          margin: 20px 0;
+        }
+        .playerButton {
+          padding: 10px;
+          background-color: #0070f3;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+        .disabledButton {
+          padding: 10px;
+          background-color: #ccc;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: not-allowed;
         }
         .playerPanel {
           display: flex;
