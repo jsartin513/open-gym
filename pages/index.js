@@ -126,12 +126,14 @@ export default function Home() {
         <div>
           <h2>Players in Attendance</h2>
           <button onClick={clearAttendance} className={styles.clearButton}>Clear All</button>
-          {attendance.map(player => (
-            <div key={player.name} className='playerPanel'>
-              <div>{player.name}</div>
-              <div><button onClick={() => removePlayerFromAttendance(player)} className={styles.removeButton}>X</button></div>
-            </div>
-          ))}
+          <div className='attendanceGrid'>
+            {attendance.map(player => (
+              <div key={player.name} className='playerPanel'>
+                <div>{player.name}</div>
+                <div><button onClick={() => removePlayerFromAttendance(player)} className={styles.removeButton}>X</button></div>
+              </div>
+            ))}
+          </div>
         </div>
         <button onClick={createTeams} className={styles.createButton}>Create Teams</button>
         <div>
@@ -177,9 +179,15 @@ export default function Home() {
         }
         .grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(100px,1fr));
           gap: 10px;
           margin: 20px 0;
+        }
+        .attendanceGrid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+          gap: 10px;
+          margin: 10px 0;
         }
         .playerButton {
           padding: 10px;
@@ -204,10 +212,10 @@ export default function Home() {
         .playerPanel {
           display: flex;
           justify-content: space-between;
-          align-items: justify;
+          align-items: center;
           border: 1px solid #ccc;
           padding: 10px;
-          margin: 10px 5px;
+          margin: 5px 0;
           background-color: #f9f9f9;
           border-radius: 5px;
           position: relative;
@@ -220,8 +228,6 @@ export default function Home() {
           width: 20px;
           height: 20px;
           display: flex;
-          margin-left: 10px;
-          padding-left: 10px;
           justify-content: center;
           align-items: center;
           cursor: pointer;
