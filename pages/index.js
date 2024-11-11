@@ -3,8 +3,6 @@ import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 
 const regularPlayers = [
-  { name: 'John Doe', gender: 'male', extraStrongArm: true, skillLevel: 'advanced' },
-  { name: 'Jane Smith', gender: 'female', skillLevel: 'intermediate' },
   { name: 'Armando', gender: 'male', skillLevel: 'extraordinary' },
   { name: 'Brandon Kelley', gender: 'male', skillLevel: 'extraordinary' },
   { name: 'Bo', gender: 'male', skillLevel: 'very advanced' },
@@ -44,6 +42,14 @@ export default function Home() {
     setAttendance(attendance.filter(p => p.name !== player.name));
   };
 
+  const clearAttendance = () => {
+    setAttendance([]);
+  };
+
+  const clearTeams = () => {
+    setTeams([]);
+  };
+
   const filteredPlayers = regularPlayers.filter(player =>
     player.name.toLowerCase().includes(query.toLowerCase())
   );
@@ -60,16 +66,22 @@ export default function Home() {
 
     const teams = Array.from({ length: numTeams }, () => []);
 
-    const extraordinaryPlayers = attendance.filter(player => player.skillLevel === 'extraordinary');
-    const veryAdvancedPlayers = attendance.filter(player => player.skillLevel === 'very advanced');
-    const advancedPlayers = attendance.filter(player => player.skillLevel === 'advanced');
-    const intermediatePlayers = attendance.filter(player => player.skillLevel === 'intermediate');
+    const malePlayers = attendance.filter(player => player.gender === 'male');
+
+    const extraordinaryPlayers = malePlayers.filter(player => player.skillLevel === 'extraordinary');
+    const veryAdvancedPlayers = malePlayers.filter(player => player.skillLevel === 'very advanced');
+    const advancedPlayers = malePlayers.filter(player => player.skillLevel === 'advanced');
+    const intermediateStrongPlayers = malePlayers.filter(player => player.skillLevel === 'intermediate' && player.strongArm);
+    const intermediatePlayers = malePlayers.filter(player => player.skillLevel === 'intermediate' && !player.strongArm);
+
+    const femalePlayers = attendance.filter(player => player.gender === 'female'); // TODO: Other genders
 
     let offset = 0;
     const distributePlayers = (players, offset) => {
       players.forEach((player, index) => {
         teams[(index + offset) % numTeams].push(player);
       });
+      console.log("offset", offset);
       // Return the offset for the next group of players
       return players.length % numTeams;
     };
@@ -77,7 +89,9 @@ export default function Home() {
     offset = distributePlayers(extraordinaryPlayers, offset);
     offset = distributePlayers(veryAdvancedPlayers, offset);
     offset = distributePlayers(advancedPlayers, offset);
-    distributePlayers(intermediatePlayers, offset);
+    offset = distributePlayers(intermediateStrongPlayers, offset);
+    offset = distributePlayers(intermediatePlayers, offset);
+    offset = distributePlayers(femalePlayers, offset);
 
     setTeams(teams);
   };
@@ -106,6 +120,7 @@ export default function Home() {
         </ul>
         <div>
           <h2>Players in Attendance</h2>
+          <button onClick={clearAttendance}>Clear All</button>
           {attendance.map(player => (
             <div key={player.name} className={styles.playerPanel}>
               <span>{player.name}</span>
@@ -116,6 +131,7 @@ export default function Home() {
         <button onClick={createTeams}>Create Teams</button>
         <div>
           <h2>Teams</h2>
+          <button onClick={clearTeams}>Clear Teams</button>
           {teams.map((team, index) => (
             <div key={index}>
               <h3>Team {index + 1}</h3>
