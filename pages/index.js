@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 
@@ -31,6 +31,9 @@ export default function Home() {
   const [attendance, setAttendance] = useState([]);
   const [query, setQuery] = useState('');
   const [teams, setTeams] = useState([]);
+  const [availablePlayers, setAvailablePlayers] = useState([]);
+
+  useEffect(() =>{setAvailablePlayers([...regularPlayers])}, [])
 
   const addPlayerToAttendance = (player) => {
     if (!attendance.some(p => p.name === player.name)) {
@@ -50,7 +53,7 @@ export default function Home() {
     setTeams([]);
   };
 
-  const filteredPlayers = regularPlayers.filter(player =>
+  const filteredPlayers = availablePlayers.filter(player =>
     player.name.toLowerCase().includes(query.toLowerCase())
   );
 
