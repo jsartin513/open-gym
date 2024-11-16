@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 
@@ -31,9 +31,11 @@ export default function Home() {
   const [attendance, setAttendance] = useState([]);
   const [query, setQuery] = useState('');
   const [teams, setTeams] = useState([]);
-  const [availablePlayers, setAvailablePlayers] = useState([]);
-
-  useEffect(() =>{setAvailablePlayers([...regularPlayers])}, [])
+  const [availablePlayers, setAvailablePlayers] = useState([...regularPlayers]);
+  const [showModal, setShowModal] = useState(false);
+  const [newPlayerName, setNewPlayerName] = useState('');
+  const [newPlayerGender, setNewPlayerGender] = useState('');
+  const [newPlayerSkillLevel, setNewPlayerSkillLevel] = useState('intermediate');
 
   const addPlayerToAttendance = (player) => {
     if (!attendance.some(p => p.name === player.name)) {
@@ -51,6 +53,26 @@ export default function Home() {
 
   const clearTeams = () => {
     setTeams([]);
+  };
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setQuery(value);
+    const playerExists = availablePlayers.some(player => player.name.toLowerCase().includes(value.toLowerCase()));
+    if (!playerExists && value !== '') {
+      setNewPlayerName(value);
+      setShowModal(true);
+    }
+  };
+
+  const handleAddNewPlayer = () => {
+    const newPlayer = { name: newPlayerName, gender: newPlayerGender, skillLevel: newPlayerSkillLevel };
+    setAvailablePlayers([...availablePlayers, newPlayer])
+    addPlayerToAttendance(newPlayer);
+    setShowModal(false);
+    setNewPlayerName('');
+    setNewPlayerSkillLevel('intermediate');
+    setQuery('');
   };
 
   const filteredPlayers = availablePlayers.filter(player =>
@@ -116,7 +138,7 @@ export default function Home() {
           type="text"
           placeholder="Search or add players..."
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={handleSearchChange}
         />
         <div className={styles.grid}>
           {filteredPlayers.map(player => (
@@ -159,6 +181,36 @@ export default function Home() {
         </div>
       </main>
 
+      {showModal && (
+        <div className="modal">
+          <div className="modalContent">
+            <h2>Add New Player</h2>
+            <input
+              type="text"
+              placeholder="New Player Name"
+              value={newPlayerName}
+              onChange={(e) => setNewPlayerName(e.target.value)}
+            />
+            <select
+              value={newPlayerGender}
+              onChange={(e) => setNewPlayerGender(e.target.value)}
+            >
+              <option value="male">male</option>
+              <option value="female">female</option>
+            </select>
+            <select
+              value={newPlayerSkillLevel}
+              onChange={(e) => setNewPlayerSkillLevel(e.target.value)}
+            >
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
+            <button onClick={handleAddNewPlayer} className={styles.addButton}>Add Player</button>
+            <button onClick={() => setShowModal(false)} className={styles.cancelButton}>Cancel</button>
+          </div>
+        </div>
+      )}
+
       <footer>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
@@ -186,15 +238,15 @@ export default function Home() {
         }
         .grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(100px,1fr));
+          grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
           gap: 10px;
           margin: 20px 0;
         }
         .attendanceGrid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
           gap: 10px;
-          margin: 10px 0;
+          margin: 20px 0;
         }
         .playerButton {
           padding: 10px;
@@ -257,6 +309,38 @@ export default function Home() {
         }
         .clearButton:hover, .createButton:hover {
           background-color: #e6c020;
+        }
+        .modal {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .modalContent {
+          background-color: white;
+          padding: 20px;
+          border-radius: 5px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .addButton, .cancelButton {
+          padding: 10px;
+          background-color: #418fde;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+          margin: 5px;
+        }
+        .addButton:hover, .cancelButton:hover {
+          background-color: #357acb;
         }
       `}</style>
     </div>
