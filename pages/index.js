@@ -75,8 +75,6 @@ export default function Home() {
     const ordered_skill_levels = ['extraordinary', 'very advanced', 'advanced', 'intermediate']
 
 
-    const malePlayers = attendance.filter(player => player.gender === 'male');
-
     let orderedPlayers = [];
     ordered_genders.forEach((gender) => 
     {  
@@ -89,17 +87,6 @@ export default function Home() {
       )
     })
 
-
-    let offset = 0;
-    const distributePlayers = (players, offset) => {
-      players.forEach((player, index) => {
-        teams[(index + offset) % numTeams].push(player);
-      });
-      const newOffset = (players.length + offset) % numTeams;
-      // Return the offset for the next group of players
-      return newOffset;
-    };
-
     const distributePlayersBySnake = (playersSkillOrdered) => {
       let descending = false;
       playersSkillOrdered.forEach((player, index) => {
@@ -111,7 +98,6 @@ export default function Home() {
       });
 
     }
-    // distributePlayers(orderedPlayers, offset);
     distributePlayersBySnake(orderedPlayers);
 
     setTeams(teams);
