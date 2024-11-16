@@ -59,7 +59,6 @@ export default function Home() {
 
   const createTeams = () => {
     const numPlayers = attendance.length;
-    console.log("numPlayers", numPlayers)
     let numTeams = 2;
 
     if (numPlayers >= 15 && numPlayers <= 19) {
@@ -70,7 +69,6 @@ export default function Home() {
     
 
     const teams = Array.from({ length: numTeams }, () => []);
-    console.log(teams)
 
 
     const ordered_genders = ['male', 'female']
@@ -91,13 +89,6 @@ export default function Home() {
       )
     })
 
-    const extraordinaryPlayers = malePlayers.filter(player => player.skillLevel === 'extraordinary');
-    const veryAdvancedPlayers = malePlayers.filter(player => player.skillLevel === 'very advanced');
-    const advancedPlayers = malePlayers.filter(player => player.skillLevel === 'advanced');
-    const intermediateStrongPlayers = malePlayers.filter(player => player.skillLevel === 'intermediate' && player.strongArm);
-    const intermediatePlayers = malePlayers.filter(player => player.skillLevel === 'intermediate' && !player.strongArm);
-
-    const femalePlayers = attendance.filter(player => player.gender === 'female'); // TODO: Other genders
 
     let offset = 0;
     const distributePlayers = (players, offset) => {
@@ -108,15 +99,20 @@ export default function Home() {
       // Return the offset for the next group of players
       return newOffset;
     };
-    console.log("orderedPlayers", orderedPlayers)
-    distributePlayers(orderedPlayers, offset);
 
-    // offset = distributePlayers(extraordinaryPlayers, offset);
-    // offset = distributePlayers(veryAdvancedPlayers, offset);
-    // offset = distributePlayers(advancedPlayers, offset);
-    // offset = distributePlayers(intermediateStrongPlayers, offset);
-    // offset = distributePlayers(intermediatePlayers, offset);
-    // offset = distributePlayers(femalePlayers, offset);
+    const distributePlayersBySnake = (playersSkillOrdered) => {
+      let descending = false;
+      playersSkillOrdered.forEach((player, index) => {
+        const playerTeam = descending ? (numTeams - (index % numTeams) - 1)  : index % numTeams
+        teams[playerTeam].push(player);
+        if ((descending && playerTeam === 0) || (!descending && playerTeam === numTeams - 1)){
+          descending = !!!descending;
+        }
+      });
+
+    }
+    // distributePlayers(orderedPlayers, offset);
+    distributePlayersBySnake(orderedPlayers);
 
     setTeams(teams);
   };
