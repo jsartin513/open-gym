@@ -59,6 +59,7 @@ export default function Home() {
 
   const createTeams = () => {
     const numPlayers = attendance.length;
+    console.log("numPlayers", numPlayers)
     let numTeams = 2;
 
     if (numPlayers >= 15 && numPlayers <= 19) {
@@ -66,10 +67,29 @@ export default function Home() {
     } else if (numPlayers >= 20 && numPlayers <= 32) {
       numTeams = 4;
     }
+    
 
     const teams = Array.from({ length: numTeams }, () => []);
+    console.log(teams)
+
+
+    const ordered_genders = ['male', 'female']
+    const ordered_skill_levels = ['extraordinary', 'very advanced', 'advanced', 'intermediate']
+
 
     const malePlayers = attendance.filter(player => player.gender === 'male');
+
+    let orderedPlayers = [];
+    ordered_genders.forEach((gender) => 
+    {  
+      const thisGenderPlayers = attendance.filter(player => player.gender === gender)
+      ordered_skill_levels.forEach(
+        (skillLevel) => {
+        const playerSet = thisGenderPlayers.filter(player => player.skillLevel === skillLevel)
+        orderedPlayers = [...orderedPlayers, ...playerSet]
+        }
+      )
+    })
 
     const extraordinaryPlayers = malePlayers.filter(player => player.skillLevel === 'extraordinary');
     const veryAdvancedPlayers = malePlayers.filter(player => player.skillLevel === 'very advanced');
@@ -88,13 +108,15 @@ export default function Home() {
       // Return the offset for the next group of players
       return newOffset;
     };
+    console.log("orderedPlayers", orderedPlayers)
+    distributePlayers(orderedPlayers, offset);
 
-    offset = distributePlayers(extraordinaryPlayers, offset);
-    offset = distributePlayers(veryAdvancedPlayers, offset);
-    offset = distributePlayers(advancedPlayers, offset);
-    offset = distributePlayers(intermediateStrongPlayers, offset);
-    offset = distributePlayers(intermediatePlayers, offset);
-    offset = distributePlayers(femalePlayers, offset);
+    // offset = distributePlayers(extraordinaryPlayers, offset);
+    // offset = distributePlayers(veryAdvancedPlayers, offset);
+    // offset = distributePlayers(advancedPlayers, offset);
+    // offset = distributePlayers(intermediateStrongPlayers, offset);
+    // offset = distributePlayers(intermediatePlayers, offset);
+    // offset = distributePlayers(femalePlayers, offset);
 
     setTeams(teams);
   };
@@ -110,7 +132,7 @@ export default function Home() {
         <h1>Open Gym Teammaker</h1>
         <input
           type="text"
-          placeholder="Search players..."
+          placeholder="Search or add players..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
