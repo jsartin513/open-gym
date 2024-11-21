@@ -12,6 +12,7 @@ export default function Home() {
   const [availablePlayers, setAvailablePlayers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showAvailablePlayers, setShowAvailablePlayers] = useState(true);
+  const [showPlayersInAttendance, setShowPlayersInAttendance] = useState(true);
   const [newPlayerName, setNewPlayerName] = useState('');
   const [newPlayerGender, setNewPlayerGender] = useState('');
   const [newPlayerSkillLevel, setNewPlayerSkillLevel] = useState('intermediate');
@@ -157,9 +158,12 @@ export default function Home() {
         <h2>Add Player to Attendance  <button onClick={() => setShowAvailablePlayers(!showAvailablePlayers)} className={styles.toggleButton}>{showAvailablePlayers ? 'Hide' : 'Show'} Available Players
         </button></h2>
         </div>
-          <h2>Players in Attendance</h2>
+
+        <div className={showPlayersInAttendance ? styles.collapsiblePanel.open : styles.collapsiblePanel}>
+        <h2>Players in Attendance  <button onClick={() => setShowPlayersInAttendance(!showPlayersInAttendance)} className={styles.toggleButton}>{showPlayersInAttendance ? 'Hide' : 'Show'} Tonight's Players
+        </button></h2>
           <button onClick={clearAttendance} className={styles.clearButton}>Clear All</button>
-           
+          
           <div className={styles.attendanceGrid}>
             {attendance.map(player => (
               <div key={player.name} className={styles.playerPanel}>
@@ -168,7 +172,12 @@ export default function Home() {
               </div>
             ))}
           </div>
-        <button onClick={createTeams} className={styles.createButton}>Create Teams</button>
+                  <button onClick={createTeams} className={styles.createButton}>Create Teams</button>
+        </div>
+        <div className={showPlayersInAttendance ? styles.collapsiblePanel : styles.collapsiblePanel.open}>
+        <h2>Players in Attendance  <button onClick={() => setShowPlayersInAttendance(!showPlayersInAttendance)} className={styles.toggleButton}>{showPlayersInAttendance ? 'Hide' : 'Show'} Tonight's Players
+        </button></h2>
+        </div>
         <div>
           <h2>Teams</h2>
           <button onClick={clearTeams} className={styles.clearButton}>Clear Teams</button>
