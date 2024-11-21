@@ -57,7 +57,7 @@ export default function Home() {
     const csvUrl = process.env.NEXT_PUBLIC_CSV_URL; // Replace with your Google Sheets CSV file URL
     axios.get(csvUrl)
     .then((response) => {
-        const parsedCsvData = parseCSV(response.data);
+        const parsedCsvData = parseCSV(response.data).sort((a, b) => b.frequency - a.frequency);
         setAvailablePlayers(parsedCsvData);
         console.log(parsedCsvData);
     })
