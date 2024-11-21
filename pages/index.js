@@ -194,7 +194,9 @@ export default function Home() {
           toggleOpen={() => setShowPlayersInAttendance(!showPlayersInAttendance)}
         >
           <button onClick={clearAttendance} className={styles.clearButton}>Clear All</button>
-          <div className={styles.attendanceGrid}>
+          <button onClick={createTeams} className={styles.createButton}>Create Teams</button>
+
+          <div className={styles.grid}>
             {attendance.map(player => (
               <div key={player.name} className={styles.playerPanel}>
                 <div>{player.name}</div>
@@ -202,7 +204,6 @@ export default function Home() {
               </div>
             ))}
           </div>
-          <button onClick={createTeams} className={styles.createButton}>Create Teams</button>
         </CollapsiblePanel>
 
         <div>

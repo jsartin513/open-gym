@@ -97,18 +97,12 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     width: 100%;
-    height: 400px;
+    max-height: 400px;
     overflow-y: scroll;
     gap: 10px;
     margin: 20px 0;
 }
-.attendanceGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    width: 100%;
-    gap: 10px;
-    margin: 20px 0;
-}
+
 .playerButton {
     padding: 10px;
     background-color: #418fde;
