@@ -212,6 +212,7 @@ export default function Home() {
         <div>
           <h2>Teams</h2>
           <button onClick={clearTeams} className={styles.clearButton}>Clear Teams</button>
+          <button onClick={createTeams} className={styles.createButton}>Create/Update Teams</button>
           <div className={styles.teamOuter}>
             {teams.map((team, index) => (
               <div key={index}>
