@@ -35,7 +35,6 @@ export default function Home() {
     .then((response) => {
         const parsedCsvData = parseCSV(response.data).sort((a, b) => b.frequency - a.frequency).filter(player => player.frequency > 2);
         setAvailablePlayers(parsedCsvData);
-        console.log(parsedCsvData);
     })
     .catch((error) => {
         console.error('Error fetching CSV data:', error);
@@ -117,8 +116,6 @@ export default function Home() {
         }
       )
     })
-
-    console.log("orderedPlayers", orderedPlayers)
 
     const distributePlayersBySnake = (playersSkillOrdered) => {
       let descending = false;
