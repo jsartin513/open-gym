@@ -122,6 +122,18 @@ export default function Home() {
     setTeams(teams);
   };
 
+  const CollapsiblePanel = ({ title, isOpen, toggleOpen, children }) => (
+    <div className={isOpen ? styles.collapsiblePanel.open : styles.collapsiblePanel}>
+      <h2>
+        {title}
+        <button onClick={toggleOpen} className={styles.toggleButton}>
+          {isOpen ? 'Hide' : 'Show'}
+        </button>
+      </h2>
+      {isOpen && children}
+    </div>
+  );
+
   return (
     <div className={styles.container}>
       <Head>
@@ -131,10 +143,11 @@ export default function Home() {
 
       <main>
         <h1>Open Gym Teammaker</h1>
-        <div className={showAvailablePlayers ? styles.collapsiblePanel.open : styles.collapsiblePanel}>
-          <h2>Add Player to Attendance  <button onClick={() => setShowAvailablePlayers(!showAvailablePlayers)} className={styles.toggleButton}>
-            {showAvailablePlayers ? 'Hide' : 'Show'} Available Players
-            </button></h2>
+        <CollapsiblePanel
+          title="Add Player to Attendance"
+          isOpen={showAvailablePlayers}
+          toggleOpen={() => setShowAvailablePlayers(!showAvailablePlayers)}
+        >
           <input
             type="text"
             placeholder="Search or add players..."
@@ -153,17 +166,14 @@ export default function Home() {
               </button>
             ))}
           </div>
-        </div>
-        <div className={showAvailablePlayers ? styles.collapsiblePanel : styles.collapsiblePanel.open}>
-        <h2>Add Player to Attendance  <button onClick={() => setShowAvailablePlayers(!showAvailablePlayers)} className={styles.toggleButton}>{showAvailablePlayers ? 'Hide' : 'Show'} Available Players
-        </button></h2>
-        </div>
+        </CollapsiblePanel>
 
-        <div className={showPlayersInAttendance ? styles.collapsiblePanel.open : styles.collapsiblePanel}>
-        <h2>Players in Attendance  <button onClick={() => setShowPlayersInAttendance(!showPlayersInAttendance)} className={styles.toggleButton}>{showPlayersInAttendance ? 'Hide' : 'Show'} Tonight's Players
-        </button></h2>
+        <CollapsiblePanel
+          title="Players in Attendance"
+          isOpen={showPlayersInAttendance}
+          toggleOpen={() => setShowPlayersInAttendance(!showPlayersInAttendance)}
+        >
           <button onClick={clearAttendance} className={styles.clearButton}>Clear All</button>
-          
           <div className={styles.attendanceGrid}>
             {attendance.map(player => (
               <div key={player.name} className={styles.playerPanel}>
@@ -172,12 +182,9 @@ export default function Home() {
               </div>
             ))}
           </div>
-                  <button onClick={createTeams} className={styles.createButton}>Create Teams</button>
-        </div>
-        <div className={showPlayersInAttendance ? styles.collapsiblePanel : styles.collapsiblePanel.open}>
-        <h2>Players in Attendance  <button onClick={() => setShowPlayersInAttendance(!showPlayersInAttendance)} className={styles.toggleButton}>{showPlayersInAttendance ? 'Hide' : 'Show'} Tonight's Players
-        </button></h2>
-        </div>
+          <button onClick={createTeams} className={styles.createButton}>Create Teams</button>
+        </CollapsiblePanel>
+
         <div>
           <h2>Teams</h2>
           <button onClick={clearTeams} className={styles.clearButton}>Clear Teams</button>
