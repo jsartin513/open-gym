@@ -191,7 +191,7 @@
     align-items: center;
 }
 .addButton, .cancelButton {
-    padding: 10px;
+    padding: 10px;  
     background-color: #418fde;
     color: white;
     border: none;
@@ -202,4 +202,15 @@
 }
 .addButton:hover, .cancelButton:hover {
     background-color: #357acb;
+}
+
+.collapsiblePanel {
+  width: 100%;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  max-height: 0;
+}
+
+.collapsiblePanel.open {
+  max-height: 500px; /* Adjust as needed */
 }

@@ -11,6 +11,7 @@ export default function Home() {
   const [teams, setTeams] = useState([]);
   const [availablePlayers, setAvailablePlayers] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [showAvailablePlayers, setShowAvailablePlayers] = useState(true);
   const [newPlayerName, setNewPlayerName] = useState('');
   const [newPlayerGender, setNewPlayerGender] = useState('');
   const [newPlayerSkillLevel, setNewPlayerSkillLevel] = useState('intermediate');
@@ -88,7 +89,7 @@ export default function Home() {
     const teams = Array.from({ length: numTeams }, () => []);
 
 
-    const ordered_genders = ['male', 'female']
+    const ordered_genders = ['male', 'nonbinary', 'female']
     const ordered_skill_levels = ['anarchy', 'elite', 'advanced', 'intermediate']
 
 
@@ -129,27 +130,36 @@ export default function Home() {
 
       <main>
         <h1>Open Gym Teammaker</h1>
-        <h2>Add Player to Attendance</h2>
-        <input
-          type="text"
-          placeholder="Search or add players..."
-          value={query}
-          onChange={handleSearchChange}
-        />
-        <div className={styles.grid}>
-          {filteredPlayers.map(player => (
-            <button
-              key={player.name}
-              onClick={() => addPlayerToAttendance(player)}
-              disabled={attendance.some(p => p.name === player.name)}
-              className={attendance.some(p => p.name === player.name) ? styles.disabledButton : styles.playerButton}
-            >
-              {player.name}
-            </button>
-          ))}
+        <div className={showAvailablePlayers ? styles.collapsiblePanel.open : styles.collapsiblePanel}>
+          <h2>Add Player to Attendance  <button onClick={() => setShowAvailablePlayers(!showAvailablePlayers)} className={styles.toggleButton}>
+            {showAvailablePlayers ? 'Hide' : 'Show'} Available Players
+            </button></h2>
+          <input
+            type="text"
+            placeholder="Search or add players..."
+            value={query}
+            onChange={handleSearchChange}
+          />
+          <div className={styles.grid}>
+            {filteredPlayers.map(player => (
+              <button
+                key={player.name}
+                onClick={() => addPlayerToAttendance(player)}
+                disabled={attendance.some(p => p.name === player.name)}
+                className={attendance.some(p => p.name === player.name) ? styles.disabledButton : styles.playerButton}
+              >
+                {player.name}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className={showAvailablePlayers ? styles.collapsiblePanel : styles.collapsiblePanel.open}>
+        <h2>Add Player to Attendance  <button onClick={() => setShowAvailablePlayers(!showAvailablePlayers)} className={styles.toggleButton}>{showAvailablePlayers ? 'Hide' : 'Show'} Available Players
+        </button></h2>
         </div>
           <h2>Players in Attendance</h2>
           <button onClick={clearAttendance} className={styles.clearButton}>Clear All</button>
+           
           <div className={styles.attendanceGrid}>
             {attendance.map(player => (
               <div key={player.name} className={styles.playerPanel}>
