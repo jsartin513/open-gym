@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Head from 'next/head';
+import CollapsiblePanel from './components/CollapsiblePanel';
 import styles from '../styles/Home.module.css';
 import { parseCSV } from '../utils/csv.js';
 
@@ -152,17 +153,7 @@ export default function Home() {
     setTeams(teams);
   };
 
-  const CollapsiblePanel = ({ title, isOpen, toggleOpen, children }) => (
-    <div className={isOpen ? styles.collapsiblePanel.open : styles.collapsiblePanel}>
-      <h2>
-        {title}
-        <button onClick={toggleOpen} className={styles.toggleButton}>
-          {isOpen ? 'Hide' : 'Show'}
-        </button>
-      </h2>
-      {isOpen && children}
-    </div>
-  );
+
 
   return (
     <div className={styles.container}>
@@ -272,6 +263,7 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           Powered by{' '}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/vercel.svg" alt="Vercel" className={styles.logo} />
         </a>
       </footer>
