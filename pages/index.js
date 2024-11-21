@@ -96,7 +96,8 @@ export default function Home() {
     player.name.toLowerCase().includes(query.toLowerCase())
   );
 
-  const createTeams = () => {
+
+  const numberOfTeams = () => {
     const numPlayers = attendance.length;
     let numTeams = 2;
 
@@ -108,7 +109,13 @@ export default function Home() {
     else {
       numTeams = Math.floor(numPlayers / 8); // Max out at 8 players per team
     }
-    
+    return numTeams;
+  }
+
+
+
+  const createTeams = () => {
+    const numTeams = numberOfTeams();
 
     const teams = Array.from({ length: numTeams }, () => []);
 
