@@ -34,6 +34,26 @@ export default function Home() {
     fetchPlayerData();
   }, []);
 
+  useEffect(() => {
+    const savedAttendance = localStorage.getItem('attendance');
+    if (savedAttendance) {
+      setAttendance(JSON.parse(savedAttendance));
+    }
+
+    const savedTeams = localStorage.getItem('teams');
+    if (savedTeams) {
+      setTeams(JSON.parse(savedTeams));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('attendance', JSON.stringify(attendance));
+  }, [attendance]);
+
+  useEffect(() => {
+    localStorage.setItem('teams', JSON.stringify(teams));
+  }, [teams]);
+
   function addPlayerToAttendance(player) {
     if (!attendance.some(p => p.name === player.name)) {
       setAttendance([...attendance, player]);
