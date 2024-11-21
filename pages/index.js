@@ -33,7 +33,7 @@ export default function Home() {
     const csvUrl = process.env.NEXT_PUBLIC_CSV_URL; // Replace with your Google Sheets CSV file URL
     axios.get(csvUrl)
     .then((response) => {
-        const parsedCsvData = parseCSV(response.data).sort((a, b) => b.frequency - a.frequency);
+        const parsedCsvData = parseCSV(response.data).sort((a, b) => b.frequency - a.frequency).filter(player => player.frequency > 2);
         setAvailablePlayers(parsedCsvData);
         console.log(parsedCsvData);
     })
@@ -164,7 +164,6 @@ export default function Home() {
             </button>
           ))}
         </div>
-        <div>
           <h2>Players in Attendance</h2>
           <button onClick={clearAttendance} className='clearButton'>Clear All</button>
           <div className='attendanceGrid'>
@@ -175,7 +174,6 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </div>
         <button onClick={createTeams} className='createButton'>Create Teams</button>
         <div>
           <h2>Teams</h2>
@@ -242,6 +240,7 @@ export default function Home() {
           flex-direction: column;
           justify-content: center;
           align-items: center;
+          width: 80%;
         }
         footer {
           width: 100%;
@@ -250,7 +249,7 @@ export default function Home() {
         }
         .grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
           width: 100%;
           height: 400px;
           overflow-y: scroll;
@@ -259,7 +258,7 @@ export default function Home() {
         }
         .attendanceGrid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
           width: 100%;
           gap: 10px;
           margin: 20px 0;
