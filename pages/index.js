@@ -105,6 +105,9 @@ export default function Home() {
     } else if (numPlayers >= 20 && numPlayers <= 32) {
       numTeams = 4;
     }
+    else {
+      numTeams = Math.floor(numPlayers / 8); // Max out at 8 players per team
+    }
     
 
     const teams = Array.from({ length: numTeams }, () => []);
