@@ -136,32 +136,32 @@ export default function Home() {
           value={query}
           onChange={handleSearchChange}
         />
-        <div className='grid'>
+        <div className={styles.grid}>
           {filteredPlayers.map(player => (
             <button
               key={player.name}
               onClick={() => addPlayerToAttendance(player)}
               disabled={attendance.some(p => p.name === player.name)}
-              className={attendance.some(p => p.name === player.name) ? 'disabledButton' : 'playerButton'}
+              className={attendance.some(p => p.name === player.name) ? styles.disabledButton : styles.playerButton}
             >
               {player.name}
             </button>
           ))}
         </div>
           <h2>Players in Attendance</h2>
-          <button onClick={clearAttendance} className='clearButton'>Clear All</button>
-          <div className='attendanceGrid'>
+          <button onClick={clearAttendance} className={styles.clearButton}>Clear All</button>
+          <div className={styles.attendanceGrid}>
             {attendance.map(player => (
-              <div key={player.name} className='playerPanel'>
+              <div key={player.name} className={styles.playerPanel}>
                 <div>{player.name}</div>
-                <div><button onClick={() => removePlayerFromAttendance(player)} className='removeButton'>X</button></div>
+                <div><button onClick={() => removePlayerFromAttendance(player)} className={styles.removeButton}>X</button></div>
               </div>
             ))}
           </div>
-        <button onClick={createTeams} className='createButton'>Create Teams</button>
+        <button onClick={createTeams} className={styles.createButton}>Create Teams</button>
         <div>
           <h2>Teams</h2>
-          <button onClick={clearTeams} className='clearButton'>Clear Teams</button>
+          <button onClick={clearTeams} className={styles.clearButton}>Clear Teams</button>
           {teams.map((team, index) => (
             <div key={index}>
               <h3>Team {index + 1}</h3>
@@ -176,8 +176,8 @@ export default function Home() {
       </main>
 
       {showModal && (
-        <div className="modal">
-          <div className="modalContent">
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
             <h2>Add New Player</h2>
             <input
               type="text"
@@ -199,8 +199,8 @@ export default function Home() {
               <option value="intermediate">Intermediate</option>
               <option value="advanced">Advanced</option>
             </select>
-            <button onClick={handleAddNewPlayer} className='addButton'>Add Player</button>
-            <button onClick={() => setShowModal(false)} className='cancelButton'>Cancel</button>
+            <button onClick={handleAddNewPlayer} className={styles.addButton}>Add Player</button>
+            <button onClick={() => setShowModal(false)} className={styles.cancelButton}>Cancel</button>
           </div>
         </div>
       )}
@@ -225,122 +225,12 @@ export default function Home() {
           justify-content: center;
           align-items: center;
           width: 80%;
-        }
-        footer {
+      }
+      footer {
           width: 100%;
           height: 100px;
           border-top: 1px solid #eaeaea;
-        }
-        .grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-          width: 100%;
-          height: 400px;
-          overflow-y: scroll;
-          gap: 10px;
-          margin: 20px 0;
-        }
-        .attendanceGrid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-          width: 100%;
-          gap: 10px;
-          margin: 20px 0;
-        }
-        .playerButton {
-          padding: 10px;
-          background-color: #418fde;
-          color: white;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          transition: background-color 0.3s;
-        }
-        .playerButton:hover {
-          background-color: #357acb;
-        }
-        .disabledButton {
-          padding: 10px;
-          background-color: #ccc;
-          color: white;
-          border: none;
-          border-radius: 5px;
-          cursor: not-allowed;
-        }
-        .playerPanel {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          border: 1px solid #ccc;
-          padding: 10px;
-          margin: 5px 0;
-          background-color: #f9f9f9;
-          border-radius: 5px;
-          position: relative;
-        }
-        .removeButton {
-          background-color: #fdda24;
-          color: black;
-          border: none;
-          border-radius: 50%;
-          width: 20px;
-          height: 20px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          cursor: pointer;
-          position: absolute;
-          top: 5px;
-          right: 5px;
-        }
-        .removeButton:hover {
-          background-color: #e6c020;
-        }
-        .clearButton, .createButton {
-          padding: 10px;
-          background-color: #fdda24;
-          color: black;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          transition: background-color 0.3s;
-          margin: 5px;
-        }
-        .clearButton:hover, .createButton:hover {
-          background-color: #e6c020;
-        }
-        .modal {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background-color: rgba(0, 0, 0, 0.5);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        .modalContent {
-          background-color: white;
-          padding: 20px;
-          border-radius: 5px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-        .addButton, .cancelButton {
-          padding: 10px;
-          background-color: #418fde;
-          color: white;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          transition: background-color 0.3s;
-          margin: 5px;
-        }
-        .addButton:hover, .cancelButton:hover {
-          background-color: #357acb;
-        }
+      }
       `}</style>
     </div>
   );
