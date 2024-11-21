@@ -103,20 +103,22 @@ export default function Home() {
 
 
     const ordered_genders = ['male', 'female']
-    const ordered_skill_levels = ['extraordinary', 'very advanced', 'advanced', 'intermediate']
+    const ordered_skill_levels = ['anarchy', 'elite', 'advanced', 'intermediate']
 
 
     let orderedPlayers = [];
     ordered_genders.forEach((gender) => 
     {  
-      const thisGenderPlayers = attendance.filter(player => player.gender === gender)
+      const thisGenderPlayers = attendance.filter(player => player.gender.toLowerCase() === gender)
       ordered_skill_levels.forEach(
         (skillLevel) => {
-        const playerSet = thisGenderPlayers.filter(player => player.skillLevel === skillLevel)
+        const playerSet = thisGenderPlayers.filter(player => player.skillLevel.toLowerCase() === skillLevel)
         orderedPlayers = [...orderedPlayers, ...playerSet]
         }
       )
     })
+
+    console.log("orderedPlayers", orderedPlayers)
 
     const distributePlayersBySnake = (playersSkillOrdered) => {
       let descending = false;
@@ -143,19 +145,20 @@ export default function Home() {
 
       <main>
         <h1>Open Gym Teammaker</h1>
+        <h2>Add Player to Attendance</h2>
         <input
           type="text"
           placeholder="Search or add players..."
           value={query}
           onChange={handleSearchChange}
         />
-        <div className={styles.grid}>
+        <div className='grid'>
           {filteredPlayers.map(player => (
             <button
               key={player.name}
               onClick={() => addPlayerToAttendance(player)}
               disabled={attendance.some(p => p.name === player.name)}
-              className={attendance.some(p => p.name === player.name) ? styles.disabledButton : styles.playerButton}
+              className={attendance.some(p => p.name === player.name) ? 'disabledButton' : 'playerButton'}
             >
               {player.name}
             </button>
@@ -163,20 +166,20 @@ export default function Home() {
         </div>
         <div>
           <h2>Players in Attendance</h2>
-          <button onClick={clearAttendance} className={styles.clearButton}>Clear All</button>
+          <button onClick={clearAttendance} className='clearButton'>Clear All</button>
           <div className='attendanceGrid'>
             {attendance.map(player => (
               <div key={player.name} className='playerPanel'>
                 <div>{player.name}</div>
-                <div><button onClick={() => removePlayerFromAttendance(player)} className={styles.removeButton}>X</button></div>
+                <div><button onClick={() => removePlayerFromAttendance(player)} className='removeButton'>X</button></div>
               </div>
             ))}
           </div>
         </div>
-        <button onClick={createTeams} className={styles.createButton}>Create Teams</button>
+        <button onClick={createTeams} className='createButton'>Create Teams</button>
         <div>
           <h2>Teams</h2>
-          <button onClick={clearTeams} className={styles.clearButton}>Clear Teams</button>
+          <button onClick={clearTeams} className='clearButton'>Clear Teams</button>
           {teams.map((team, index) => (
             <div key={index}>
               <h3>Team {index + 1}</h3>
@@ -214,8 +217,8 @@ export default function Home() {
               <option value="intermediate">Intermediate</option>
               <option value="advanced">Advanced</option>
             </select>
-            <button onClick={handleAddNewPlayer} className={styles.addButton}>Add Player</button>
-            <button onClick={() => setShowModal(false)} className={styles.cancelButton}>Cancel</button>
+            <button onClick={handleAddNewPlayer} className='addButton'>Add Player</button>
+            <button onClick={() => setShowModal(false)} className='cancelButton'>Cancel</button>
           </div>
         </div>
       )}
@@ -247,13 +250,17 @@ export default function Home() {
         }
         .grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+          width: 100%;
+          height: 400px;
+          overflow-y: scroll;
           gap: 10px;
           margin: 20px 0;
         }
         .attendanceGrid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+          width: 100%;
           gap: 10px;
           margin: 20px 0;
         }
