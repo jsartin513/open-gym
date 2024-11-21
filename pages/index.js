@@ -3,36 +3,12 @@ import axios from 'axios';
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 
-const regularPlayers = [
-  { name: 'Armando', gender: 'male', skillLevel: 'extraordinary' },
-  { name: 'Brandon Kelley', gender: 'male', skillLevel: 'extraordinary' },
-  { name: 'Bo', gender: 'male', skillLevel: 'very advanced' },
-  { name: 'Kyle', gender: 'male', skillLevel: 'very advanced' },
-  { name: 'Decker', gender: 'male', skillLevel: 'very advanced' },
-  { name: 'Zach', gender: 'male', skillLevel: 'advanced' },
-  { name: 'Alex', gender: 'male', skillLevel: 'advanced' },
-  { name: 'Dave Hollm', gender: 'male', skillLevel: 'advanced' },
-  { name: 'Jon', gender: 'male', skillLevel: 'advanced' },
-  { name: 'Nick Scali', gender: 'male', skillLevel: 'advanced' },
-  { name: 'Nick Trask', gender: 'male', skillLevel: 'intermediate' },
-  { name: 'Garrett', gender: 'male', skillLevel: 'intermediate', strongArm: true },
-  { name: 'Matt C', gender: 'male', skillLevel: 'intermediate', strongArm: true },
-  { name: 'Connor', gender: 'male', skillLevel: 'intermediate', strongArm: true },
-  { name: 'Brandon Johnson', gender: 'male', skillLevel: 'intermediate', strongArm: true },
-  { name: 'Abby', gender: 'female', skillLevel: 'advanced'},
-  { name: 'Jess', gender: 'female', skillLevel: 'advanced'},
-  { name: 'Lovie', gender: 'female', skillLevel: 'advanced'},
-  { name: 'Mackenzie', gender: 'female', skillLevel: 'advanced'},
-  { name: 'Sami', gender: 'female', skillLevel: 'advanced'},
-
-  // Add more players as needed
-];
 
 export default function Home() {
   const [attendance, setAttendance] = useState([]);
   const [query, setQuery] = useState('');
   const [teams, setTeams] = useState([]);
-  const [availablePlayers, setAvailablePlayers] = useState([...regularPlayers]);
+  const [availablePlayers, setAvailablePlayers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [newPlayerName, setNewPlayerName] = useState('');
   const [newPlayerGender, setNewPlayerGender] = useState('');
