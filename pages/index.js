@@ -1,6 +1,7 @@
+import Layout from './components/layout'
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Head from 'next/head';
 import CollapsiblePanel from './components/CollapsiblePanel';
 import styles from '../styles/Home.module.css';
 import { parseCSV } from '../utils/csv.js';
@@ -157,74 +158,71 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      <Head>
-        <title>Open Gym Teammaker</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <Layout>
+        <main>
+          <h1>Open Gym Teammaker</h1>
+          <CollapsiblePanel
+            title="Add Player to Attendance"
+            isOpen={showAvailablePlayers}
+            toggleOpen={() => setShowAvailablePlayers(!showAvailablePlayers)}
+          >
+            <input
+              type="text"
+              placeholder="Search or add players..."
+              value={query}
+              onChange={handleSearchChange}
+            />
+            <div className={styles.grid}>
+              {filteredPlayers.map(player => (
+                <button
+                  key={player.name}
+                  onClick={() => addPlayerToAttendance(player)}
+                  disabled={attendance.some(p => p.name === player.name)}
+                  className={attendance.some(p => p.name === player.name) ? styles.disabledButton : styles.playerButton}
+                >
+                  {player.name}
+                </button>
+              ))}
+            </div>
+          </CollapsiblePanel>
 
-      <main>
-        <h1>Open Gym Teammaker</h1>
-        <CollapsiblePanel
-          title="Add Player to Attendance"
-          isOpen={showAvailablePlayers}
-          toggleOpen={() => setShowAvailablePlayers(!showAvailablePlayers)}
-        >
-          <input
-            type="text"
-            placeholder="Search or add players..."
-            value={query}
-            onChange={handleSearchChange}
-          />
-          <div className={styles.grid}>
-            {filteredPlayers.map(player => (
-              <button
-                key={player.name}
-                onClick={() => addPlayerToAttendance(player)}
-                disabled={attendance.some(p => p.name === player.name)}
-                className={attendance.some(p => p.name === player.name) ? styles.disabledButton : styles.playerButton}
-              >
-                {player.name}
-              </button>
-            ))}
+          <CollapsiblePanel
+            title="Players in Attendance"
+            isOpen={showPlayersInAttendance}
+            toggleOpen={() => setShowPlayersInAttendance(!showPlayersInAttendance)}
+          >
+            <button onClick={clearAttendance} className={styles.clearButton}>Clear All</button>
+            <button onClick={createTeams} className={styles.createButton}>Create Teams</button>
+
+            <div className={styles.grid}>
+              {attendance.map(player => (
+                <div key={player.name} className={styles.playerPanel}>
+                  <div>{player.name}</div>
+                  <div><button onClick={() => removePlayerFromAttendance(player)} className={styles.removeButton}>X</button></div>
+                </div>
+              ))}
+            </div>
+          </CollapsiblePanel>
+
+          <div>
+            <h2>Teams</h2>
+            <button onClick={clearTeams} className={styles.clearButton}>Clear Teams</button>
+            <button onClick={createTeams} className={styles.createButton}>Create/Update Teams</button>
+            <div className={styles.teamOuter}>
+              {teams.map((team, index) => (
+                <div key={index}>
+                  <h3>Team {index + 1}</h3>
+                  <ul>
+                    {team.map(player => (
+                      <li key={player.name}>{player.name}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
           </div>
-        </CollapsiblePanel>
-
-        <CollapsiblePanel
-          title="Players in Attendance"
-          isOpen={showPlayersInAttendance}
-          toggleOpen={() => setShowPlayersInAttendance(!showPlayersInAttendance)}
-        >
-          <button onClick={clearAttendance} className={styles.clearButton}>Clear All</button>
-          <button onClick={createTeams} className={styles.createButton}>Create Teams</button>
-
-          <div className={styles.grid}>
-            {attendance.map(player => (
-              <div key={player.name} className={styles.playerPanel}>
-                <div>{player.name}</div>
-                <div><button onClick={() => removePlayerFromAttendance(player)} className={styles.removeButton}>X</button></div>
-              </div>
-            ))}
-          </div>
-        </CollapsiblePanel>
-
-        <div>
-          <h2>Teams</h2>
-          <button onClick={clearTeams} className={styles.clearButton}>Clear Teams</button>
-          <button onClick={createTeams} className={styles.createButton}>Create/Update Teams</button>
-          <div className={styles.teamOuter}>
-            {teams.map((team, index) => (
-              <div key={index}>
-                <h3>Team {index + 1}</h3>
-                <ul>
-                  {team.map(player => (
-                    <li key={player.name}>{player.name}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      </main>
+        </main>
+      </Layout>
 
       {showModal && (
         <div className={styles.modal}>
@@ -256,18 +254,6 @@ export default function Home() {
         </div>
       )}
 
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/vercel.svg" alt="Vercel" className={styles.logo} />
-        </a>
-      </footer>
-
       <style jsx>{`
         main {
           padding: 5rem 0;
@@ -277,11 +263,6 @@ export default function Home() {
           justify-content: center;
           align-items: center;
           width: 80%;
-      }
-      footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
       }
       `}</style>
     </div>
