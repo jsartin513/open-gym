@@ -115,7 +115,7 @@ export default function Home() {
       numTeams = 3;
     } else if (numPlayers >= 20 && numPlayers <= 32) {
       numTeams = 4;
-    } else {
+    } else if (numPlayers > 32) {
       numTeams = Math.floor(numPlayers / 8); // Max out at 8 players per team
     }
     return numTeams;
