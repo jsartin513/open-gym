@@ -137,6 +137,8 @@ export default function Home() {
         }
       )
     })
+    const unassignedPlayers = attendance.filter(player => !orderedPlayers.includes(player))
+    orderedPlayers = [...orderedPlayers, ...unassignedPlayers]
 
     const distributePlayersBySnake = (playersSkillOrdered) => {
       let descending = false;
