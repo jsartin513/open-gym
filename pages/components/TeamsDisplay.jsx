@@ -87,13 +87,16 @@ export default function TeamsDisplay({attendance}) {
   return (
     <div className={styles.teamsPanel}>
       <h2>Teams</h2>
-      <button onClick={clearTeams} className={styles.clearButton}>
-        Clear Teams
-      </button>
-      <button onClick={createTeams} className={styles.createButton}>
-        Create/Update Teams
-      </button>
-      <div className={styles.teamOuter}>
+      <div className={styles.teamsHeader}>
+          <button onClick={clearTeams} className={styles.clearButton}>
+            Clear Teams
+          </button>
+          <button onClick={createTeams} className={styles.createButton}>
+            Create/Update Teams
+          </button>
+          <span> With {attendance.length} players, create {numberOfTeams()} teams</span>
+      </div>
+      <div className={styles.teamsLists}>
         {teams.map((team, index) => (
           <div key={index}>
             <h3>Team {index + 1}</h3>
