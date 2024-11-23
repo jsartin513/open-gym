@@ -1,5 +1,4 @@
 import Layout from "./components/layout";
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import CollapsiblePanel from "./components/CollapsiblePanel";
@@ -11,15 +10,13 @@ import TeamsDisplay from "./components/TeamsDisplay";
 export default function Home() {
   const [attendance, setAttendance] = useState([]);
   const [query, setQuery] = useState("");
-  const [teams, setTeams] = useState([]);
   const [availablePlayers, setAvailablePlayers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showAvailablePlayers, setShowAvailablePlayers] = useState(true);
   const [showPlayersInAttendance, setShowPlayersInAttendance] = useState(true);
   const [newPlayerName, setNewPlayerName] = useState("");
   const [newPlayerGender, setNewPlayerGender] = useState("");
-  const [newPlayerSkillLevel, setNewPlayerSkillLevel] =
-    useState("intermediate");
+  const [newPlayerSkillLevel, setNewPlayerSkillLevel] = useState("intermediate");
 
   const fetchPlayerData = () => {
     const csvUrl = process.env.NEXT_PUBLIC_CSV_URL; // Replace with your Google Sheets CSV file URL
@@ -45,20 +42,13 @@ export default function Home() {
     if (savedAttendance) {
       setAttendance(JSON.parse(savedAttendance));
     }
-
-    const savedTeams = localStorage.getItem("teams");
-    if (savedTeams) {
-      setTeams(JSON.parse(savedTeams));
-    }
   }, []);
 
   useEffect(() => {
     localStorage.setItem("attendance", JSON.stringify(attendance));
   }, [attendance]);
 
-  useEffect(() => {
-    localStorage.setItem("teams", JSON.stringify(teams));
-  }, [teams]);
+
 
   function addPlayerToAttendance(player) {
     if (!attendance.some((p) => p.name === player.name)) {
@@ -108,69 +98,6 @@ export default function Home() {
     player.name.toLowerCase().includes(query.toLowerCase())
   );
 
-  const numberOfTeams = () => {
-    const numPlayers = attendance.length;
-    let numTeams = 2;
-
-    if (numPlayers >= 15 && numPlayers <= 19) {
-      numTeams = 3;
-    } else if (numPlayers >= 20 && numPlayers <= 32) {
-      numTeams = 4;
-    } else if (numPlayers > 32) {
-      numTeams = Math.floor(numPlayers / 8); // Max out at 8 players per team
-    }
-    return numTeams;
-  };
-
-  const createTeams = () => {
-    const numTeams = numberOfTeams();
-
-    const teams = Array.from({ length: numTeams }, () => []);
-
-    const ordered_genders = ["male", "nonbinary", "female"];
-    const ordered_skill_levels = [
-      "anarchy",
-      "elite",
-      "advanced",
-      "intermediate",
-    ];
-
-    let orderedPlayers = [];
-    ordered_genders.forEach((gender) => {
-      const thisGenderPlayers = attendance.filter(
-        (player) => player.gender.toLowerCase() === gender
-      );
-      ordered_skill_levels.forEach((skillLevel) => {
-        const playerSet = thisGenderPlayers.filter(
-          (player) => player.skillLevel.toLowerCase() === skillLevel
-        );
-        orderedPlayers = [...orderedPlayers, ...playerSet];
-      });
-    });
-    const unassignedPlayers = attendance.filter(
-      (player) => !orderedPlayers.includes(player)
-    );
-    orderedPlayers = [...orderedPlayers, ...unassignedPlayers];
-
-    const distributePlayersBySnake = (playersSkillOrdered) => {
-      let descending = false;
-      playersSkillOrdered.forEach((player, index) => {
-        const playerTeam = descending
-          ? numTeams - (index % numTeams) - 1
-          : index % numTeams;
-        teams[playerTeam].push(player);
-        if (
-          (descending && playerTeam === 0) ||
-          (!descending && playerTeam === numTeams - 1)
-        ) {
-          descending = !!!descending;
-        }
-      });
-    };
-    distributePlayersBySnake(orderedPlayers);
-
-    setTeams(teams);
-  };
 
   return (
     <div className={styles.container}>
@@ -216,9 +143,6 @@ export default function Home() {
             <button onClick={clearAttendance} className={styles.clearButton}>
               Clear All
             </button>
-            <button onClick={createTeams} className={styles.createButton}>
-              Create Teams
-            </button>
 
             <div className={styles.grid}>
               {attendance.map((player) => (
@@ -239,12 +163,9 @@ export default function Home() {
 
         
         <TeamsDisplay 
-          teams={teams} 
-          players={attendance} 
-          setTeams={setTeams} 
+          attendance={attendance} 
           setPlayers={setAttendance}
           clearTeams={clearTeams}
-          createTeams={createTeams}
         />
           
         </main>
