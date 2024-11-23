@@ -97,7 +97,10 @@ export default function TeamsDisplay({attendance}) {
           <button onClick={createTeams} className={styles.createButton}>
             Create/Update Teams
           </button>
-          <span> With {attendance.length} players, create {numTeams} teams</span>
+          {(attendance && attendance.length) && <span>
+          {" "}
+          With {attendance.length} players, create {numTeams} teams
+        </span>}
       </div>
       <div className={styles.teamsLists}>
         {teams.map((team, index) => (
