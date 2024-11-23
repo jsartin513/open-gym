@@ -4,6 +4,7 @@ import styles from "../../styles/Home.module.css";
 export default function TeamsDisplay({attendance}) {
   const [teams, setTeams] = useState([]);
   const [players, setPlayers] = useState([]);
+  const [numTeams, setNumTeams] = useState(2);
 
   useEffect(() => {
     localStorage.setItem("teams", JSON.stringify(teams));
@@ -20,6 +21,10 @@ export default function TeamsDisplay({attendance}) {
     setTeams([]);
   };
 
+  useEffect(() => {
+    setNumTeams(numberOfTeams());
+  }, [attendance]);
+
   const numberOfTeams = () => {
     const numPlayers = attendance.length;
     let numTeams = 2;
@@ -35,8 +40,6 @@ export default function TeamsDisplay({attendance}) {
   };
 
   const createTeams = () => {
-    const numTeams = numberOfTeams();
-
     const teams = Array.from({ length: numTeams }, () => []);
 
     const ordered_genders = ["male", "nonbinary", "female"];
@@ -94,7 +97,7 @@ export default function TeamsDisplay({attendance}) {
           <button onClick={createTeams} className={styles.createButton}>
             Create/Update Teams
           </button>
-          <span> With {attendance.length} players, create {numberOfTeams()} teams</span>
+          <span> With {attendance.length} players, create {numTeams} teams</span>
       </div>
       <div className={styles.teamsLists}>
         {teams.map((team, index) => (
