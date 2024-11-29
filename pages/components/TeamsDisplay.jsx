@@ -47,21 +47,16 @@ export default function TeamsDisplay({ attendance }) {
     }
     return numTeams;
   };
-
+  
   const orderedPlayersOfGender = (gender) => {
-    let orderedPlayersOfGender = [];
-    const playersOfSpecifiedGender = attendance.filter(
-      (player) => player.gender.toLowerCase() === gender
+    return orderedSkillLevels.flatMap((skillLevel) =>
+      attendance.filter(
+        (player) =>
+          player.gender.toLowerCase() === gender &&
+          player.skillLevel.toLowerCase() === skillLevel
+      )
     );
-    orderedSkillLevels.forEach((skillLevel) => {
-      const playerSet = playersOfSpecifiedGender.filter(
-        (player) => player.skillLevel.toLowerCase() === skillLevel
-      );
-      orderedPlayersOfGender = [...orderedPlayersOfGender, ...playerSet];
-    });
-    return orderedPlayersOfGender;
   };
-
 
   const distributePlayersBySnake = (playersSkillOrdered) => {
     const teams = Array.from({ length: numTeams }, () => []);
@@ -82,9 +77,9 @@ export default function TeamsDisplay({ attendance }) {
   };
 
   const createTeams = () => {
-    const orderedMen = orderedPlayersOfGender('male');
-    const orderedWomen = orderedPlayersOfGender('female');
-    const orderedNonBinary = orderedPlayersOfGender('nonbinary');
+    const orderedMen = orderedPlayersOfGender("male");
+    const orderedWomen = orderedPlayersOfGender("female");
+    const orderedNonBinary = orderedPlayersOfGender("nonbinary");
     const orderedNonMen = [...orderedWomen, ...orderedNonBinary];
     const orderedPlayersWithWomenReversed = [
       ...orderedMen,
