@@ -3,12 +3,11 @@ import styles from "../../styles/Home.module.css";
 
 export default function TeamsDisplay({ attendance }) {
   const [teams, setTeams] = useState([]);
-  const [players, setPlayers] = useState([]);
   const [numTeams, setNumTeams] = useState(2);
 
   //TODO: Move this to constants file or even another tab in the spreadsheet
-  const ordered_genders = ["male", "female", "nonbinary"];
-  const ordered_skill_levels = [
+  const orderedGenders = ["male", "female", "nonbinary"];
+  const orderedskilllevels = [
     "anarchy",
     "elite",
     "advanced",
@@ -49,33 +48,12 @@ export default function TeamsDisplay({ attendance }) {
     return numTeams;
   };
 
-  const orderPlayersInOneList = () => {
-    let orderedPlayers = [];
-    ordered_genders.forEach((gender) => {
-      const thisGenderPlayers = attendance.filter(
-        (player) => player.gender.toLowerCase() === gender
-      );
-      ordered_skill_levels.forEach((skillLevel) => {
-        const playerSet = thisGenderPlayers.filter(
-          (player) => player.skillLevel.toLowerCase() === skillLevel
-        );
-        orderedPlayers = [...orderedPlayers, ...playerSet];
-      });
-      const unassignedPlayers = attendance.filter(
-        (player) => !orderedPlayers.includes(player)
-      );
-      orderedPlayers = [...orderedPlayers, ...unassignedPlayers];
-    });
-
-    return orderedPlayers;
-  };
-
   const orderedPlayersOfGender = (gender) => {
     let orderedPlayersOfGender = [];
     const all_male = attendance.filter(
       (player) => player.gender.toLowerCase() === gender
     );
-    ordered_skill_levels.forEach((skillLevel) => {
+    orderedskilllevels.forEach((skillLevel) => {
       const playerSet = all_male.filter(
         (player) => player.skillLevel.toLowerCase() === skillLevel
       );
@@ -104,7 +82,6 @@ export default function TeamsDisplay({ attendance }) {
   };
 
   const createTeams = () => {
-    const orderedPlayers = orderPlayersInOneList();
     const orderedMen = orderedPlayersOfGender('male');
     const orderedWomen = orderedPlayersOfGender('female');
     const orderedNonBinary = orderedPlayersOfGender('nonbinary');
