@@ -3,12 +3,11 @@ import styles from "../../styles/Home.module.css";
 
 export default function TeamsDisplay({ attendance }) {
   const [teams, setTeams] = useState([]);
-  const [players, setPlayers] = useState([]);
   const [numTeams, setNumTeams] = useState(2);
 
   //TODO: Move this to constants file or even another tab in the spreadsheet
-  const ordered_genders = ["male", "female", "nonbinary"];
-  const ordered_skill_levels = [
+  const orderedGenders = ["male", "female", "nonbinary"];
+  const orderedSkillLevels = [
     "anarchy",
     "elite",
     "advanced",
@@ -49,54 +48,18 @@ export default function TeamsDisplay({ attendance }) {
     return numTeams;
   };
 
-  const orderPlayersInOneList = () => {
-    let orderedPlayers = [];
-    ordered_genders.forEach((gender) => {
-      const thisGenderPlayers = attendance.filter(
-        (player) => player.gender.toLowerCase() === gender
-      );
-      ordered_skill_levels.forEach((skillLevel) => {
-        const playerSet = thisGenderPlayers.filter(
-          (player) => player.skillLevel.toLowerCase() === skillLevel
-        );
-        orderedPlayers = [...orderedPlayers, ...playerSet];
-      });
-      const unassignedPlayers = attendance.filter(
-        (player) => !orderedPlayers.includes(player)
-      );
-      orderedPlayers = [...orderedPlayers, ...unassignedPlayers];
-    });
-
-    return orderedPlayers;
-  };
-
-  
-  const orderedNonMen = () => {
-    let orderedWomen = [];
+  const orderedPlayersOfGender = (gender) => {
+    let orderedPlayersOfGender = [];
     const all_male = attendance.filter(
-      (player) => player.gender.toLowerCase() !== "male"
+      (player) => player.gender.toLowerCase() === gender
     );
-    ordered_skill_levels.forEach((skillLevel) => {
+    orderedSkillLevels.forEach((skillLevel) => {
       const playerSet = all_male.filter(
         (player) => player.skillLevel.toLowerCase() === skillLevel
       );
-      orderedWomen = [...orderedWomen, ...playerSet];
+      orderedPlayersOfGender = [...orderedPlayersOfGender, ...playerSet];
     });
-    return orderedWomen;
-  };
-
-  const orderedMen = (attendance) => {
-    let orderedMen = [];
-    const all_male = attendance.filter(
-      (player) => player.gender.toLowerCase() === "male"
-    );
-    ordered_skill_levels.forEach((skillLevel) => {
-      const playerSet = all_male.filter(
-        (player) => player.skillLevel.toLowerCase() === skillLevel
-      );
-      orderedMen = [...orderedMen, ...playerSet];
-    });
-    return orderedMen;
+    return orderedPlayersOfGender;
   };
 
 
@@ -119,13 +82,13 @@ export default function TeamsDisplay({ attendance }) {
   };
 
   const createTeams = () => {
-    const orderedPlayers = orderPlayersInOneList();
-    const orderedMenVariable = orderedMen(attendance);
-    console.log("orderedMenVariable", orderedMenVariable);
-    const orderedWomen = orderedNonMen();
+    const orderedMen = orderedPlayersOfGender('male');
+    const orderedWomen = orderedPlayersOfGender('female');
+    const orderedNonBinary = orderedPlayersOfGender('nonbinary');
+    const orderedNonMen = [...orderedWomen, ...orderedNonBinary];
     const orderedPlayersWithWomenReversed = [
-      ...orderedMenVariable,
-      ...orderedWomen.reverse(),
+      ...orderedMen,
+      ...orderedNonMen.reverse(),
     ];
     const teams = distributePlayersBySnake(orderedPlayersWithWomenReversed);
 
