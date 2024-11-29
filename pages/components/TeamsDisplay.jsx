@@ -70,33 +70,18 @@ export default function TeamsDisplay({ attendance }) {
     return orderedPlayers;
   };
 
-  
-  const orderedNonMen = () => {
-    let orderedWomen = [];
+  const orderedPlayersOfGender = (gender) => {
+    let orderedPlayersOfGender = [];
     const all_male = attendance.filter(
-      (player) => player.gender.toLowerCase() !== "male"
+      (player) => player.gender.toLowerCase() === gender
     );
     ordered_skill_levels.forEach((skillLevel) => {
       const playerSet = all_male.filter(
         (player) => player.skillLevel.toLowerCase() === skillLevel
       );
-      orderedWomen = [...orderedWomen, ...playerSet];
+      orderedPlayersOfGender = [...orderedPlayersOfGender, ...playerSet];
     });
-    return orderedWomen;
-  };
-
-  const orderedMen = (attendance) => {
-    let orderedMen = [];
-    const all_male = attendance.filter(
-      (player) => player.gender.toLowerCase() === "male"
-    );
-    ordered_skill_levels.forEach((skillLevel) => {
-      const playerSet = all_male.filter(
-        (player) => player.skillLevel.toLowerCase() === skillLevel
-      );
-      orderedMen = [...orderedMen, ...playerSet];
-    });
-    return orderedMen;
+    return orderedPlayersOfGender;
   };
 
 
@@ -120,12 +105,13 @@ export default function TeamsDisplay({ attendance }) {
 
   const createTeams = () => {
     const orderedPlayers = orderPlayersInOneList();
-    const orderedMenVariable = orderedMen(attendance);
-    console.log("orderedMenVariable", orderedMenVariable);
-    const orderedWomen = orderedNonMen();
+    const orderedMen = orderedPlayersOfGender('male');
+    const orderedWomen = orderedPlayersOfGender('female');
+    const orderedNonBinary = orderedPlayersOfGender('nonbinary');
+    const orderedNonMen = [...orderedWomen, ...orderedNonBinary];
     const orderedPlayersWithWomenReversed = [
-      ...orderedMenVariable,
-      ...orderedWomen.reverse(),
+      ...orderedMen,
+      ...orderedNonMen.reverse(),
     ];
     const teams = distributePlayersBySnake(orderedPlayersWithWomenReversed);
 
