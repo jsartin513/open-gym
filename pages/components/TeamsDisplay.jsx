@@ -48,6 +48,7 @@ export default function TeamsDisplay({attendance}) {
       "elite",
       "advanced",
       "intermediate",
+      "new",
     ];
 
     let orderedPlayers = [];
