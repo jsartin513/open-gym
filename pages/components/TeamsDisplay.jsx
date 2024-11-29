@@ -50,11 +50,11 @@ export default function TeamsDisplay({ attendance }) {
 
   const orderedPlayersOfGender = (gender) => {
     let orderedPlayersOfGender = [];
-    const all_male = attendance.filter(
+    const playersOfSpecifiedGender = attendance.filter(
       (player) => player.gender.toLowerCase() === gender
     );
     orderedSkillLevels.forEach((skillLevel) => {
-      const playerSet = all_male.filter(
+      const playerSet = playersOfSpecifiedGender.filter(
         (player) => player.skillLevel.toLowerCase() === skillLevel
       );
       orderedPlayersOfGender = [...orderedPlayersOfGender, ...playerSet];
