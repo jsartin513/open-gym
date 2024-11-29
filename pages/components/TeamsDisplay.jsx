@@ -7,7 +7,7 @@ export default function TeamsDisplay({ attendance }) {
 
   //TODO: Move this to constants file or even another tab in the spreadsheet
   const orderedGenders = ["male", "female", "nonbinary"];
-  const orderedskilllevels = [
+  const orderedSkillLevels = [
     "anarchy",
     "elite",
     "advanced",
@@ -53,7 +53,7 @@ export default function TeamsDisplay({ attendance }) {
     const all_male = attendance.filter(
       (player) => player.gender.toLowerCase() === gender
     );
-    orderedskilllevels.forEach((skillLevel) => {
+    orderedSkillLevels.forEach((skillLevel) => {
       const playerSet = all_male.filter(
         (player) => player.skillLevel.toLowerCase() === skillLevel
       );
