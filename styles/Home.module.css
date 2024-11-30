@@ -273,8 +273,7 @@
 }
 
 .tabContent {
-  display: flex;
-  flex-direction: row;
+  display: none;
   width: 100%;
   padding: 10px;
   background-color: #fff;
@@ -283,6 +282,16 @@
   margin-top: 5px;
 }
 
-.tabContent.active {
-  display: block;
+.activeTabContent {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin:10px;
+  margin-top: 5px;
+
 }
