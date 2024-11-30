@@ -44,7 +44,7 @@
   justify-content: center;
   flex-wrap: wrap;
 
-  max-width: 800px;
+  max-width: 1000px;
   margin-top: 3rem;
 }
 
@@ -221,6 +221,8 @@
 }
 .teamsLists{
   display: flex;
+  align-items: center;
+  width: 100%;
   justify-content: space-between;
 }
 .teamsPanel{
@@ -237,4 +239,50 @@
   padding: 10px;
   background-color: #f9f9f9;
   border-radius: 5px;
+}
+.tabs{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+}
+.tabbedView{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 10px;
+}
+.tab {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border-bottom: 2px solid transparent;
+}
+
+.tab:hover {
+  background-color: #f1f1f1;
+}
+
+.activeTab {
+  border-bottom: 2px solid #418fde;
+  font-weight: bold;
+}
+
+.tabContent {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 5px;
+}
+
+.tabContent.active {
+  display: block;
 }
