@@ -6,11 +6,7 @@ import {
 import styles from "../../styles/Home.module.css";
 
 export default function TeamsDisplay({ attendance }) {
-  //   const [teamsAlgorithm1, setTeamsAlgorithm1] = useState([]);
-  //   const [teamsAlgorithm2, setTeamsAlgorithm2] = useState([]);
-  //   const [teamsAlgorithm3, setTeamsAlgorithm3] = useState([]);
-  //   const [teamsAlgorithm4, setTeamsAlgorithm4] = useState([]);
-  const [teamAlgorithms, setTeamsAlgorithms] = useState([[], [], [], []]);
+  const [teamsAlgorithms, setTeamsAlgorithms] = useState([[], [], [], []]);
   const [activeTab, setActiveTab] = useState(0);
   const [numTeams, setNumTeams] = useState(2);
 
@@ -27,17 +23,6 @@ export default function TeamsDisplay({ attendance }) {
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
-
-  //   useEffect(() => {
-  //     localStorage.setItem("teamsAlgorithm1", JSON.stringify(teamsAlgorithm1));
-  //   }, [teamsAlgorithm1]);
-
-  //   useEffect(() => {
-  //     const savedTeams = localStorage.getItem("teamsAlgorithm1");
-  //     if (savedTeams) {
-  //       setTeamsAlgorithm1(JSON.parse(savedTeams));
-  //     }
-  //   }, []);
 
   const clearTeams = () => {
     setTeamsAlgorithms([], [], [], []);
@@ -111,7 +96,7 @@ export default function TeamsDisplay({ attendance }) {
       </div>
       <div className={styles.tabbedView}>
         <div className={styles.tabs}>
-          {teamAlgorithms.map((_, algorithmIndex) => (
+          {teamsAlgorithms.map((_, algorithmIndex) => (
             <button
               key={algorithmIndex}
               className={
@@ -124,7 +109,7 @@ export default function TeamsDisplay({ attendance }) {
           ))}
         </div>
         <div className={styles.teamsLists}>
-          {teamAlgorithms.map((teams, algorithmIndex) => (
+          {teamsAlgorithms.map((teams, algorithmIndex) => (
             <div
               key={algorithmIndex}
               className={
