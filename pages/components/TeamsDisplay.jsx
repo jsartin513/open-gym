@@ -135,7 +135,7 @@ return (
             </div>
             <div className={styles.tabContent}>
                 {activeTab === 'algorithm1' && (
-                    <div>
+                    <div className={styles.teamsLists}>
                         {teams.map((team, index) => (
                             <div key={index}>
                                 <h3>Team {index + 1}</h3>
