@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+import {
+  distributePlayersBySnake,
+  distributePlayersInOrder,
+} from "../../utils/teamCreation";
 import styles from "../../styles/Home.module.css";
 
 export default function TeamsDisplay({ attendance }) {
@@ -6,7 +10,7 @@ export default function TeamsDisplay({ attendance }) {
   const [teamsAlgorithm2, setTeamsAlgorithm2] = useState([]);
   const [teamsAlgorithm3, setTeamsAlgorithm3] = useState([]);
   const [teamsAlgorithm4, setTeamsAlgorithm4] = useState([]);
-  const [activeTab, setActiveTab] = useState('algorithm1');
+  const [activeTab, setActiveTab] = useState("algorithm1");
   const [numTeams, setNumTeams] = useState(2);
 
   //TODO: Move this to constants file or even another tab in the spreadsheet
@@ -55,7 +59,7 @@ export default function TeamsDisplay({ attendance }) {
     }
     return numTeams;
   };
-  
+
   const orderedPlayersOfGender = (gender) => {
     return orderedSkillLevels.flatMap((skillLevel) =>
       attendance.filter(
@@ -65,33 +69,6 @@ export default function TeamsDisplay({ attendance }) {
       )
     );
   };
-
-  const distributePlayersBySnake = (playersSkillOrdered) => {
-    const teams = Array.from({ length: numTeams }, () => []);
-    let descending = false;
-    playersSkillOrdered.forEach((player, index) => {
-      const playerTeam = descending
-        ? numTeams - (index % numTeams) - 1
-        : index % numTeams;
-      teams[playerTeam].push(player);
-      if (
-        (descending && playerTeam === 0) ||
-        (!descending && playerTeam === numTeams - 1)
-      ) {
-        descending = !!!descending;
-      }
-    });
-    return teams;
-  };
-
-  const distributePlayersInOrder = (playersSkillOrdered) => {
-    const teams = Array.from({ length: numTeams }, () => []);
-    playersSkillOrdered.forEach((player, index) => {
-      const playerTeam = index % numTeams;
-      teams[playerTeam].push(player);
-    });
-    return teams;
-  }
 
   const createTeams = () => {
     const orderedMen = orderedPlayersOfGender("male");
@@ -103,122 +80,136 @@ export default function TeamsDisplay({ attendance }) {
       ...orderedMen,
       ...orderedNonMen.reverse(),
     ];
-    const teamsAlgorithm1 = distributePlayersBySnake(orderedPlayersWithWomenReversed);
+    const teamsAlgorithm1 = distributePlayersBySnake(
+      orderedPlayersWithWomenReversed,
+      numTeams
+    );
     setTeamsAlgorithm1(teamsAlgorithm1);
 
-    const teamsAlgorithm2 = distributePlayersBySnake(orderedPlayers);
-    setTeamsAlgorithm2(teamsAlgorithm2);    
+    const teamsAlgorithm2 = distributePlayersBySnake(orderedPlayers, numTeams);
+    setTeamsAlgorithm2(teamsAlgorithm2);
 
-    const teamsAlgorithm3 = distributePlayersInOrder(orderedPlayers);
+    const teamsAlgorithm3 = distributePlayersInOrder(orderedPlayers, numTeams);
     setTeamsAlgorithm3(teamsAlgorithm3);
 
-    const teamsAlgorithm4 = distributePlayersInOrder(orderedPlayersWithWomenReversed);
+    const teamsAlgorithm4 = distributePlayersInOrder(
+      orderedPlayersWithWomenReversed,
+      numTeams
+    );
     setTeamsAlgorithm4(teamsAlgorithm4);
   };
 
-return (
+  return (
     <div className={styles.teamsPanel}>
-        <h2>Teams</h2>
-        <div className={styles.teamsHeader}>
-            <button onClick={clearTeams} className={styles.clearButton}>
-                Clear Teams
-            </button>
-            <button onClick={createTeams} className={styles.createButton}>
-                Create/Update Teams
-            </button>
-            {attendance && attendance.length && (
-                <span>
-                    {" "}
-                    With {attendance.length} players, create {numTeams} teams
-                </span>
-            )}
+      <h2>Teams</h2>
+      <div className={styles.teamsHeader}>
+        <button onClick={clearTeams} className={styles.clearButton}>
+          Clear Teams
+        </button>
+        <button onClick={createTeams} className={styles.createButton}>
+          Create/Update Teams
+        </button>
+        {attendance && attendance.length && (
+          <span>
+            {" "}
+            With {attendance.length} players, create {numTeams} teams
+          </span>
+        )}
+      </div>
+      <div className={styles.tabbedView}>
+        <div className={styles.tabs}>
+          <button
+            className={
+              activeTab === "algorithm1" ? styles.activeTab : styles.tab
+            }
+            onClick={() => handleTabChange("algorithm1")}
+          >
+            Algorithm 1
+          </button>
+          <button
+            className={
+              activeTab === "algorithm2" ? styles.activeTab : styles.tab
+            }
+            onClick={() => handleTabChange("algorithm2")}
+          >
+            Algorithm 2
+          </button>
+          <button
+            className={
+              activeTab === "algorithm3" ? styles.activeTab : styles.tab
+            }
+            onClick={() => handleTabChange("algorithm3")}
+          >
+            Algorithm 3
+          </button>
+          <button
+            className={
+              activeTab === "algorithm4" ? styles.activeTab : styles.tab
+            }
+            onClick={() => handleTabChange("algorithm4")}
+          >
+            Algorithm 4
+          </button>
         </div>
-        <div className={styles.tabbedView}>
-            <div className={styles.tabs}>
-                <button
-                    className={activeTab === 'algorithm1' ? styles.activeTab : styles.tab}
-                    onClick={() => handleTabChange('algorithm1')}
-                >
-                    Algorithm 1
-                </button>
-                <button
-                    className={activeTab === 'algorithm2' ? styles.activeTab : styles.tab}
-                    onClick={() => handleTabChange('algorithm2')}
-                >
-                    Algorithm 2
-                </button>
-                <button
-                    className={activeTab === 'algorithm3' ? styles.activeTab : styles.tab}
-                    onClick={() => handleTabChange('algorithm3')}
-                >
-                    Algorithm 3
-                </button>
-                <button 
-                    className={activeTab === 'algorithm4' ? styles.activeTab : styles.tab}
-                    onClick={() => handleTabChange('algorithm4')}
-                >
-                    Algorithm 4
-                </button>
-            </div>
-            <div className={styles.tabContent}>
-                {activeTab === 'algorithm1' && (
-                    <div className={styles.teamsLists}>
-                        {teamsAlgorithm1.map((team, index) => (
-                            <div key={index}>
-                                <h3>Team {index + 1}</h3>
-                                <ul>
-                                    {team.map((player) => (
-                                        <li key={player.name}>{player.name}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        ))}
-                    </div>
-                )}
-                {activeTab === 'algorithm2' && (
-                    <div className={styles.teamsLists}>
-                    {teamsAlgorithm2.map((team, index) => (
-                        <div key={index}>
-                            <h3>Team {index + 1}</h3>
-                            <ul>
-                                {team.map((player) => (
-                                    <li key={player.name}>{player.name}</li>
-                                ))}
-                            </ul>
-                        </div>
+        <div className={styles.tabContent}>
+          {activeTab === "algorithm1" && (
+            <div className={styles.teamsLists}>
+              {teamsAlgorithm1.map((team, index) => (
+                <div key={index}>
+                  <h3>Team {index + 1}</h3>
+                  <ul>
+                    {team.map((player) => (
+                      <li key={player.name}>{player.name}</li>
                     ))}
+                  </ul>
                 </div>
-                )}
-                {activeTab === 'algorithm3' && (
-                    <div className={styles.teamsLists}>
-                    {teamsAlgorithm3.map((team, index) => (
-                        <div key={index}>
-                            <h3>Team {index + 1}</h3>
-                            <ul>
-                                {team.map((player) => (
-                                    <li key={player.name}>{player.name}</li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))}
-                </div>
-                )}
-                {activeTab === 'algorithm4' && (
-                    <div className={styles.teamsLists}>
-                    {teamsAlgorithm4.map((team, index) => (
-                        <div key={index}>
-                            <h3>Team {index + 1}</h3>
-                            <ul>
-                                {team.map((player) => (
-                                    <li key={player.name}>{player.name}</li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))}
-                    </div>
-                )}
+              ))}
             </div>
+          )}
+          {activeTab === "algorithm2" && (
+            <div className={styles.teamsLists}>
+              {teamsAlgorithm2.map((team, index) => (
+                <div key={index}>
+                  <h3>Team {index + 1}</h3>
+                  <ul>
+                    {team.map((player) => (
+                      <li key={player.name}>{player.name}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          )}
+          {activeTab === "algorithm3" && (
+            <div className={styles.teamsLists}>
+              {teamsAlgorithm3.map((team, index) => (
+                <div key={index}>
+                  <h3>Team {index + 1}</h3>
+                  <ul>
+                    {team.map((player) => (
+                      <li key={player.name}>{player.name}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          )}
+          {activeTab === "algorithm4" && (
+            <div className={styles.teamsLists}>
+              {teamsAlgorithm4.map((team, index) => (
+                <div key={index}>
+                  <h3>Team {index + 1}</h3>
+                  <ul>
+                    {team.map((player) => (
+                      <li key={player.name}>{player.name}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
+      </div>
     </div>
-);
+  );
 }
