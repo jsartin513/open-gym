@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import styles from "../../styles/Home.module.css";
 
 export default function TeamsDisplay({ attendance }) {
-  const [teams, setTeams] = useState([]);
+  const [teamsAlgorithm1, setTeamsAlgorithm1] = useState([]);
+  const [teamsAlgorithm2, setTeamsAlgorithm2] = useState([]);
+  const [teamsAlgorithm3, setTeamsAlgorithm3] = useState([]);
   const [activeTab, setActiveTab] = useState('algorithm1');
   const [numTeams, setNumTeams] = useState(2);
 
@@ -21,18 +23,18 @@ export default function TeamsDisplay({ attendance }) {
   };
 
   useEffect(() => {
-    localStorage.setItem("teams", JSON.stringify(teams));
-  }, [teams]);
+    localStorage.setItem("teamsAlgorithm1", JSON.stringify(teamsAlgorithm1));
+  }, [teamsAlgorithm1]);
 
   useEffect(() => {
-    const savedTeams = localStorage.getItem("teams");
+    const savedTeams = localStorage.getItem("teamsAlgorithm1");
     if (savedTeams) {
-      setTeams(JSON.parse(savedTeams));
+      setTeamsAlgorithm1(JSON.parse(savedTeams));
     }
   }, []);
 
   const clearTeams = () => {
-    setTeams([]);
+    setTeamsAlgorithm1([]);
   };
 
   useEffect(() => {
@@ -86,13 +88,16 @@ export default function TeamsDisplay({ attendance }) {
     const orderedWomen = orderedPlayersOfGender("female");
     const orderedNonBinary = orderedPlayersOfGender("nonbinary");
     const orderedNonMen = [...orderedWomen, ...orderedNonBinary];
+    const orderedPlayers = [...orderedMen, ...orderedNonMen];
     const orderedPlayersWithWomenReversed = [
       ...orderedMen,
       ...orderedNonMen.reverse(),
     ];
-    const teams = distributePlayersBySnake(orderedPlayersWithWomenReversed);
+    const teamsAlgorithm1 = distributePlayersBySnake(orderedPlayersWithWomenReversed);
+    setTeamsAlgorithm1(teamsAlgorithm1);
 
-    setTeams(teams);
+    const teamsAlgorithm2 = distributePlayersBySnake(orderedPlayers);
+    setTeamsAlgorithm2(teamsAlgorithm2);    
   };
 
 return (
@@ -136,7 +141,7 @@ return (
             <div className={styles.tabContent}>
                 {activeTab === 'algorithm1' && (
                     <div className={styles.teamsLists}>
-                        {teams.map((team, index) => (
+                        {teamsAlgorithm1.map((team, index) => (
                             <div key={index}>
                                 <h3>Team {index + 1}</h3>
                                 <ul>
@@ -149,9 +154,18 @@ return (
                     </div>
                 )}
                 {activeTab === 'algorithm2' && (
-                    <div>
-                        {/* Content for Algorithm 2 */}
-                    </div>
+                    <div className={styles.teamsLists}>
+                    {teamsAlgorithm2.map((team, index) => (
+                        <div key={index}>
+                            <h3>Team {index + 1}</h3>
+                            <ul>
+                                {team.map((player) => (
+                                    <li key={player.name}>{player.name}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                </div>
                 )}
                 {activeTab === 'algorithm3' && (
                     <div>
