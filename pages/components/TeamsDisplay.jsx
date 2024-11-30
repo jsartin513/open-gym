@@ -5,6 +5,7 @@ export default function TeamsDisplay({ attendance }) {
   const [teamsAlgorithm1, setTeamsAlgorithm1] = useState([]);
   const [teamsAlgorithm2, setTeamsAlgorithm2] = useState([]);
   const [teamsAlgorithm3, setTeamsAlgorithm3] = useState([]);
+  const [teamsAlgorithm4, setTeamsAlgorithm4] = useState([]);
   const [activeTab, setActiveTab] = useState('algorithm1');
   const [numTeams, setNumTeams] = useState(2);
 
@@ -83,6 +84,15 @@ export default function TeamsDisplay({ attendance }) {
     return teams;
   };
 
+  const distributePlayersInOrder = (playersSkillOrdered) => {
+    const teams = Array.from({ length: numTeams }, () => []);
+    playersSkillOrdered.forEach((player, index) => {
+      const playerTeam = index % numTeams;
+      teams[playerTeam].push(player);
+    });
+    return teams;
+  }
+
   const createTeams = () => {
     const orderedMen = orderedPlayersOfGender("male");
     const orderedWomen = orderedPlayersOfGender("female");
@@ -98,6 +108,12 @@ export default function TeamsDisplay({ attendance }) {
 
     const teamsAlgorithm2 = distributePlayersBySnake(orderedPlayers);
     setTeamsAlgorithm2(teamsAlgorithm2);    
+
+    const teamsAlgorithm3 = distributePlayersInOrder(orderedPlayers);
+    setTeamsAlgorithm3(teamsAlgorithm3);
+
+    const teamsAlgorithm4 = distributePlayersInOrder(orderedPlayersWithWomenReversed);
+    setTeamsAlgorithm4(teamsAlgorithm4);
   };
 
 return (
@@ -137,6 +153,12 @@ return (
                 >
                     Algorithm 3
                 </button>
+                <button 
+                    className={activeTab === 'algorithm4' ? styles.activeTab : styles.tab}
+                    onClick={() => handleTabChange('algorithm4')}
+                >
+                    Algorithm 4
+                </button>
             </div>
             <div className={styles.tabContent}>
                 {activeTab === 'algorithm1' && (
@@ -168,8 +190,31 @@ return (
                 </div>
                 )}
                 {activeTab === 'algorithm3' && (
-                    <div>
-                        {/* Content for Algorithm 3 */}
+                    <div className={styles.teamsLists}>
+                    {teamsAlgorithm3.map((team, index) => (
+                        <div key={index}>
+                            <h3>Team {index + 1}</h3>
+                            <ul>
+                                {team.map((player) => (
+                                    <li key={player.name}>{player.name}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                </div>
+                )}
+                {activeTab === 'algorithm4' && (
+                    <div className={styles.teamsLists}>
+                    {teamsAlgorithm4.map((team, index) => (
+                        <div key={index}>
+                            <h3>Team {index + 1}</h3>
+                            <ul>
+                                {team.map((player) => (
+                                    <li key={player.name}>{player.name}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
                     </div>
                 )}
             </div>
