@@ -34,6 +34,7 @@ export default function TeamsDisplay({ attendance }) {
     const selectedTeams = teamsAlgorithms[index];
     setSelectedTeams(selectedTeams);
     localStorage.setItem("selectedTeams", JSON.stringify(selectedTeams));
+    window.location.href = "/teams";
   };
 
   useEffect(() => {
