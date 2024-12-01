@@ -31,7 +31,9 @@ export default function TeamsDisplay({ attendance }) {
   };
 
   const handleSelectTeams = (index) => {
-    setSelectedTeams(teamsAlgorithms[index]);
+    const selectedTeams = teamsAlgorithms[index];
+    setSelectedTeams(selectedTeams);
+    localStorage.setItem("selectedTeams", JSON.stringify(selectedTeams));
   };
 
   useEffect(() => {
