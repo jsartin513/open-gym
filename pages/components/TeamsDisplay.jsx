@@ -7,6 +7,8 @@ import styles from "../../styles/Home.module.css";
 
 export default function TeamsDisplay({ attendance }) {
   const [teamsAlgorithms, setTeamsAlgorithms] = useState([[], [], [], []]);
+  const [selectedTeams, setSelectedTeams] = useState(null);
+
   const [activeTab, setActiveTab] = useState(0);
   const [numTeams, setNumTeams] = useState(2);
 
@@ -26,6 +28,13 @@ export default function TeamsDisplay({ attendance }) {
 
   const clearTeams = () => {
     setTeamsAlgorithms([], [], [], []);
+  };
+
+  const handleSelectTeams = (index) => {
+    const selectedTeams = teamsAlgorithms[index];
+    setSelectedTeams(selectedTeams);
+    localStorage.setItem("selectedTeams", JSON.stringify(selectedTeams));
+    window.location.href = "/teams";
   };
 
   useEffect(() => {
@@ -104,11 +113,10 @@ export default function TeamsDisplay({ attendance }) {
               }
               onClick={() => handleTabChange(algorithmIndex)}
             >
-              Algorithm {algorithmIndex + 1}
+              Option {algorithmIndex + 1}
             </button>
           ))}
         </div>
-        <div className={styles.teamsLists}>
           {teamsAlgorithms.map((teams, algorithmIndex) => (
             <div
               key={algorithmIndex}
@@ -118,6 +126,16 @@ export default function TeamsDisplay({ attendance }) {
                   : styles.tabContent
               }
             >
+              <h3>Option {algorithmIndex + 1}</h3>
+              <div className={styles.teamSelection}>
+                <button
+                  onClick={() => handleSelectTeams(algorithmIndex)}
+                  className={styles.selectButton}
+                >
+                  Select These Teams
+                </button>
+              </div>
+              <div className={styles.teamsLists}>
               {teams.map((team, teamIndex) => (
                 <div key={teamIndex}>
                   <h3>Team {teamIndex + 1}</h3>
@@ -128,9 +146,9 @@ export default function TeamsDisplay({ attendance }) {
                   </ul>
                 </div>
               ))}
+              </div>
             </div>
           ))}
-        </div>
       </div>
     </div>
   );
