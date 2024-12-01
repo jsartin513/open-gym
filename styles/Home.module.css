@@ -1,6 +1,8 @@
 .container {
   min-height: 100vh;
-  padding: 0 0.5rem;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -340,4 +342,24 @@
 
 .selectedTeam li {
   margin-bottom: 5px;
+}
+
+.team {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.team h2 {
+  margin: 0 0 10px 0;
+}
+
+.team ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.team li {
+  margin: 5px 0;
 }
