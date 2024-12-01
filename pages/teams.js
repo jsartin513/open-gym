@@ -22,6 +22,13 @@ const TeamsPage = () => {
     localStorage.setItem('selectedTeams', JSON.stringify(updatedTeams));
   };
 
+  const handleAddPlayer = (teamIndex) => {
+    const updatedTeams = [...selectedTeams];
+    updatedTeams[teamIndex].push({ name: 'New Player' });
+    setSelectedTeams(updatedTeams);
+    localStorage.setItem('selectedTeams', JSON.stringify(updatedTeams));
+  };
+
   return (
     <Layout>
       <div className={styles.container}>
@@ -53,6 +60,9 @@ const TeamsPage = () => {
                     </li>
                   ))}
                 </ul>
+                {isEditMode && (
+                  <button onClick={() => handleAddPlayer(teamIndex)}>Add Player</button>
+                )}
               </div>
             ))
           )}
