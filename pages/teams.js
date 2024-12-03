@@ -15,24 +15,43 @@ const TeamsPage = () => {
   }, []);
 
   const handleEditToggle = () => {
+    if (!isEditMode) {
+      // Entering edit mode
+      localStorage.setItem("editModeTeams", JSON.stringify(selectedTeams));
+    } else {
+      // Exiting edit mode and saving changes
+      localStorage.setItem("selectedTeams", JSON.stringify(selectedTeams));
+      localStorage.removeItem("editModeTeams");
+    }
     setIsEditMode(!isEditMode);
+  };
+
+  const handleCancelEdit = () => {
+    const storedTeams = JSON.parse(
+      localStorage.getItem("selectedTeams") || "[]"
+    );
+    setSelectedTeams(storedTeams);
+    localStorage.removeItem("editModeTeams");
+    setIsEditMode(false);
   };
 
   const updateTeams = (newTeams) => {
     setSelectedTeams(newTeams);
-    localStorage.setItem("selectedTeams", JSON.stringify(newTeams));
+    if (isEditMode) {
+      localStorage.setItem("editModeTeams", JSON.stringify(newTeams));
+    } 
   };
 
   const handleTeamNameChange = (teamIndex, memberIndex, newName) => {
     const updatedTeams = [...selectedTeams];
     updatedTeams[teamIndex][memberIndex].name = newName;
-    updateTeams(updatedTeams)
+    updateTeams(updatedTeams);
   };
 
   const handleAddPlayer = (teamIndex) => {
     const updatedTeams = [...selectedTeams];
     updatedTeams[teamIndex].push({ name: "New Player" });
-    updateTeams(updatedTeams)
+    updateTeams(updatedTeams);
   };
 
   const handleMovePlayer = (teamIndex, memberIndex, newTeamIndex) => {
@@ -40,14 +59,14 @@ const TeamsPage = () => {
     const updatedTeams = [...selectedTeams];
     const [movedPlayer] = updatedTeams[teamIndex].splice(memberIndex, 1);
     updatedTeams[newTeamIndex].push(movedPlayer);
-    updateTeams(updatedTeams)
+    updateTeams(updatedTeams);
     setSelectedTeamForPlayer({});
   };
 
   const handleRemovePlayer = (teamIndex, memberIndex) => {
     const updatedTeams = [...selectedTeams];
     updatedTeams[teamIndex].splice(memberIndex, 1);
-    updateTeams(updatedTeams)
+    updateTeams(updatedTeams);
     setSelectedTeamForPlayer({});
   };
 
@@ -63,6 +82,11 @@ const TeamsPage = () => {
         <button onClick={handleEditToggle}>
           {isEditMode ? "Save" : "Edit"}
         </button>
+        {isEditMode && (
+          <button onClick={handleCancelEdit}>
+            Cancel
+          </button>
+        )}
         <div className={styles.teamsLists}>
           {selectedTeams.length === 0 ? (
             <p>No teams selected.</p>
