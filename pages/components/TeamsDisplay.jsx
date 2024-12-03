@@ -43,16 +43,16 @@ export default function TeamsDisplay({ attendance }) {
 
   const numberOfTeams = () => {
     const numPlayers = attendance.length;
-    let numTeams = 2;
+    let teamCount = 2;
 
     if (numPlayers >= 15 && numPlayers <= 19) {
-      numTeams = 3;
+      teamCount = 3;
     } else if (numPlayers >= 20 && numPlayers <= 32) {
-      numTeams = 4;
+      teamCount = 4;
     } else if (numPlayers > 32) {
-      numTeams = Math.floor(numPlayers / 8); // Max out at 8 players per team
+      teamCount = Math.floor(numPlayers / 8); // Max out at 8 players per team
     }
-    return numTeams;
+    return teamCount;
   };
 
   const orderedPlayersOfGender = (gender) => {
@@ -99,7 +99,15 @@ export default function TeamsDisplay({ attendance }) {
         {attendance && attendance.length && (
           <span>
             {" "}
-            With {attendance.length} players, create {numTeams} teams
+            With {attendance.length} players, create {numTeams} teams{" "}
+            <div className={styles.numTeamChangeButtons}>
+              <button
+                onClick={() => setNumTeams(numTeams > 1 ? numTeams - 1 : 1)}
+              >
+                -
+              </button>
+              <button onClick={() => setNumTeams(numTeams + 1)}>+</button>
+            </div>{" "}
           </span>
         )}
       </div>
@@ -117,25 +125,25 @@ export default function TeamsDisplay({ attendance }) {
             </button>
           ))}
         </div>
-          {teamsAlgorithms.map((teams, algorithmIndex) => (
-            <div
-              key={algorithmIndex}
-              className={
-                activeTab == algorithmIndex
-                  ? styles.activeTabContent
-                  : styles.tabContent
-              }
-            >
-              <h3>Option {algorithmIndex + 1}</h3>
-              <div className={styles.teamSelection}>
-                <button
-                  onClick={() => handleSelectTeams(algorithmIndex)}
-                  className={styles.selectButton}
-                >
-                  Select These Teams
-                </button>
-              </div>
-              <div className={styles.teamsLists}>
+        {teamsAlgorithms.map((teams, algorithmIndex) => (
+          <div
+            key={algorithmIndex}
+            className={
+              activeTab == algorithmIndex
+                ? styles.activeTabContent
+                : styles.tabContent
+            }
+          >
+            <h3>Option {algorithmIndex + 1}</h3>
+            <div className={styles.teamSelection}>
+              <button
+                onClick={() => handleSelectTeams(algorithmIndex)}
+                className={styles.selectButton}
+              >
+                Select These Teams
+              </button>
+            </div>
+            <div className={styles.teamsLists}>
               {teams.map((team, teamIndex) => (
                 <div key={teamIndex}>
                   <h3>Team {teamIndex + 1}</h3>
@@ -146,9 +154,9 @@ export default function TeamsDisplay({ attendance }) {
                   </ul>
                 </div>
               ))}
-              </div>
             </div>
-          ))}
+          </div>
+        ))}
       </div>
     </div>
   );
