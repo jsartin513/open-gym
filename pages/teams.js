@@ -5,6 +5,7 @@ import styles from '../styles/Home.module.css';
 const TeamsPage = () => {
   const [selectedTeams, setSelectedTeams] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [selectedTeamForPlayer, setSelectedTeamForPlayer] = useState({});
 
   useEffect(() => {
     const storedTeams = JSON.parse(localStorage.getItem('selectedTeams') || '[]');
@@ -29,6 +30,29 @@ const TeamsPage = () => {
     localStorage.setItem('selectedTeams', JSON.stringify(updatedTeams));
   };
 
+  const handleMovePlayer = (teamIndex, memberIndex, newTeamIndex) => {
+    if (newTeamIndex === "") return;
+    const updatedTeams = [...selectedTeams];
+    const [movedPlayer] = updatedTeams[teamIndex].splice(memberIndex, 1);
+    updatedTeams[newTeamIndex].push(movedPlayer);
+    setSelectedTeams(updatedTeams);
+    localStorage.setItem('selectedTeams', JSON.stringify(updatedTeams));
+    setSelectedTeamForPlayer({});
+  };
+
+  const handleRemovePlayer = (teamIndex, memberIndex) => {
+    const updatedTeams = [...selectedTeams];
+    updatedTeams[teamIndex].splice(memberIndex, 1);
+    setSelectedTeams(updatedTeams);
+    localStorage.setItem('selectedTeams', JSON.stringify(updatedTeams));
+    setSelectedTeamForPlayer({});
+  };
+
+  const handleDropdownChange = (teamIndex, memberIndex, newTeamIndex) => {
+    setSelectedTeamForPlayer({ [`${teamIndex}-${memberIndex}`]: newTeamIndex });
+    handleMovePlayer(teamIndex, memberIndex, newTeamIndex);
+  };
+
   return (
     <Layout>
       <div className={styles.container}>
@@ -47,13 +71,33 @@ const TeamsPage = () => {
                   {team.map((member, memberIndex) => (
                     <li key={memberIndex}>
                       {isEditMode ? (
-                        <input
-                          type="text"
-                          value={member.name}
-                          onChange={(e) =>
-                            handleTeamNameChange(teamIndex, memberIndex, e.target.value)
-                          }
-                        />
+                        <>
+                          <input
+                            type="text"
+                            value={member.name}
+                            onChange={(e) =>
+                              handleTeamNameChange(teamIndex, memberIndex, e.target.value)
+                            }
+                          />
+                          <select
+                            value={selectedTeamForPlayer[`${teamIndex}-${memberIndex}`] || ""}
+                            onChange={(e) =>
+                              handleDropdownChange(teamIndex, memberIndex, e.target.value)
+                            }
+                          >
+                            <option value="">Move to...</option>
+                            {selectedTeams.map((_, newTeamIndex) => (
+                              newTeamIndex !== teamIndex && (
+                                <option key={newTeamIndex} value={newTeamIndex}>
+                                  Team {newTeamIndex + 1}
+                                </option>
+                              )
+                            ))}
+                          </select>
+                          <button onClick={() => handleRemovePlayer(teamIndex, memberIndex)}>
+                            Remove
+                          </button>
+                        </>
                       ) : (
                         member.name
                       )}
