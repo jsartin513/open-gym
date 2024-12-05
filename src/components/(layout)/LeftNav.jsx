@@ -1,22 +1,23 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
+import styles from './LeftNav.module.css';
 
 const LeftNav = () => {
-    return (
-        <nav>
-            <ul>
-                <li>
-                    <Link to="/attendance">Attendance</Link>
-                </li>
-                <li>
-                    <Link to="/teams">Teams</Link>
-                </li>
-                <li>
-                    <Link to="/games">Games</Link>
-                </li>
-            </ul>
-        </nav>
-    );
+  return (
+    <nav className={styles.nav}>
+      <ul>
+        <li>
+          <Link href="/attendance">Attendance</Link>
+        </li>
+        <li>
+          <Link href="/teams">Teams</Link>
+        </li>
+        <li>
+          <Link href="/games">Games</Link>
+        </li>
+      </ul>
+    </nav>
+  );
 };
 
 export default LeftNav;
