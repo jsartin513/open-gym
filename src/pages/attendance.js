@@ -7,7 +7,7 @@ import { parseCSV } from "../utils/csv.js";
 import NewPlayerModal from "../components/NewPlayerModal.jsx";
 import TeamsDisplay from "../components/TeamsDisplay.jsx";
 
-export default function Home() {
+export default function AttendancePage() {
   const [attendance, setAttendance] = useState([]);
   const [query, setQuery] = useState("");
   const [availablePlayers, setAvailablePlayers] = useState([]);
