@@ -6,6 +6,7 @@ import styles from "../styles/Home.module.css";
 import { parseCSV } from "../utils/csv.js";
 import NewPlayerModal from "../components/NewPlayerModal.jsx";
 import TeamsDisplay from "../components/TeamsDisplay.jsx";
+import ActivePlayers from "../components/ActivePlayers.jsx";
 
 export default function AttendancePage() {
   const [attendance, setAttendance] = useState([]);
@@ -133,33 +134,10 @@ export default function AttendancePage() {
             </div>
           </CollapsiblePanel>
 
-          <CollapsiblePanel
-            title="Players in Attendance"
-            isOpen={showPlayersInAttendance}
-            toggleOpen={() =>
-              setShowPlayersInAttendance(!showPlayersInAttendance)
-            }
-          >
-            <button onClick={clearAttendance} className={styles.clearButton}>
-              Clear All
-            </button>
-
-            <div className={styles.grid}>
-              {attendance.map((player) => (
-                <div key={player.name} className={styles.playerPanel}>
-                  <div>{player.name}</div>
-                  <div>
-                    <button
-                      onClick={() => removePlayerFromAttendance(player)}
-                      className={styles.removeButton}
-                    >
-                      X
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CollapsiblePanel>
+          <ActivePlayers 
+            players={attendance}
+            removePlayerFromAttendance={removePlayerFromAttendance}
+            clearAttendance={clearAttendance}/>
 
         
         <TeamsDisplay 
