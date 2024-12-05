@@ -1,11 +1,11 @@
-import Layout from "./components/layout";
+import Layout from "./components/layout.js";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import CollapsiblePanel from "./components/CollapsiblePanel";
+import CollapsiblePanel from "./components/CollapsiblePanel.jsx";
 import styles from "../styles/Home.module.css";
 import { parseCSV } from "../utils/csv.js";
-import NewPlayerModal from "./components/NewPlayerModal";
-import TeamsDisplay from "./components/TeamsDisplay";
+import NewPlayerModal from "./components/NewPlayerModal.jsx";
+import TeamsDisplay from "./components/TeamsDisplay.jsx";
 
 export default function Home() {
   const [attendance, setAttendance] = useState([]);
