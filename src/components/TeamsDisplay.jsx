@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import {
   distributePlayersBySnake,
   distributePlayersInOrder,
-} from "../../utils/teamCreation";
-import styles from "../../styles/Home.module.css";
+} from "../utils/teamCreation";
+import styles from "../styles/Home.module.css";
 
 export default function TeamsDisplay({ attendance }) {
   const [teamsAlgorithms, setTeamsAlgorithms] = useState([[], [], [], []]);
