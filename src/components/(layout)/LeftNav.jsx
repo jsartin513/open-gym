@@ -6,7 +6,7 @@ const LeftNav = () => {
         <nav>
             <ul>
                 <li>
-                    <Link to="/">Attendance</Link>
+                    <Link to="/attendance">Attendance</Link>
                 </li>
                 <li>
                     <Link to="/teams">Teams</Link>
