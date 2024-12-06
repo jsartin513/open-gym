@@ -49,6 +49,9 @@ export default function AttendancePage() {
   }, [attendance]);
 
 
+  // People tell me that someone else is coming - so I want
+  // that person on a team, but we can't fill the team
+  // with players who aren't there yet
   function addPlayerToExpectedPlayers(player){
     if (!expectedPlayers.some((p) => p.name === player.name)) {
       setExpectedPlayers([...expectedPlayers, player])
@@ -68,6 +71,7 @@ export default function AttendancePage() {
 
   const clearAttendance = () => {
     setAttendance([]);
+    setExpectedPlayers([]);
   };
 
   const clearTeams = () => {
