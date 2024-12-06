@@ -12,9 +12,8 @@ export default function AttendancePage() {
   const [attendance, setAttendance] = useState([]);
   const [query, setQuery] = useState("");
   const [availablePlayers, setAvailablePlayers] = useState([]);
+  const [expectedPlayers, setExpectedPlayers] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [showAvailablePlayers, setShowAvailablePlayers] = useState(true);
-  const [showPlayersInAttendance, setShowPlayersInAttendance] = useState(true);
   const [newPlayerName, setNewPlayerName] = useState("");
   const [newPlayerGender, setNewPlayerGender] = useState("");
   const [newPlayerSkillLevel, setNewPlayerSkillLevel] = useState("intermediate");
@@ -50,11 +49,17 @@ export default function AttendancePage() {
   }, [attendance]);
 
 
+  function addPlayerToExpectedPlayers(player){
+    if (!expectedPlayers.some((p) => p.name === player.name)) {
+      setExpectedPlayers([...expectedPlayers, player])
+    }
+  }
 
   function addPlayerToAttendance(player) {
     if (!attendance.some((p) => p.name === player.name)) {
       setAttendance([...attendance, player]);
     }
+    setExpectedPlayers(expectedPlayers.filter((p) => p.name !== player.name));
   }
 
   const removePlayerFromAttendance = (player) => {
@@ -107,8 +112,6 @@ export default function AttendancePage() {
           <h1>Open Gym Teammaker</h1>
           <CollapsiblePanel
             title="Add Player to Attendance"
-            isOpen={showAvailablePlayers}
-            toggleOpen={() => setShowAvailablePlayers(!showAvailablePlayers)}
           >
             <input
               type="text"

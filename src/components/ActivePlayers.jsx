@@ -3,14 +3,10 @@ import styles from "../styles/Home.module.css";
 import CollapsiblePanel from "./CollapsiblePanel";
 
 export default function ActivePlayers ({players, removePlayerFromAttendance, clearAttendance}) {
-    const [isOpen, setIsOpen] = useState(true);
+
 
     return (<CollapsiblePanel
         title="Players in Attendance"
-        isOpen={isOpen}
-        toggleOpen={() =>
-          setIsOpen(!isOpen)
-        }
       >
         <button onClick={clearAttendance} className={styles.clearButton}>
           Clear All
