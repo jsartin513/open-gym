@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../components/(layout)/layout";
-import styles from "../styles/Home.module.css";
+import styles from "../styles/GamesPage.module.css";
 
 const GamesPage = () => {
   const [teams, setTeams] = useState([]);
@@ -65,27 +65,30 @@ const GamesPage = () => {
   return (
     <Layout>
       <div className={styles.container}>
-        <h1>Game Schedule</h1>
-        <button onClick={handleAddRoundRobin}>Add Round</button>
-        {schedule.length === 0 ? (
-          <p>No teams available.</p>
-        ) : (
-          <ul>
-            {schedule.map((game, index) => (
-              <li key={index}>
-                {game.homeTeam} vs {game.awayTeam}
-                <select
-                  value={winners[index] || ''}
-                  onChange={(e) => handleWinnerChange(index, e.target.value)}
-                >
-                  <option value="">Select Winner</option>
-                  <option value={game.homeTeam}>{game.homeTeam}</option>
-                  <option value={game.awayTeam}>{game.awayTeam}</option>
-                </select>
-              </li>
-            ))}
-          </ul>
-        )}
+        <div className={styles.gamesSchedulePanel}>
+          <h1>Game Schedule</h1>
+          <button className={styles.button} onClick={handleAddRoundRobin}>Add Round</button>
+          {schedule.length === 0 ? (
+            <p>No teams available.</p>
+          ) : (
+            <ul className={styles.gamesList}>
+              {schedule.map((game, index) => (
+                <li key={index}>
+                  {game.homeTeam} vs {game.awayTeam}
+                  <select
+                    className={styles.select}
+                    value={winners[index] || ''}
+                    onChange={(e) => handleWinnerChange(index, e.target.value)}
+                  >
+                    <option value="">Select Winner</option>
+                    <option value={game.homeTeam}>{game.homeTeam}</option>
+                    <option value={game.awayTeam}>{game.awayTeam}</option>
+                  </select>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
         <div className={styles.gamesWonPanel}>
           <h2>Games Won</h2>
           <ul>
