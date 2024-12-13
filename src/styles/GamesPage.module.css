@@ -1,0 +1,53 @@
+.container {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.button {
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #005bb5;
+}
+
+.gamesList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.gamesList li {
+  margin-bottom: 10px;
+}
+
+.select {
+  margin-left: 10px;
+}
+
+.gamesSchedulePanel {
+  margin: 20px;
+}
+
+.gamesWonPanel {
+  margin: 20px;
+}
+
+.gamesWonPanel h2 {
+  margin-bottom: 10px;
+}
+
+.gamesWonPanel ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.gamesWonPanel li {
+  margin-bottom: 5px;
+}
