@@ -50,6 +50,18 @@ const GamesPage = () => {
     localStorage.setItem('gameWinners', JSON.stringify(updatedWinners));
   };
 
+  const calculateGamesWon = () => {
+    const gamesWon = {};
+    Object.values(winners).forEach((winner) => {
+      if (winner) {
+        gamesWon[winner] = (gamesWon[winner] || 0) + 1;
+      }
+    });
+    return gamesWon;
+  };
+
+  const gamesWon = calculateGamesWon();
+
   return (
     <Layout>
       <div className={styles.container}>
@@ -74,6 +86,16 @@ const GamesPage = () => {
             ))}
           </ul>
         )}
+        <div className={styles.gamesWonPanel}>
+          <h2>Games Won</h2>
+          <ul>
+            {Object.keys(gamesWon).map((team, index) => (
+              <li key={index}>
+                {team}: {gamesWon[team]}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </Layout>
   );
