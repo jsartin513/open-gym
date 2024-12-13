@@ -80,6 +80,13 @@ const GamesPage = () => {
 
   const gamesWonByTeam = calculateGamesWon();
 
+  const currentGameIndex = schedule.findIndex((_, index) => !winners[index]);
+  const currentGame = schedule[currentGameIndex];
+  const nextGame = schedule[currentGameIndex + 1];
+
+  const pastGames = schedule.filter((_, index) => winners[index]);
+  const upcomingGames = schedule.filter((_, index) => !winners[index]);
+
   return (
     <Layout>
       <div className={styles.container}>
@@ -90,22 +97,76 @@ const GamesPage = () => {
           {schedule.length === 0 ? (
             <p>No teams available.</p>
           ) : (
-            <ul className={styles.gamesList}>
-              {schedule.map((game, index) => (
-                <li key={index}>
-                  {game.homeTeam} vs {game.awayTeam}
+            <>
+              {currentGame && (
+                <div className={styles.currentGame}>
+                  <h2>Current Game</h2>
+                  <p>{currentGame.homeTeam} vs {currentGame.awayTeam}</p>
                   <select
                     className={styles.select}
-                    value={winners[index] || ''}
-                    onChange={(e) => handleWinnerChange(index, e.target.value)}
+                    value={winners[currentGameIndex] || ''}
+                    onChange={(e) => handleWinnerChange(currentGameIndex, e.target.value)}
                   >
                     <option value="">Select Winner</option>
-                    <option value={game.homeTeam}>{game.homeTeam}</option>
-                    <option value={game.awayTeam}>{game.awayTeam}</option>
+                    <option value={currentGame.homeTeam}>{currentGame.homeTeam}</option>
+                    <option value={currentGame.awayTeam}>{currentGame.awayTeam}</option>
                   </select>
-                </li>
-              ))}
-            </ul>
+                </div>
+              )}
+              {nextGame && (
+                <div className={styles.nextGame}>
+                  <h2>Next Game</h2>
+                  <p>{nextGame.homeTeam} vs {nextGame.awayTeam}</p>
+                  <select
+                    className={styles.select}
+                    value={winners[currentGameIndex + 1] || ''}
+                    onChange={(e) => handleWinnerChange(currentGameIndex + 1, e.target.value)}
+                  >
+                    <option value="">Select Winner</option>
+                    <option value={nextGame.homeTeam}>{nextGame.homeTeam}</option>
+                    <option value={nextGame.awayTeam}>{nextGame.awayTeam}</option>
+                  </select>
+                </div>
+              )}
+              <div>
+                <h2>Schedule (after the next game)</h2>
+                <ul className={styles.gamesList}>
+                  {upcomingGames.slice(2).map((game, index) => (
+                    <li key={index + currentGameIndex + 2}>
+                      {game.homeTeam} vs {game.awayTeam}
+                      <select
+                        className={styles.select}
+                        value={winners[index + currentGameIndex + 2] || ''}
+                        onChange={(e) => handleWinnerChange(index + currentGameIndex + 2, e.target.value)}
+                      >
+                        <option value="">Select Winner</option>
+                        <option value={game.homeTeam}>{game.homeTeam}</option>
+                        <option value={game.awayTeam}>{game.awayTeam}</option>
+                      </select>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h2>Past Games</h2>
+                <ul className={styles.gamesList}>
+                  {pastGames.map((game, index) => (
+                    <li key={index}>
+                      {game.homeTeam} vs {game.awayTeam}
+                      <select
+                        className={styles.select}
+                        value={winners[index] || ''}
+                        onChange={(e) => handleWinnerChange(index, e.target.value)}
+                      >
+                        <option value="">Select Winner</option>
+                        <option value={game.homeTeam}>{game.homeTeam}</option>
+                        <option value={game.awayTeam}>{game.awayTeam}</option>
+                      </select>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </>
           )}
         </div>
         <div className={styles.gamesWonPanel}>
