@@ -22,7 +22,7 @@ const GamesPage = () => {
     const halfSize = numTeams / 2;
 
     const teamIndexes = teams.map((_, i) => i + 1);
-    const schedule = [];
+    const newSchedule = [];
 
     for (let round = 0; round < rounds; round++) {
       const roundMatches = [];
@@ -31,13 +31,17 @@ const GamesPage = () => {
         const away = teamIndexes[numTeams - 1 - i];
         roundMatches.push({ homeTeam: `Team ${home}`, awayTeam: `Team ${away}` });
       }
-      schedule.push(...roundMatches);
+      newSchedule.push(...roundMatches);
 
       // Rotate teams
       teamIndexes.splice(1, 0, teamIndexes.pop());
     }
 
-    setSchedule(schedule);
+    setSchedule((prevSchedule) => [...prevSchedule, ...newSchedule]);
+  };
+
+  const handleAddRoundRobin = () => {
+    generateSchedule(teams);
   };
 
   const handleWinnerChange = (index, winner) => {
@@ -50,6 +54,7 @@ const GamesPage = () => {
     <Layout>
       <div className={styles.container}>
         <h1>Game Schedule</h1>
+        <button onClick={handleAddRoundRobin}>Add Round</button>
         {schedule.length === 0 ? (
           <p>No teams available.</p>
         ) : (
