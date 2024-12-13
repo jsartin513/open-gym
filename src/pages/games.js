@@ -156,16 +156,18 @@ const GamesPage = () => {
             </>
           )}
         </div>
-        <div className={styles.gamesWonPanel}>
-          <h2>Games Won</h2>
-          <ul>
-            {Object.keys(gamesWonByTeam).map((team, index) => (
-              <li key={index}>
-                {team}: {gamesWonByTeam[team]}
-              </li>
-            ))}
-          </ul>
-        </div>
+        {!isPrintableView && (
+          <div className={styles.gamesWonPanel}>
+            <h2>Games Won</h2>
+            <ul>
+              {Object.keys(gamesWonByTeam).map((team, index) => (
+                <li key={index}>
+                  {team}: {gamesWonByTeam[team]}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </Layout>
   );
