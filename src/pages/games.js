@@ -17,12 +17,26 @@ const GamesPage = () => {
   }, []);
 
   const generateSchedule = (teams) => {
+    const numTeams = teams.length;
+    const rounds = numTeams - 1;
+    const halfSize = numTeams / 2;
+
+    const teamIndexes = teams.map((_, i) => i + 1);
     const schedule = [];
-    for (let i = 0; i < teams.length; i++) {
-      for (let j = i + 1; j < teams.length; j++) {
-        schedule.push({ homeTeam: `Team ${i + 1}`, awayTeam: `Team ${j + 1}` });
+
+    for (let round = 0; round < rounds; round++) {
+      const roundMatches = [];
+      for (let i = 0; i < halfSize; i++) {
+        const home = teamIndexes[i];
+        const away = teamIndexes[numTeams - 1 - i];
+        roundMatches.push({ homeTeam: `Team ${home}`, awayTeam: `Team ${away}` });
       }
+      schedule.push(...roundMatches);
+
+      // Rotate teams
+      teamIndexes.splice(1, 0, teamIndexes.pop());
     }
+
     setSchedule(schedule);
   };
 
