@@ -111,9 +111,9 @@ const GamesPage = () => {
                 </div>
               )}
               <div>
-                <h2>Past Games</h2>
+                <h2>Upcoming Games</h2>
                 <ul className={styles.gamesList}>
-                  {pastGames.map((game, index) => (
+                  {upcomingGames.map((game, index) => (
                     <li key={index}>
                       {game.homeTeam} vs {game.awayTeam}
                       <select
@@ -130,9 +130,9 @@ const GamesPage = () => {
                 </ul>
               </div>
               <div>
-                <h2>Upcoming Games</h2>
+                <h2>Past Games</h2>
                 <ul className={styles.gamesList}>
-                  {upcomingGames.map((game, index) => (
+                  {pastGames.map((game, index) => (
                     <li key={index}>
                       {game.homeTeam} vs {game.awayTeam}
                       <select
