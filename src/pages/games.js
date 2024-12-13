@@ -6,6 +6,7 @@ const GamesPage = () => {
   const [teams, setTeams] = useState([]);
   const [schedule, setSchedule] = useState([]);
   const [winners, setWinners] = useState({});
+  const [gamesWon, setGamesWon] = useState({});
 
   useEffect(() => {
     const storedTeams = JSON.parse(localStorage.getItem('selectedTeams') || '[]');
@@ -14,6 +15,9 @@ const GamesPage = () => {
 
     const storedWinners = JSON.parse(localStorage.getItem('gameWinners') || '{}');
     setWinners(storedWinners);
+
+    const storedGamesWon = JSON.parse(localStorage.getItem('gamesWon') || '{}');
+    setGamesWon(storedGamesWon);
   }, []);
 
   const generateSchedule = (teams) => {
@@ -48,19 +52,33 @@ const GamesPage = () => {
     const updatedWinners = { ...winners, [index]: winner };
     setWinners(updatedWinners);
     localStorage.setItem('gameWinners', JSON.stringify(updatedWinners));
+
+    const updatedGamesWon = { ...gamesWon };
+    if (winner) {
+      updatedGamesWon[winner] = (updatedGamesWon[winner] || 0) + 1;
+    }
+    setGamesWon(updatedGamesWon);
+    localStorage.setItem('gamesWon', JSON.stringify(updatedGamesWon));
+  };
+
+  const handleClearWins = () => {
+    setWinners({});
+    setGamesWon({});
+    localStorage.removeItem('gameWinners');
+    localStorage.removeItem('gamesWon');
   };
 
   const calculateGamesWon = () => {
-    const gamesWon = {};
+    const gamesWonByTeam = {};
     Object.values(winners).forEach((winner) => {
       if (winner) {
-        gamesWon[winner] = (gamesWon[winner] || 0) + 1;
+        gamesWonByTeam[winner] = (gamesWonByTeam[winner] || 0) + 1;
       }
     });
-    return gamesWon;
+    return gamesWonByTeam;
   };
 
-  const gamesWon = calculateGamesWon();
+  const gamesWonByTeam = calculateGamesWon();
 
   return (
     <Layout>
@@ -68,6 +86,7 @@ const GamesPage = () => {
         <div className={styles.gamesSchedulePanel}>
           <h1>Game Schedule</h1>
           <button className={styles.button} onClick={handleAddRoundRobin}>Add Round</button>
+          <button className={styles.button} onClick={handleClearWins}>Clear Wins</button>
           {schedule.length === 0 ? (
             <p>No teams available.</p>
           ) : (
@@ -92,9 +111,9 @@ const GamesPage = () => {
         <div className={styles.gamesWonPanel}>
           <h2>Games Won</h2>
           <ul>
-            {Object.keys(gamesWon).map((team, index) => (
+            {Object.keys(gamesWonByTeam).map((team, index) => (
               <li key={index}>
-                {team}: {gamesWon[team]}
+                {team}: {gamesWonByTeam[team]}
               </li>
             ))}
           </ul>
