@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../components/(layout)/layout";
+import PrintableSchedule from "../components/PrintableSchedule";
 import styles from "../styles/GamesPage.module.css";
 
 const GamesPage = () => {
@@ -7,6 +8,7 @@ const GamesPage = () => {
   const [schedule, setSchedule] = useState([]);
   const [winners, setWinners] = useState({});
   const [gamesWon, setGamesWon] = useState({});
+  const [isPrintableView, setIsPrintableView] = useState(false);
 
   useEffect(() => {
     const storedTeams = JSON.parse(localStorage.getItem('selectedTeams') || '[]');
@@ -41,7 +43,9 @@ const GamesPage = () => {
       teamIndexes.splice(1, 0, teamIndexes.pop());
     }
 
-    setSchedule((prevSchedule) => [...prevSchedule, ...newSchedule]);
+    const reversedNewSchedule = newSchedule.map(({ homeTeam, awayTeam }) => ({ homeTeam: awayTeam, awayTeam: homeTeam }));
+
+    setSchedule((prevSchedule) => [...prevSchedule, ...newSchedule, ...reversedNewSchedule]);
   };
 
   const handleAddRoundRobin = () => {
@@ -94,50 +98,35 @@ const GamesPage = () => {
           <h1>Game Schedule</h1>
           <button className={styles.button} onClick={handleAddRoundRobin}>Add Round</button>
           <button className={styles.button} onClick={handleClearWins}>Clear Wins</button>
-          {schedule.length === 0 ? (
-            <p>No teams available.</p>
+          <button className={styles.button} onClick={() => setIsPrintableView(!isPrintableView)}>
+            {isPrintableView ? 'Back to Schedule' : 'Printable View'}
+          </button>
+          {isPrintableView ? (
+            <PrintableSchedule schedule={schedule} />
           ) : (
             <>
               {currentGame && (
                 <div className={styles.currentGame}>
                   <h2>Current Game</h2>
                   <p>{currentGame.homeTeam} vs {currentGame.awayTeam}</p>
-                  <select
-                    className={styles.select}
-                    value={winners[currentGameIndex] || ''}
-                    onChange={(e) => handleWinnerChange(currentGameIndex, e.target.value)}
-                  >
-                    <option value="">Select Winner</option>
-                    <option value={currentGame.homeTeam}>{currentGame.homeTeam}</option>
-                    <option value={currentGame.awayTeam}>{currentGame.awayTeam}</option>
-                  </select>
                 </div>
               )}
               {nextGame && (
                 <div className={styles.nextGame}>
                   <h2>Next Game</h2>
                   <p>{nextGame.homeTeam} vs {nextGame.awayTeam}</p>
-                  <select
-                    className={styles.select}
-                    value={winners[currentGameIndex + 1] || ''}
-                    onChange={(e) => handleWinnerChange(currentGameIndex + 1, e.target.value)}
-                  >
-                    <option value="">Select Winner</option>
-                    <option value={nextGame.homeTeam}>{nextGame.homeTeam}</option>
-                    <option value={nextGame.awayTeam}>{nextGame.awayTeam}</option>
-                  </select>
                 </div>
               )}
               <div>
-                <h2>Schedule (after the next game)</h2>
+                <h2>Upcoming Games</h2>
                 <ul className={styles.gamesList}>
-                  {upcomingGames.slice(2).map((game, index) => (
-                    <li key={index + currentGameIndex + 2}>
+                  {upcomingGames.map((game, index) => (
+                    <li key={index}>
                       {game.homeTeam} vs {game.awayTeam}
                       <select
                         className={styles.select}
-                        value={winners[index + currentGameIndex + 2] || ''}
-                        onChange={(e) => handleWinnerChange(index + currentGameIndex + 2, e.target.value)}
+                        value={winners[index] || ''}
+                        onChange={(e) => handleWinnerChange(index, e.target.value)}
                       >
                         <option value="">Select Winner</option>
                         <option value={game.homeTeam}>{game.homeTeam}</option>
@@ -169,16 +158,18 @@ const GamesPage = () => {
             </>
           )}
         </div>
-        <div className={styles.gamesWonPanel}>
-          <h2>Games Won</h2>
-          <ul>
-            {Object.keys(gamesWonByTeam).map((team, index) => (
-              <li key={index}>
-                {team}: {gamesWonByTeam[team]}
-              </li>
-            ))}
-          </ul>
-        </div>
+        {!isPrintableView && (
+          <div className={styles.gamesWonPanel}>
+            <h2>Games Won</h2>
+            <ul>
+              {Object.keys(gamesWonByTeam).map((team, index) => (
+                <li key={index}>
+                  {team}: {gamesWonByTeam[team]}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </Layout>
   );

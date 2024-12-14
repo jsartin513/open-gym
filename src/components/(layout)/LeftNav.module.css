@@ -26,3 +26,13 @@
 .nav li a:hover {
   background-color: #575757;
 }
+
+.printHidden {
+  display: block;
+}
+
+@media print {
+  .printHidden {
+    display: none;
+  }
+}
