@@ -137,16 +137,7 @@ const GamesPage = () => {
                   ))}
                 </ul>
               </div>
-              <div>
-                <h2>Past Games</h2>
-                <ul className={styles.gamesList}>
-                  {pastGames.map((game, index) => (
-                    <li key={index}>
-                      {game.homeTeam} vs {game.awayTeam} - Winner: {winners[index]}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              
             </>
           )}
         </div>
@@ -160,6 +151,16 @@ const GamesPage = () => {
                 </li>
               ))}
             </ul>
+            <div>
+                <h2>Finished Games</h2>
+                <ul className={styles.gamesList}>
+                  {pastGames.map((game, index) => (
+                    <li key={index}>
+                      {game.homeTeam} vs {game.awayTeam} - Winner: {winners[index]}
+                    </li>
+                  ))}
+                </ul>
+              </div>
           </div>
         )}
       </div>
