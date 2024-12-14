@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/(layout)/layout";
 import PrintableSchedule from "../components/PrintableSchedule";
 import styles from "../styles/GamesPage.module.css";
+import { generateSchedule } from '../utils/scheduling';
 
 const GamesPage = () => {
   const [teams, setTeams] = useState([]);
@@ -13,7 +14,7 @@ const GamesPage = () => {
   useEffect(() => {
     const storedTeams = JSON.parse(localStorage.getItem('selectedTeams') || '[]');
     setTeams(storedTeams);
-    generateSchedule(storedTeams);
+    setSchedule(generateSchedule(teamNames()));
 
     const storedWinners = JSON.parse(localStorage.getItem('gameWinners') || '{}');
     setWinners(storedWinners);
@@ -22,38 +23,24 @@ const GamesPage = () => {
     setGamesWon(storedGamesWon);
   }, []);
 
-  const generateSchedule = (teams) => {
-    const numTeams = teams.length;
-    const rounds = numTeams - 1;
-    const halfSize = numTeams / 2;
-
-    const teamIndexes = teams.map((_, i) => i + 1);
-    const newSchedule = [];
-
-    for (let round = 0; round < rounds; round++) {
-      const roundMatches = [];
-      for (let i = 0; i < halfSize; i++) {
-        const home = teamIndexes[i];
-        const away = teamIndexes[numTeams - 1 - i];
-        roundMatches.push({ homeTeam: `Team ${home}`, awayTeam: `Team ${away}` });
-      }
-      newSchedule.push(...roundMatches);
-
-      // Rotate teams
-      teamIndexes.splice(1, 0, teamIndexes.pop());
-    }
-
-    const reversedNewSchedule = newSchedule.map(({ homeTeam, awayTeam }) => ({ homeTeam: awayTeam, awayTeam: homeTeam }));
-
-    setSchedule((prevSchedule) => [...prevSchedule, ...newSchedule, ...reversedNewSchedule]);
+  const handleAddRoundRobin = () => {
+    const additionalGames = generateSchedule(teamNames());
+    setSchedule([...schedule, ...additionalGames]);
   };
 
-  const handleAddRoundRobin = () => {
-    generateSchedule(teams);
+  const teamNames = () => {
+    const teamNames = teams.map((team, index) => {
+      if (team.name) {
+        return team.name;
+      }
+      else {
+        return "Team " + (index + 1);
+      }
+    });
+    return teamNames;
   };
 
   const handleWinnerChange = (index, winner) => {
-    console.log("index: ", index);
     const updatedWinners = { ...winners, [index]: winner };
     setWinners(updatedWinners);
     localStorage.setItem('gameWinners', JSON.stringify(updatedWinners));
@@ -128,9 +115,9 @@ const GamesPage = () => {
                 </div>
               )}
               <div>
-                <h2>Upcoming Games</h2>
+                <h2>After that...</h2>
                 <ul className={styles.gamesList}>
-                  {upcomingGames.map((game, index) => (
+                  {upcomingGames.slice(2).map((game, index) => (
                     <li key={index}>
                       {game.homeTeam} vs {game.awayTeam}
                     </li>
@@ -154,7 +141,7 @@ const GamesPage = () => {
             <div>
                 <h2>Finished Games</h2>
                 <ul className={styles.gamesList}>
-                  {pastGames.map((game, index) => (
+                  {pastGames.slice(2).map((game, index) => (
                     <li key={index}>
                       {game.homeTeam} vs {game.awayTeam} - Winner: {winners[index]}
                     </li>
