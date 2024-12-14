@@ -53,7 +53,6 @@ const GamesPage = () => {
   };
 
   const handleWinnerChange = (index, winner) => {
-    console.log("index: ", index);
     const updatedWinners = { ...winners, [index]: winner };
     setWinners(updatedWinners);
     localStorage.setItem('gameWinners', JSON.stringify(updatedWinners));
