@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/(layout)/layout";
 import PrintableSchedule from "../components/PrintableSchedule";
 import styles from "../styles/GamesPage.module.css";
+import { generateSchedule } from '../utils/teams';
 
 const GamesPage = () => {
   const [teams, setTeams] = useState([]);
@@ -22,34 +23,9 @@ const GamesPage = () => {
     setGamesWon(storedGamesWon);
   }, []);
 
-  const generateSchedule = (teams) => {
-    const numTeams = teams.length;
-    const rounds = numTeams - 1;
-    const halfSize = numTeams / 2;
-
-    const teamIndexes = teams.map((_, i) => i + 1);
-    const newSchedule = [];
-
-    for (let round = 0; round < rounds; round++) {
-      const roundMatches = [];
-      for (let i = 0; i < halfSize; i++) {
-        const home = teamIndexes[i];
-        const away = teamIndexes[numTeams - 1 - i];
-        roundMatches.push({ homeTeam: `Team ${home}`, awayTeam: `Team ${away}` });
-      }
-      newSchedule.push(...roundMatches);
-
-      // Rotate teams
-      teamIndexes.splice(1, 0, teamIndexes.pop());
-    }
-
-    const reversedNewSchedule = newSchedule.map(({ homeTeam, awayTeam }) => ({ homeTeam: awayTeam, awayTeam: homeTeam }));
-
-    setSchedule((prevSchedule) => [...prevSchedule, ...newSchedule, ...reversedNewSchedule]);
-  };
-
   const handleAddRoundRobin = () => {
-    generateSchedule(teams);
+    const additionalGames = generateSchedule(teams);
+    setSchedule((prevSchedule) => [...prevSchedule, ...additionalGames]);
   };
 
   const handleWinnerChange = (index, winner) => {
