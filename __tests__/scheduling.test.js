@@ -72,4 +72,24 @@ describe('generateSchedule', () => {
         ];
         expect(schedule).toEqual(expectedSchedule);
     });
+
+    test('should generate the correct number of rounds for 3 teams', () => {
+        const teams = ['Team 1', 'Team 2', 'Team 3'];
+        const schedule = generateSchedule(teams);
+        expect(schedule.length).toBe(6); // 6 matches for 4 teams (3 rounds) + 6 reversed matches
+    });
+
+    test('should generate the correct matches 3 teams', () => {
+        const teams = ['Team 1', 'Team 2', 'Team 3'];
+        const schedule = generateSchedule(teams);
+        const expectedSchedule = [
+            { homeTeam: 'Team 2', awayTeam: 'Team 3' },
+            { homeTeam: 'Team 1', awayTeam: 'Team 3' },
+            { homeTeam: 'Team 1', awayTeam: 'Team 2' },
+            { homeTeam: 'Team 3', awayTeam: 'Team 2' },
+            { homeTeam: 'Team 3', awayTeam: 'Team 1' },
+            { homeTeam: 'Team 2', awayTeam: 'Team 1' },
+        ];
+        expect(schedule).toEqual(expectedSchedule);
+    });
 });

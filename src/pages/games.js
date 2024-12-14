@@ -14,7 +14,7 @@ const GamesPage = () => {
   useEffect(() => {
     const storedTeams = JSON.parse(localStorage.getItem('selectedTeams') || '[]');
     setTeams(storedTeams);
-    generateSchedule(storedTeams);
+    setSchedule(generateSchedule(teamNames()));
 
     const storedWinners = JSON.parse(localStorage.getItem('gameWinners') || '{}');
     setWinners(storedWinners);
@@ -24,8 +24,20 @@ const GamesPage = () => {
   }, []);
 
   const handleAddRoundRobin = () => {
-    const additionalGames = generateSchedule(teams);
-    setSchedule((prevSchedule) => [...prevSchedule, ...additionalGames]);
+    const additionalGames = generateSchedule(teamNames());
+    setSchedule([...schedule, ...additionalGames]);
+  };
+
+  const teamNames = () => {
+    const teamNames = teams.map((team, index) => {
+      if (team.name) {
+        return team.name;
+      }
+      else {
+        return "Team " + (index + 1);
+      }
+    });
+    return teamNames;
   };
 
   const handleWinnerChange = (index, winner) => {

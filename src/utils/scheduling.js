@@ -1,28 +1,31 @@
-const generateSchedule = (teams) => {
-    const numTeams = teams.length;
-    const rounds = numTeams - 1;
-    const halfSize = numTeams / 2;
+function generateSchedule(teamNames) {
+  const numTeams = teamNames.length;
+  const isOdd = numTeams % 2 !== 0;
+  const teamsWithBye = isOdd ? [...teamNames, 'Bye'] : teamNames;
+  const totalTeams = teamsWithBye.length;
+  const rounds = totalTeams - 1;
+  const halfSize = totalTeams / 2;
 
-    const teamIndexes = teams.map((_, i) => i + 1);
-    const newSchedule = [];
+  const schedule = [];
+  const backSchedule = [];
 
-    for (let round = 0; round < rounds; round++) {
-      const roundMatches = [];
-      for (let i = 0; i < halfSize; i++) {
-        const home = teamIndexes[i];
-        const away = teamIndexes[numTeams - 1 - i];
-        roundMatches.push({ homeTeam: `Team ${home}`, awayTeam: `Team ${away}` });
+  for (let round = 0; round < rounds; round++) {
+    const roundMatches = [];
+    const backRoundMatches = [];
+    for (let i = 0; i < halfSize; i++) {
+      const home = teamsWithBye[i];
+      const away = teamsWithBye[totalTeams - 1 - i];
+      if (home !== 'Bye' && away !== 'Bye') {
+        roundMatches.push({ homeTeam: home, awayTeam: away });
+        backRoundMatches.push({ homeTeam: away, awayTeam: home });
       }
-      newSchedule.push(...roundMatches);
-
-      // Rotate teams
-      teamIndexes.splice(1, 0, teamIndexes.pop());
     }
+    schedule.push(...roundMatches);
+    backSchedule.push(...backRoundMatches);
+    teamsWithBye.splice(1, 0, teamsWithBye.pop());
+  }
 
-    const reversedNewSchedule = newSchedule.map(({ homeTeam, awayTeam }) => ({ homeTeam: awayTeam, awayTeam: homeTeam }));
+  return [...schedule, ...backSchedule];
+};
 
-    return newSchedule.concat(reversedNewSchedule);
-    
-  };
-
-  export { generateSchedule };
+export { generateSchedule };
