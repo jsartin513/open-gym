@@ -142,7 +142,7 @@ const GamesPage = () => {
                 <ul className={styles.gamesList}>
                   {pastGames.map((game, index) => (
                     <li key={index}>
-                      {game.homeTeam} vs {game.awayTeam}
+                      {game.homeTeam} vs {game.awayTeam} - Winner: {winners[index]}
                     </li>
                   ))}
                 </ul>
