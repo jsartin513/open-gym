@@ -43,7 +43,9 @@ const GamesPage = () => {
       teamIndexes.splice(1, 0, teamIndexes.pop());
     }
 
-    setSchedule((prevSchedule) => [...prevSchedule, ...newSchedule]);
+    const reversedNewSchedule = newSchedule.map(({ homeTeam, awayTeam }) => ({ homeTeam: awayTeam, awayTeam: homeTeam }));
+
+    setSchedule((prevSchedule) => [...prevSchedule, ...newSchedule, ...reversedNewSchedule]);
   };
 
   const handleAddRoundRobin = () => {
