@@ -53,6 +53,7 @@ const GamesPage = () => {
   };
 
   const handleWinnerChange = (index, winner) => {
+    console.log("index: ", index);
     const updatedWinners = { ...winners, [index]: winner };
     setWinners(updatedWinners);
     localStorage.setItem('gameWinners', JSON.stringify(updatedWinners));
@@ -109,6 +110,15 @@ const GamesPage = () => {
                 <div className={styles.currentGame}>
                   <h2>Current Game</h2>
                   <p>{currentGame.homeTeam} vs {currentGame.awayTeam}</p>
+                  <select
+                    className={styles.select}
+                    value={winners[currentGameIndex] || ''}
+                    onChange={(e) => handleWinnerChange(currentGameIndex, e.target.value)}
+                  >
+                    <option value="">Select Winner</option>
+                    <option value={currentGame.homeTeam}>{currentGame.homeTeam}</option>
+                    <option value={currentGame.awayTeam}>{currentGame.awayTeam}</option>
+                  </select>
                 </div>
               )}
               {nextGame && (
@@ -123,15 +133,6 @@ const GamesPage = () => {
                   {upcomingGames.map((game, index) => (
                     <li key={index}>
                       {game.homeTeam} vs {game.awayTeam}
-                      <select
-                        className={styles.select}
-                        value={winners[index] || ''}
-                        onChange={(e) => handleWinnerChange(index, e.target.value)}
-                      >
-                        <option value="">Select Winner</option>
-                        <option value={game.homeTeam}>{game.homeTeam}</option>
-                        <option value={game.awayTeam}>{game.awayTeam}</option>
-                      </select>
                     </li>
                   ))}
                 </ul>
@@ -142,15 +143,6 @@ const GamesPage = () => {
                   {pastGames.map((game, index) => (
                     <li key={index}>
                       {game.homeTeam} vs {game.awayTeam}
-                      <select
-                        className={styles.select}
-                        value={winners[index] || ''}
-                        onChange={(e) => handleWinnerChange(index, e.target.value)}
-                      >
-                        <option value="">Select Winner</option>
-                        <option value={game.homeTeam}>{game.homeTeam}</option>
-                        <option value={game.awayTeam}>{game.awayTeam}</option>
-                      </select>
                     </li>
                   ))}
                 </ul>
