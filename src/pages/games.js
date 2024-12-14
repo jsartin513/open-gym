@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/(layout)/layout";
 import PrintableSchedule from "../components/PrintableSchedule";
 import styles from "../styles/GamesPage.module.css";
-import { generateSchedule } from '../utils/teams';
+import { generateSchedule } from '../utils/scheduling';
 
 const GamesPage = () => {
   const [teams, setTeams] = useState([]);
