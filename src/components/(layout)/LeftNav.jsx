@@ -4,7 +4,7 @@ import styles from './LeftNav.module.css';
 
 const LeftNav = () => {
   return (
-    <nav className={styles.nav}>
+    <nav className={`${styles.nav} ${styles.printHidden}`}>
       <ul>
         <li>
           <Link href="/attendance">Attendance</Link>
