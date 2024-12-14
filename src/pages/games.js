@@ -115,9 +115,9 @@ const GamesPage = () => {
                 </div>
               )}
               <div>
-                <h2>Upcoming Games</h2>
+                <h2>After that...</h2>
                 <ul className={styles.gamesList}>
-                  {upcomingGames.map((game, index) => (
+                  {upcomingGames.slice(2).map((game, index) => (
                     <li key={index}>
                       {game.homeTeam} vs {game.awayTeam}
                     </li>
@@ -141,7 +141,7 @@ const GamesPage = () => {
             <div>
                 <h2>Finished Games</h2>
                 <ul className={styles.gamesList}>
-                  {pastGames.map((game, index) => (
+                  {pastGames.slice(2).map((game, index) => (
                     <li key={index}>
                       {game.homeTeam} vs {game.awayTeam} - Winner: {winners[index]}
                     </li>
