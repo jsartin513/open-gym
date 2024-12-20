@@ -15,7 +15,7 @@ export default function AttendancePage() {
   const [expectedPlayers, setExpectedPlayers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [newPlayerName, setNewPlayerName] = useState("");
-  const [newPlayerGender, setNewPlayerGender] = useState("");
+  const [newPlayerGender, setNewPlayerGender] = useState("male");
   const [newPlayerSkillLevel, setNewPlayerSkillLevel] = useState("intermediate");
 
   const fetchPlayerData = () => {
