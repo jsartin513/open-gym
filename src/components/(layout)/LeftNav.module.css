@@ -36,3 +36,18 @@
     display: none;
   }
 }
+
+.collapsed {
+  width: 40px; 
+}
+
+.toggleButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
