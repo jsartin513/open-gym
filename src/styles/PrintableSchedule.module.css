@@ -30,4 +30,8 @@
   .gamesHeader {
     display: none;
   }
+
+  .footer {
+    display: none;
+  }
 }
