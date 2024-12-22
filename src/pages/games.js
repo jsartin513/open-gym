@@ -161,7 +161,7 @@ const GamesPage = () => {
             <div>
                 <h2>Finished Games</h2>
                 <ul className={styles.gamesList}>
-                  {pastGames.slice(2).map((game, index) => (
+                  {pastGames.map((game, index) => (
                     <li key={index}>
                       {game.homeTeam} vs {game.awayTeam} - Winner: {winners[index] === 'tie' ? 'Tie' : winners[index]}
                     </li>
