@@ -9,7 +9,9 @@ const GamesPage = () => {
   const [schedule, setSchedule] = useState([]);
   const [winners, setWinners] = useState({});
   const [gamesWon, setGamesWon] = useState({});
+  const [skippedGames, setSkippedGames] = useState([]);
   const [isPrintableView, setIsPrintableView] = useState(false);
+  const [mode, setMode] = useState('foam');
 
   useEffect(() => {
     const storedTeams = JSON.parse(localStorage.getItem('selectedTeams') || '[]');
@@ -21,11 +23,24 @@ const GamesPage = () => {
 
     const storedGamesWon = JSON.parse(localStorage.getItem('gamesWon') || '{}');
     setGamesWon(storedGamesWon);
+
+    const storedSkippedGames = JSON.parse(localStorage.getItem('skippedGames') || '[]');
+    setSkippedGames(storedSkippedGames);
   }, []);
 
   const handleAddRoundRobin = () => {
     const additionalGames = generateSchedule(teamNames());
     setSchedule([...schedule, ...additionalGames]);
+  };
+
+  const handleSkipGame = (index) => {
+    const updatedSkippedGames = [...skippedGames, index];
+    setSkippedGames(updatedSkippedGames);
+    localStorage.setItem('skippedGames', JSON.stringify(updatedSkippedGames));
+  };
+
+  const handleModeToggle = () => {
+    setMode(mode === 'foam' ? 'cloth' : 'foam');
   };
 
   const teamNames = () => {
@@ -46,7 +61,7 @@ const GamesPage = () => {
     localStorage.setItem('gameWinners', JSON.stringify(updatedWinners));
 
     const updatedGamesWon = { ...gamesWon };
-    if (winner) {
+    if (winner && winner !== 'tie') {
       updatedGamesWon[winner] = (updatedGamesWon[winner] || 0) + 1;
     }
     setGamesWon(updatedGamesWon);
@@ -70,6 +85,27 @@ const GamesPage = () => {
     return gamesWonByTeam;
   };
 
+  const calculateClothPoints = () => {
+    const pointsByTeam = {};
+    Object.values(winners).forEach((winner, index) => {
+      if (winner && winner !== 'tie') {
+        pointsByTeam[winner] = (pointsByTeam[winner] || 0) + 2;
+      }
+      else {
+        // Lookup which teams played
+        console.log(schedule[index]);
+        // If they played, add 1 point to each
+        if (schedule[index]) {
+          const homeTeam = schedule[index].homeTeam;
+          const awayTeam = schedule[index].awayTeam;
+          pointsByTeam[homeTeam] = (pointsByTeam[homeTeam] || 0) + 1;
+          pointsByTeam[awayTeam] = (pointsByTeam[awayTeam] || 0) + 1;
+        }
+      }
+    });
+    return pointsByTeam;
+  }
+
   const gamesWonByTeam = calculateGamesWon();
 
   const currentGameIndex = schedule.findIndex((_, index) => !winners[index]);
@@ -89,6 +125,9 @@ const GamesPage = () => {
           <button className={styles.button} onClick={() => setIsPrintableView(!isPrintableView)}>
             {isPrintableView ? 'Back to Schedule' : 'Printable View'}
           </button>
+          <button className={styles.button} onClick={handleModeToggle}>
+            Toggle to {mode === 'foam' ? 'Cloth' : 'Foam'} Mode
+          </button>
           {isPrintableView ? (
             <PrintableSchedule schedule={schedule} />
           ) : (
@@ -102,10 +141,12 @@ const GamesPage = () => {
                     value={winners[currentGameIndex] || ''}
                     onChange={(e) => handleWinnerChange(currentGameIndex, e.target.value)}
                   >
-                    <option value="">Select Winner</option>
+                    <option value="">Select Result</option>
                     <option value={currentGame.homeTeam}>{currentGame.homeTeam}</option>
                     <option value={currentGame.awayTeam}>{currentGame.awayTeam}</option>
+                    {mode === 'cloth' && <option value="tie">Tie</option>}
                   </select>
+                  <button onClick={() => handleSkipGame(currentGameIndex)}>Skip</button>
                 </div>
               )}
               {nextGame && (
@@ -129,25 +170,41 @@ const GamesPage = () => {
           )}
         </div>
         {!isPrintableView && (
-          <div className={styles.gamesWonPanel}>
-            <h2>Games Won</h2>
-            <ul>
-              {Object.keys(gamesWonByTeam).map((team, index) => (
-                <li key={index}>
-                  {team}: {gamesWonByTeam[team]}
-                </li>
-              ))}
-            </ul>
-            <div>
-                <h2>Finished Games</h2>
-                <ul className={styles.gamesList}>
-                  {pastGames.slice(2).map((game, index) => (
+          <div className={styles.gamesWonPanel} >
+            {mode==='foam' && (
+              <div>
+                <h2>Games Won</h2>
+                <ul>
+                  {Object.keys(gamesWonByTeam).map((team, index) => (
                     <li key={index}>
-                      {game.homeTeam} vs {game.awayTeam} - Winner: {winners[index]}
+                      {team}: {gamesWonByTeam[team]}
                     </li>
                   ))}
                 </ul>
               </div>
+            )}
+            { mode==='cloth' && (
+              <div>
+                <h2>Points</h2>
+                <ul>
+                  {Object.keys(calculateClothPoints()).map((team, index) => (
+                    <li key={index}>
+                      {team}: {calculateClothPoints()[team]}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <div>
+              <h2>Finished Games</h2>
+              <ul className={styles.gamesList}>
+                {pastGames.map((game, index) => (
+                  <li key={index}>
+                    {game.homeTeam} vs {game.awayTeam} - Winner: {winners[index] === 'tie' ? 'Tie' : winners[index]}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         )}
       </div>
