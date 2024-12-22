@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/(layout)/layout";
 import PrintableSchedule from "../components/PrintableSchedule";
 import styles from "../styles/GamesPage.module.css";
-import { generateRotatingSchedule, generateRoundRobinSchedule } from '../utils/scheduling';
+import {
+  generateRotatingSchedule,
+  generateRoundRobinSchedule,
+} from "../utils/scheduling";
 
 const GamesPage = () => {
   const [teams, setTeams] = useState([]);
@@ -11,28 +14,86 @@ const GamesPage = () => {
   const [gamesWon, setGamesWon] = useState({});
   const [skippedGames, setSkippedGames] = useState([]);
   const [isPrintableView, setIsPrintableView] = useState(false);
-  const [mode, setMode] = useState('foam');
+  const [mode, setMode] = useState("foam");
+
+  const [gameTimer, setGameTimer] = useState(180); // 3 minutes in seconds
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [preGameCountdown, setPreGameCountdown] = useState(null);
 
   useEffect(() => {
-    const storedTeams = JSON.parse(localStorage.getItem('selectedTeams') || '[]');
+    const storedTeams = JSON.parse(
+      localStorage.getItem("selectedTeams") || "[]"
+    );
     setTeams(storedTeams);
     setSchedule(getAdditionalGamesRound());
 
-    const storedWinners = JSON.parse(localStorage.getItem('gameWinners') || '{}');
+    const storedWinners = JSON.parse(
+      localStorage.getItem("gameWinners") || "{}"
+    );
     setWinners(storedWinners);
 
-    const storedGamesWon = JSON.parse(localStorage.getItem('gamesWon') || '{}');
+    const storedGamesWon = JSON.parse(localStorage.getItem("gamesWon") || "{}");
     setGamesWon(storedGamesWon);
 
-    const storedSkippedGames = JSON.parse(localStorage.getItem('skippedGames') || '[]');
+    const storedSkippedGames = JSON.parse(
+      localStorage.getItem("skippedGames") || "[]"
+    );
     setSkippedGames(storedSkippedGames);
   }, []);
 
+  useEffect(() => {
+    let timerInterval;
+
+    if (isTimerRunning) {
+      if (preGameCountdown !== null) {
+        if (preGameCountdown > 0) {
+          timerInterval = setInterval(() => {
+            setPreGameCountdown(preGameCountdown - 1);
+          }, 1000);
+        } else {
+          setPreGameCountdown(null);
+          setGameTimer(180); // Reset game timer to 3 minutes
+        }
+      } else {
+        if (gameTimer > 0) {
+          timerInterval = setInterval(() => {
+            setGameTimer(gameTimer - 1);
+          }, 1000);
+        } else {
+          setIsTimerRunning(false);
+        }
+      }
+    }
+
+    return () => clearInterval(timerInterval);
+  }, [isTimerRunning, gameTimer, preGameCountdown]);
+
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+  };
+
+  const handleStartGame = () => {
+    if (!isTimerRunning) {
+      setPreGameCountdown(5);
+      setIsTimerRunning(true);
+    }
+  };
+
+  const handleEndGame = () => {
+    setIsTimerRunning(false);
+    setPreGameCountdown(null);
+    setGameTimer(180);
+  };
 
   const getAdditionalGamesRound = () => {
-    const additionalGames = teams.length > 3 ? generateRoundRobinSchedule(teamNames()) : generateRotatingSchedule(teamNames());
-    return additionalGames
-  }
+    const additionalGames =
+      teams.length > 3
+        ? generateRoundRobinSchedule(teamNames())
+        : generateRotatingSchedule(teamNames());
+    return additionalGames;
+  };
   const handleAddGamesRound = () => {
     const additionalGames = getAdditionalGamesRound();
     setSchedule([...schedule, ...additionalGames]);
@@ -41,19 +102,18 @@ const GamesPage = () => {
   const handleSkipGame = (index) => {
     const updatedSkippedGames = [...skippedGames, index];
     setSkippedGames(updatedSkippedGames);
-    localStorage.setItem('skippedGames', JSON.stringify(updatedSkippedGames));
+    localStorage.setItem("skippedGames", JSON.stringify(updatedSkippedGames));
   };
 
   const handleModeToggle = () => {
-    setMode(mode === 'foam' ? 'cloth' : 'foam');
+    setMode(mode === "foam" ? "cloth" : "foam");
   };
 
   const teamNames = () => {
     const teamNames = teams.map((team, index) => {
       if (team.name) {
         return team.name;
-      }
-      else {
+      } else {
         return "Team " + (index + 1);
       }
     });
@@ -63,21 +123,21 @@ const GamesPage = () => {
   const handleWinnerChange = (index, winner) => {
     const updatedWinners = { ...winners, [index]: winner };
     setWinners(updatedWinners);
-    localStorage.setItem('gameWinners', JSON.stringify(updatedWinners));
+    localStorage.setItem("gameWinners", JSON.stringify(updatedWinners));
 
     const updatedGamesWon = { ...gamesWon };
-    if (winner && winner !== 'tie') {
+    if (winner && winner !== "tie") {
       updatedGamesWon[winner] = (updatedGamesWon[winner] || 0) + 1;
     }
     setGamesWon(updatedGamesWon);
-    localStorage.setItem('gamesWon', JSON.stringify(updatedGamesWon));
+    localStorage.setItem("gamesWon", JSON.stringify(updatedGamesWon));
   };
 
   const handleClearWins = () => {
     setWinners({});
     setGamesWon({});
-    localStorage.removeItem('gameWinners');
-    localStorage.removeItem('gamesWon');
+    localStorage.removeItem("gameWinners");
+    localStorage.removeItem("gamesWon");
   };
 
   const calculateGamesWon = () => {
@@ -93,10 +153,9 @@ const GamesPage = () => {
   const calculateClothPoints = () => {
     const pointsByTeam = {};
     Object.values(winners).forEach((winner, index) => {
-      if (winner && winner !== 'tie') {
+      if (winner && winner !== "tie") {
         pointsByTeam[winner] = (pointsByTeam[winner] || 0) + 2;
-      }
-      else {
+      } else {
         // Lookup which teams played
         console.log(schedule[index]);
         // If they played, add 1 point to each
@@ -109,7 +168,7 @@ const GamesPage = () => {
       }
     });
     return pointsByTeam;
-  }
+  };
 
   const gamesWonByTeam = calculateGamesWon();
 
@@ -126,13 +185,20 @@ const GamesPage = () => {
         <div className={styles.gamesSchedulePanel}>
           <div className={styles.gamesHeader}>
             <h1>Game Schedule</h1>
-            <button className={styles.button} onClick={handleAddGamesRound}>Add Round</button>
-            <button className={styles.button} onClick={handleClearWins}>Clear Wins</button>
-            <button className={styles.button} onClick={() => setIsPrintableView(!isPrintableView)}>
-              {isPrintableView ? 'Back to Schedule' : 'Printable View'}
+            <button className={styles.button} onClick={handleAddGamesRound}>
+              Add Round
+            </button>
+            <button className={styles.button} onClick={handleClearWins}>
+              Clear Wins
+            </button>
+            <button
+              className={styles.button}
+              onClick={() => setIsPrintableView(!isPrintableView)}
+            >
+              {isPrintableView ? "Back to Schedule" : "Printable View"}
             </button>
             <button className={styles.button} onClick={handleModeToggle}>
-              Toggle to {mode === 'foam' ? 'Cloth' : 'Foam'} Mode
+              Toggle to {mode === "foam" ? "Cloth" : "Foam"} Mode
             </button>
           </div>
           {isPrintableView ? (
@@ -142,24 +208,36 @@ const GamesPage = () => {
               {currentGame && (
                 <div className={styles.currentGame}>
                   <h2>Current Game</h2>
-                  <p>{currentGame.homeTeam} vs {currentGame.awayTeam}</p>
+                  <p>
+                    {currentGame.homeTeam} vs {currentGame.awayTeam}
+                  </p>
                   <select
                     className={styles.select}
-                    value={winners[currentGameIndex] || ''}
-                    onChange={(e) => handleWinnerChange(currentGameIndex, e.target.value)}
+                    value={winners[currentGameIndex] || ""}
+                    onChange={(e) =>
+                      handleWinnerChange(currentGameIndex, e.target.value)
+                    }
                   >
                     <option value="">Select Result</option>
-                    <option value={currentGame.homeTeam}>{currentGame.homeTeam}</option>
-                    <option value={currentGame.awayTeam}>{currentGame.awayTeam}</option>
-                    {mode === 'cloth' && <option value="tie">Tie</option>}
+                    <option value={currentGame.homeTeam}>
+                      {currentGame.homeTeam}
+                    </option>
+                    <option value={currentGame.awayTeam}>
+                      {currentGame.awayTeam}
+                    </option>
+                    {mode === "cloth" && <option value="tie">Tie</option>}
                   </select>
-                  <button onClick={() => handleSkipGame(currentGameIndex)}>Skip</button>
+                  <button onClick={() => handleSkipGame(currentGameIndex)}>
+                    Skip
+                  </button>
                 </div>
               )}
               {nextGame && (
                 <div className={styles.nextGame}>
                   <h2>Next Game</h2>
-                  <p>{nextGame.homeTeam} vs {nextGame.awayTeam}</p>
+                  <p>
+                    {nextGame.homeTeam} vs {nextGame.awayTeam}
+                  </p>
                 </div>
               )}
               <div>
@@ -172,13 +250,12 @@ const GamesPage = () => {
                   ))}
                 </ul>
               </div>
-              
             </>
           )}
         </div>
         {!isPrintableView && (
-          <div className={styles.gamesWonPanel} >
-            {mode==='foam' && (
+          <div className={styles.gamesWonPanel}>
+            {mode === "foam" && (
               <div>
                 <h2>Games Won</h2>
                 <ul>
@@ -190,7 +267,7 @@ const GamesPage = () => {
                 </ul>
               </div>
             )}
-            { mode==='cloth' && (
+            {mode === "cloth" && (
               <div>
                 <h2>Points</h2>
                 <ul>
@@ -202,12 +279,36 @@ const GamesPage = () => {
                 </ul>
               </div>
             )}
+
+            <div className={styles.timerPanel}>
+              <h2>Game Timer</h2>
+              {preGameCountdown !== null ? (
+                <p>Starting in {preGameCountdown}...</p>
+              ) : (
+                <p className={gameTimer <= 10 ? styles.flashingTimer : ""}>
+                  {formatTime(gameTimer)}{" "}
+                  {gameTimer <= 0 &&
+                    (mode === "cloth" ? "Game Over!" : "No Blocking!")}
+                </p>
+              )}
+              <button
+                onClick={handleStartGame}
+                disabled={isTimerRunning && preGameCountdown === null}
+              >
+                Start Game
+              </button>
+              <button onClick={handleEndGame} disabled={!isTimerRunning}>
+                End Game
+              </button>
+            </div>
+
             <div>
               <h2>Finished Games</h2>
               <ul className={styles.gamesList}>
                 {pastGames.map((game, index) => (
                   <li key={index}>
-                    {game.homeTeam} vs {game.awayTeam} - Winner: {winners[index] === 'tie' ? 'Tie' : winners[index]}
+                    {game.homeTeam} vs {game.awayTeam} - Winner:{" "}
+                    {winners[index] === "tie" ? "Tie" : winners[index]}
                   </li>
                 ))}
               </ul>
