@@ -1,4 +1,4 @@
-function generateSchedule(teamNames) {
+function generateRoundRobinSchedule(teamNames) {
   const numTeams = teamNames.length;
   const isOdd = numTeams % 2 !== 0;
   const teamsWithBye = isOdd ? [...teamNames, 'Bye'] : teamNames;
@@ -28,4 +28,4 @@ function generateSchedule(teamNames) {
   return [...matches, ...reverseMatches];
 }
 
-export { generateSchedule };
+export { generateRoundRobinSchedule };

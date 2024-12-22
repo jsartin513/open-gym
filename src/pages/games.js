@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/(layout)/layout";
 import PrintableSchedule from "../components/PrintableSchedule";
 import styles from "../styles/GamesPage.module.css";
-import { generateSchedule } from '../utils/scheduling';
+import { generateRoundRobinSchedule } from '../utils/scheduling';
 
 const GamesPage = () => {
   const [teams, setTeams] = useState([]);
@@ -16,7 +16,7 @@ const GamesPage = () => {
   useEffect(() => {
     const storedTeams = JSON.parse(localStorage.getItem('selectedTeams') || '[]');
     setTeams(storedTeams);
-    setSchedule(generateSchedule(teamNames()));
+    setSchedule(generateRoundRobinSchedule(teamNames()));
 
     const storedWinners = JSON.parse(localStorage.getItem('gameWinners') || '{}');
     setWinners(storedWinners);
@@ -29,7 +29,7 @@ const GamesPage = () => {
   }, []);
 
   const handleAddRoundRobin = () => {
-    const additionalGames = generateSchedule(teamNames());
+    const additionalGames = generateRoundRobinSchedule(teamNames());
     setSchedule([...schedule, ...additionalGames]);
   };
 
