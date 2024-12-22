@@ -16,6 +16,7 @@ const GamesPage = () => {
   const [isPrintableView, setIsPrintableView] = useState(false);
   const [mode, setMode] = useState("foam");
 
+  const [gameLength, setGameLength] = useState(180); // 3 minutes in seconds
   const [gameTimer, setGameTimer] = useState(180); // 3 minutes in seconds
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [preGameCountdown, setPreGameCountdown] = useState(null);
@@ -52,7 +53,7 @@ const GamesPage = () => {
           }, 1000);
         } else {
           setPreGameCountdown(null);
-          setGameTimer(180); // Reset game timer to 3 minutes
+          setGameTimer(gameLength); // Reset game timer to 3 minutes
         }
       } else {
         if (gameTimer > 0) {
@@ -84,7 +85,7 @@ const GamesPage = () => {
   const handleEndGame = () => {
     setIsTimerRunning(false);
     setPreGameCountdown(null);
-    setGameTimer(180);
+    setGameTimer(gameLength);
   };
 
   const getAdditionalGamesRound = () => {
@@ -168,6 +169,12 @@ const GamesPage = () => {
       }
     });
     return pointsByTeam;
+  };
+
+  const toggleGameDuration = () => {
+    setGameLength(gameLength === 180 ? 90 : 180);
+    setGameTimer(gameLength === 180 ? 90 : 180);
+    clearInterval();
   };
 
   const gamesWonByTeam = calculateGamesWon();
@@ -300,6 +307,11 @@ const GamesPage = () => {
               <button onClick={handleEndGame} disabled={!isTimerRunning}>
                 End Game
               </button>
+              {mode === "cloth" && !isTimerRunning && (
+                <button onClick={toggleGameDuration}>
+                  Toggle to {gameTimer === 180 ? "90 seconds" : "3 minutes"}
+                </button>
+              )}
             </div>
 
             <div>
