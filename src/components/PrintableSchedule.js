@@ -10,7 +10,7 @@ const PrintableSchedule = ({ schedule }) => {
           <tr>
             <th>Home Team/Inner Wall</th>
             <th>Away Team/Door Side</th>
-            <th>Winner</th>
+            <th className={styles.winnersColumn}>Winner</th>
           </tr>
         </thead>
         <tbody>
