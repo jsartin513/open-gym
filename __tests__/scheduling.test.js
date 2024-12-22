@@ -1,7 +1,48 @@
-import { generateRoundRobinSchedule } from '../src/utils/scheduling';
+import { generateRoundRobinSchedule, generateRotatingSchedule } from '../src/utils/scheduling';
 
-// FILE: /Users/jessica.sartin/github_development/open-gym/__tests__/scheduling.test.js
+describe('generateRotatingSchedule', () => {
+  test('generates schedule for 4 teams', () => {
+    const teams = ['Team A', 'Team B', 'Team C', 'Team D'];
+    const schedule = generateRotatingSchedule(teams);
 
+    const expectedSchedule = [
+      { homeTeam: 'Team B', awayTeam: 'Team A' },
+      { homeTeam: 'Team C', awayTeam: 'Team B' },
+      { homeTeam: 'Team D', awayTeam: 'Team C' },
+      { homeTeam: 'Team A', awayTeam: 'Team D' },
+    ];
+
+    expect(schedule).toEqual(expectedSchedule);
+  });
+
+  test('generates schedule for 3 teams', () => {
+    const teams = ['Team A', 'Team B', 'Team C'];
+    const schedule = generateRotatingSchedule(teams);
+
+    const expectedSchedule = [
+      { homeTeam: 'Team B', awayTeam: 'Team A' },
+      { homeTeam: 'Team C', awayTeam: 'Team B' },
+      { homeTeam: 'Team A', awayTeam: 'Team C' },
+    ];
+
+    expect(schedule).toEqual(expectedSchedule);
+  });
+
+  test('generates schedule for 5 teams', () => {
+    const teams = ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'];
+    const schedule = generateRotatingSchedule(teams);
+
+    const expectedSchedule = [
+      { homeTeam: 'Team B', awayTeam: 'Team A' },
+      { homeTeam: 'Team C', awayTeam: 'Team B' },
+      { homeTeam: 'Team D', awayTeam: 'Team C' },
+      { homeTeam: 'Team E', awayTeam: 'Team D' },
+      { homeTeam: 'Team A', awayTeam: 'Team E' },
+    ];
+
+    expect(schedule).toEqual(expectedSchedule);
+  });
+});
 describe('generateRoundRobinSchedule', () => {
     test('should generate the correct number of rounds for 4 teams', () => {
         const teams = ['Team 1', 'Team 2', 'Team 3', 'Team 4'];
@@ -93,3 +134,4 @@ describe('generateRoundRobinSchedule', () => {
         expect(schedule).toEqual(expectedSchedule);
     });
 });
+

@@ -28,4 +28,39 @@ function generateRoundRobinSchedule(teamNames) {
   return [...matches, ...reverseMatches];
 }
 
-export { generateRoundRobinSchedule };
+function generateRotatingSchedule(teamNames) {
+  const numTeams = teamNames.length;
+  const rounds = numTeams;
+  const matches = [];
+
+  let teams = [...teamNames];
+  let sittingTeams = [];
+
+  for (let round = 0; round < rounds; round++) {
+    const roundMatches = [];
+
+    // Rotate teams
+    const awayTeam = teams.shift();
+    const homeTeam = teams[0]
+    sittingTeams.push(awayTeam);
+
+    // Create match
+    roundMatches.push({ homeTeam, awayTeam });
+
+    // Rotate sitting teams
+    if (sittingTeams.length > 1) {
+      const nextHomeTeam = sittingTeams.shift();
+      teams.push(nextHomeTeam);
+    }
+
+    // Add remaining teams back to the list
+    teams.push(awayTeam);
+
+    // Add round matches to the schedule
+    matches.push(...roundMatches);
+  }
+
+  return matches;
+}
+
+export { generateRoundRobinSchedule, generateRotatingSchedule };
