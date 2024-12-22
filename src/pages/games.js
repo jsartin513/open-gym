@@ -85,6 +85,27 @@ const GamesPage = () => {
     return gamesWonByTeam;
   };
 
+  const calculateClothPoints = () => {
+    const pointsByTeam = {};
+    Object.values(winners).forEach((winner, index) => {
+      if (winner && winner !== 'tie') {
+        pointsByTeam[winner] = (pointsByTeam[winner] || 0) + 2;
+      }
+      else {
+        // Lookup which teams played
+        console.log(schedule[index]);
+        // If they played, add 1 point to each
+        if (schedule[index]) {
+          const homeTeam = schedule[index].homeTeam;
+          const awayTeam = schedule[index].awayTeam;
+          pointsByTeam[homeTeam] = (pointsByTeam[homeTeam] || 0) + 1;
+          pointsByTeam[awayTeam] = (pointsByTeam[awayTeam] || 0) + 1;
+        }
+      }
+    });
+    return pointsByTeam;
+  }
+
   const gamesWonByTeam = calculateGamesWon();
 
   const currentGameIndex = schedule.findIndex((_, index) => !winners[index]);
@@ -149,25 +170,41 @@ const GamesPage = () => {
           )}
         </div>
         {!isPrintableView && (
-          <div className={styles.gamesWonPanel}>
-            <h2>Games Won</h2>
-            <ul>
-              {Object.keys(gamesWonByTeam).map((team, index) => (
-                <li key={index}>
-                  {team}: {gamesWonByTeam[team]}
-                </li>
-              ))}
-            </ul>
-            <div>
-                <h2>Finished Games</h2>
-                <ul className={styles.gamesList}>
-                  {pastGames.map((game, index) => (
+          <div className={styles.gamesWonPanel} >
+            {mode==='foam' && (
+              <div>
+                <h2>Games Won</h2>
+                <ul>
+                  {Object.keys(gamesWonByTeam).map((team, index) => (
                     <li key={index}>
-                      {game.homeTeam} vs {game.awayTeam} - Winner: {winners[index] === 'tie' ? 'Tie' : winners[index]}
+                      {team}: {gamesWonByTeam[team]}
                     </li>
                   ))}
                 </ul>
               </div>
+            )}
+            { mode==='cloth' && (
+              <div>
+                <h2>Points</h2>
+                <ul>
+                  {Object.keys(calculateClothPoints()).map((team, index) => (
+                    <li key={index}>
+                      {team}: {calculateClothPoints()[team]}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <div>
+              <h2>Finished Games</h2>
+              <ul className={styles.gamesList}>
+                {pastGames.map((game, index) => (
+                  <li key={index}>
+                    {game.homeTeam} vs {game.awayTeam} - Winner: {winners[index] === 'tie' ? 'Tie' : winners[index]}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         )}
       </div>
