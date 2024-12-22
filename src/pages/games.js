@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/(layout)/layout";
 import PrintableSchedule from "../components/PrintableSchedule";
 import styles from "../styles/GamesPage.module.css";
-import { generateSchedule } from '../utils/scheduling';
+import { generateRotatingSchedule, generateRoundRobinSchedule } from '../utils/scheduling';
 
 const GamesPage = () => {
   const [teams, setTeams] = useState([]);
@@ -16,7 +16,7 @@ const GamesPage = () => {
   useEffect(() => {
     const storedTeams = JSON.parse(localStorage.getItem('selectedTeams') || '[]');
     setTeams(storedTeams);
-    setSchedule(generateSchedule(teamNames()));
+    setSchedule(getAdditionalGamesRound());
 
     const storedWinners = JSON.parse(localStorage.getItem('gameWinners') || '{}');
     setWinners(storedWinners);
@@ -28,8 +28,13 @@ const GamesPage = () => {
     setSkippedGames(storedSkippedGames);
   }, []);
 
-  const handleAddRoundRobin = () => {
-    const additionalGames = generateSchedule(teamNames());
+
+  const getAdditionalGamesRound = () => {
+    const additionalGames = teams.length > 3 ? generateRoundRobinSchedule(teamNames()) : generateRotatingSchedule(teamNames());
+    return additionalGames
+  }
+  const handleAddGamesRound = () => {
+    const additionalGames = getAdditionalGamesRound();
     setSchedule([...schedule, ...additionalGames]);
   };
 
@@ -121,7 +126,7 @@ const GamesPage = () => {
         <div className={styles.gamesSchedulePanel}>
           <div className={styles.gamesHeader}>
             <h1>Game Schedule</h1>
-            <button className={styles.button} onClick={handleAddRoundRobin}>Add Round</button>
+            <button className={styles.button} onClick={handleAddGamesRound}>Add Round</button>
             <button className={styles.button} onClick={handleClearWins}>Clear Wins</button>
             <button className={styles.button} onClick={() => setIsPrintableView(!isPrintableView)}>
               {isPrintableView ? 'Back to Schedule' : 'Printable View'}
