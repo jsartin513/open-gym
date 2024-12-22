@@ -119,15 +119,17 @@ const GamesPage = () => {
     <Layout>
       <div className={styles.container}>
         <div className={styles.gamesSchedulePanel}>
-          <h1>Game Schedule</h1>
-          <button className={styles.button} onClick={handleAddRoundRobin}>Add Round</button>
-          <button className={styles.button} onClick={handleClearWins}>Clear Wins</button>
-          <button className={styles.button} onClick={() => setIsPrintableView(!isPrintableView)}>
-            {isPrintableView ? 'Back to Schedule' : 'Printable View'}
-          </button>
-          <button className={styles.button} onClick={handleModeToggle}>
-            Toggle to {mode === 'foam' ? 'Cloth' : 'Foam'} Mode
-          </button>
+          <div className={styles.gamesHeader}>
+            <h1>Game Schedule</h1>
+            <button className={styles.button} onClick={handleAddRoundRobin}>Add Round</button>
+            <button className={styles.button} onClick={handleClearWins}>Clear Wins</button>
+            <button className={styles.button} onClick={() => setIsPrintableView(!isPrintableView)}>
+              {isPrintableView ? 'Back to Schedule' : 'Printable View'}
+            </button>
+            <button className={styles.button} onClick={handleModeToggle}>
+              Toggle to {mode === 'foam' ? 'Cloth' : 'Foam'} Mode
+            </button>
+          </div>
           {isPrintableView ? (
             <PrintableSchedule schedule={schedule} />
           ) : (
