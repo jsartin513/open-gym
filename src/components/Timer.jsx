@@ -7,6 +7,26 @@ const Timer = ({ mode }) => {
   const [preGameCountdown, setPreGameCountdown] = useState(null);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
 
+  function speak(text) {
+    console.log("Speaking:", text);
+    const utterance = new SpeechSynthesisUtterance(text);
+    window.speechSynthesis.speak(utterance);
+  }
+
+  function speakTimeIfRelevant(seconds) {
+    console.log("Checking speak time:", seconds);
+    if (seconds === 60) {
+      speak("One minute remaining");
+    } else if (seconds === 30) {
+      speak("Thirty seconds remaining");
+    } else if (seconds === 10) {
+      speak("Ten seconds remaining");
+    } else if (seconds === 0) {
+      speak("Game over");
+    }
+
+  }
+
   const toggleGameDuration = () => {
     setGameLength(gameLength === 180 ? 90 : 180);
     setGameTimer(gameLength === 180 ? 90 : 180);
@@ -17,6 +37,7 @@ const Timer = ({ mode }) => {
     if (preGameCountdown !== null) {
       const countdownInterval = setInterval(() => {
         setPreGameCountdown((prev) => {
+          speakTimeIfRelevant(prev);
           if (prev > 1) {
             return prev - 1;
           } else {
@@ -34,6 +55,7 @@ const Timer = ({ mode }) => {
     if (isTimerRunning) {
       timerInterval = setInterval(() => {
         setGameTimer((prev) => {
+          speakTimeIfRelevant(prev);
           if (prev > 0) {
             return prev - 1;
           } else {
