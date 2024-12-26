@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../components/(layout)/layout";
 import PrintableSchedule from "../components/PrintableSchedule";
+import Timer from "../components/Timer";
 import styles from "../styles/GamesPage.module.css";
 import {
   generateRotatingSchedule,
@@ -16,10 +17,6 @@ const GamesPage = () => {
   const [isPrintableView, setIsPrintableView] = useState(false);
   const [mode, setMode] = useState("foam");
 
-  const [gameLength, setGameLength] = useState(180); // 3 minutes in seconds
-  const [gameTimer, setGameTimer] = useState(180); // 3 minutes in seconds
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
-  const [preGameCountdown, setPreGameCountdown] = useState(null);
 
   useEffect(() => {
     const storedTeams = JSON.parse(
@@ -41,52 +38,6 @@ const GamesPage = () => {
     );
     setSkippedGames(storedSkippedGames);
   }, []);
-
-  useEffect(() => {
-    let timerInterval;
-
-    if (isTimerRunning) {
-      if (preGameCountdown !== null) {
-        if (preGameCountdown > 0) {
-          timerInterval = setInterval(() => {
-            setPreGameCountdown(preGameCountdown - 1);
-          }, 1000);
-        } else {
-          setPreGameCountdown(null);
-          setGameTimer(gameLength); // Reset game timer to 3 minutes
-        }
-      } else {
-        if (gameTimer > 0) {
-          timerInterval = setInterval(() => {
-            setGameTimer(gameTimer - 1);
-          }, 1000);
-        } else {
-          setIsTimerRunning(false);
-        }
-      }
-    }
-
-    return () => clearInterval(timerInterval);
-  }, [isTimerRunning, gameTimer, preGameCountdown]);
-
-  const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
-  };
-
-  const handleStartGame = () => {
-    if (!isTimerRunning) {
-      setPreGameCountdown(5);
-      setIsTimerRunning(true);
-    }
-  };
-
-  const handleEndGame = () => {
-    setIsTimerRunning(false);
-    setPreGameCountdown(null);
-    setGameTimer(gameLength);
-  };
 
   const getAdditionalGamesRound = () => {
     const additionalGames =
@@ -169,12 +120,6 @@ const GamesPage = () => {
       }
     });
     return pointsByTeam;
-  };
-
-  const toggleGameDuration = () => {
-    setGameLength(gameLength === 180 ? 90 : 180);
-    setGameTimer(gameLength === 180 ? 90 : 180);
-    clearInterval();
   };
 
   const gamesWonByTeam = calculateGamesWon();
@@ -286,33 +231,10 @@ const GamesPage = () => {
                 </ul>
               </div>
             )}
-
-            <div className={styles.timerPanel}>
-              <h2>Game Timer</h2>
-              {preGameCountdown !== null ? (
-                <p>Starting in {preGameCountdown}...</p>
-              ) : (
-                <p className={gameTimer <= 10 ? styles.flashingTimer : ""}>
-                  {formatTime(gameTimer)}{" "}
-                  {gameTimer <= 0 &&
-                    (mode === "cloth" ? "Game Over!" : "No Blocking!")}
-                </p>
-              )}
-              <button
-                onClick={handleStartGame}
-                disabled={isTimerRunning && preGameCountdown === null}
-              >
-                Start Game
-              </button>
-              <button onClick={handleEndGame} disabled={!isTimerRunning}>
-                End Game
-              </button>
-              {mode === "cloth" && !isTimerRunning && (
-                <button onClick={toggleGameDuration}>
-                  Toggle to {gameTimer === 180 ? "90 seconds" : "3 minutes"}
-                </button>
-              )}
-            </div>
+              
+            <Timer
+              mode={mode}
+            />
 
             <div>
               <h2>Finished Games</h2>
