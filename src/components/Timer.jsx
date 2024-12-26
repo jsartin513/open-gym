@@ -13,7 +13,8 @@ const Timer = ({ mode }) => {
     window.speechSynthesis.speak(utterance);
   }
 
-  function speakTimeIfRelevant(seconds) {
+  function speakTimeIfRelevant(timerSeconds) {
+    const seconds = timerSeconds - 2; // speak 2 seconds before the actual time
     console.log("Checking speak time:", seconds);
     if (seconds === 0){
         speak("Game over");
