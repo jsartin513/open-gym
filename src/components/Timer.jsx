@@ -67,7 +67,7 @@ const Timer = ({ mode }) => {
             return prev - 1;
           } else {
             clearInterval(timerInterval);
-            setIsTimerRunning(false);
+            handleEndGame();
             return 0;
           }
         });
