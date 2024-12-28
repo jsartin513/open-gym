@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import styles from "../styles/GamesPage.module.css";
 
 const Timer = ({ mode }) => {
+  const TIMER_OFFSET = 1; // seconds before the actual time to speak
+
   const [gameTimer, setGameTimer] = useState(180);
   const [gameLength, setGameLength] = useState(180);
   const [preGameCountdown, setPreGameCountdown] = useState(null);
@@ -14,7 +16,7 @@ const Timer = ({ mode }) => {
   }
 
   function speakTimeIfRelevant(timerSeconds) {
-    const seconds = timerSeconds - 2; // speak 2 seconds before the actual time
+    const seconds = timerSeconds - TIMER_OFFSET;
     console.log("Checking speak time:", seconds);
     if (seconds === 0) {
       speak("Game over");
