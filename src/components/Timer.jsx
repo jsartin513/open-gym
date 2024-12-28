@@ -16,23 +16,19 @@ const Timer = ({ mode }) => {
   function speakTimeIfRelevant(timerSeconds) {
     const seconds = timerSeconds - 2; // speak 2 seconds before the actual time
     console.log("Checking speak time:", seconds);
-    if (seconds === 0){
-        speak("Game over");
-    }
-    else if (seconds === 60){
-        speak("One minute left");
-    }
-    else if (seconds % 60 === 0) {
+    if (seconds === 0) {
+      speak("Game over");
+    } else if (seconds === 60) {
+      speak("One minute left");
+    } else if (seconds % 60 === 0) {
       speak(`${seconds / 60} minutes left`);
     } else if ([30, 20, 10].includes(seconds)) {
       speak(`${seconds} seconds left`);
     } else if (isTimerRunning && seconds > 0 && seconds < 10) {
-        speak(seconds);
-    }
-    else if (seconds === 0) {
+      speak(seconds);
+    } else if (seconds === 0) {
       speak("Game over");
     }
-
   }
 
   const toggleGameDuration = () => {

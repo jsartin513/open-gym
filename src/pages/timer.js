@@ -13,16 +13,22 @@ const TimerPage = () => {
     <div className={styles.timerPage}>
       <h1>Ball type</h1>
       <div className={styles.modeSelector}>
-        <button className={styles.btn} onClick={() => handleModeChange("foam")} disabled={mode === "foam"}>
-          Foam 
+        <button
+          className={styles.btn}
+          onClick={() => handleModeChange("foam")}
+          disabled={mode === "foam"}
+        >
+          Foam
         </button>
-        <button className={styles.btn} onClick={() => handleModeChange("cloth")} disabled={mode === "cloth"}>
+        <button
+          className={styles.btn}
+          onClick={() => handleModeChange("cloth")}
+          disabled={mode === "cloth"}
+        >
           Cloth
         </button>
       </div>
-      <Timer
-              mode={mode}
-            />
+      <Timer mode={mode} />
     </div>
   );
 };
