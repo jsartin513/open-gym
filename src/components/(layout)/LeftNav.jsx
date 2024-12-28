@@ -25,6 +25,9 @@ const LeftNav = () => {
           <li>
             <Link href="/games">Games</Link>
           </li>
+          <li>
+            <Link href="/timer">Timer</Link>
+          </li>
         </ul>
       )}
     </nav>
