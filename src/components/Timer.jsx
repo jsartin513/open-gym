@@ -10,14 +10,12 @@ const Timer = ({ mode }) => {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
 
   function speak(text) {
-    console.log("Speaking:", text);
     const utterance = new SpeechSynthesisUtterance(text);
     window.speechSynthesis.speak(utterance);
   }
 
   function speakTimeIfRelevant(timerSeconds) {
     const seconds = timerSeconds - TIMER_OFFSET;
-    console.log("Checking speak time:", seconds);
     if (seconds === 0) {
       speak("Game over");
     } else if (seconds === 60) {
