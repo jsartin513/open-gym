@@ -132,7 +132,7 @@ const GamesPage = () => {
 
   return (
     <Layout>
-      <div className="container mx-auto p-4 pl-20">
+      <div className="container mx-auto p-4" style={{ paddingLeft: 'calc(20% + 1rem)' }}> {/* Adjusted padding */}
         <div className="bg-white shadow-md rounded-lg p-6 mb-4">
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-2xl font-bold">Game Schedule</h1>
