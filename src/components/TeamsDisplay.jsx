@@ -3,12 +3,10 @@ import {
   distributePlayersBySnake,
   distributePlayersInOrder,
 } from "../utils/teamCreation";
-import styles from "../styles/Home.module.css";
 
 export default function TeamsDisplay({ attendance }) {
   const [teamsAlgorithms, setTeamsAlgorithms] = useState([[], [], [], []]);
   const [selectedTeams, setSelectedTeams] = useState(null);
-
   const [activeTab, setActiveTab] = useState(0);
   const [numTeams, setNumTeams] = useState(2);
 
@@ -87,38 +85,51 @@ export default function TeamsDisplay({ attendance }) {
   };
 
   return (
-    <div className={styles.teamsPanel}>
-      <h2>Teams</h2>
-      <div className={styles.teamsHeader}>
-        <button onClick={clearTeams} className={styles.clearButton}>
+    <div className="bg-white shadow-md rounded-lg p-6 mb-4">
+      <h2 className="text-xl font-bold mb-4">Teams</h2>
+      <div className="flex justify-between items-center mb-4">
+        <button
+          onClick={clearTeams}
+          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
+        >
           Clear Teams
         </button>
-        <button onClick={createTeams} className={styles.createButton}>
+        <button
+          onClick={createTeams}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
           Create/Update Teams
         </button>
         {attendance && attendance.length && (
           <span>
-            {" "}
-            With {attendance.length} players, create {numTeams} teams{" "}
-            <div className={styles.numTeamChangeButtons}>
+            With {attendance.length} players, create {numTeams} teams
+            <div className="inline-flex ml-2">
               <button
                 onClick={() => setNumTeams(numTeams > 1 ? numTeams - 1 : 1)}
+                className="bg-gray-300 text-black px-2 py-1 rounded-l hover:bg-gray-400"
               >
                 -
               </button>
-              <button onClick={() => setNumTeams(numTeams + 1)}>+</button>
-            </div>{" "}
+              <button
+                onClick={() => setNumTeams(numTeams + 1)}
+                className="bg-gray-300 text-black px-2 py-1 rounded-r hover:bg-gray-400"
+              >
+                +
+              </button>
+            </div>
           </span>
         )}
       </div>
-      <div className={styles.tabbedView}>
-        <div className={styles.tabs}>
+      <div>
+        <div className="flex space-x-2 mb-4">
           {teamsAlgorithms.map((_, algorithmIndex) => (
             <button
               key={algorithmIndex}
-              className={
-                activeTab === algorithmIndex ? styles.activeTab : styles.tab
-              }
+              className={`px-4 py-2 rounded ${
+                activeTab === algorithmIndex
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-300 text-black hover:bg-gray-400"
+              }`}
               onClick={() => handleTabChange(algorithmIndex)}
             >
               Option {algorithmIndex + 1}
@@ -128,26 +139,22 @@ export default function TeamsDisplay({ attendance }) {
         {teamsAlgorithms.map((teams, algorithmIndex) => (
           <div
             key={algorithmIndex}
-            className={
-              activeTab == algorithmIndex
-                ? styles.activeTabContent
-                : styles.tabContent
-            }
+            className={activeTab === algorithmIndex ? "block" : "hidden"}
           >
-            <h3>Option {algorithmIndex + 1}</h3>
-            <div className={styles.teamSelection}>
+            <h3 className="text-lg font-semibold mb-2">Option {algorithmIndex + 1}</h3>
+            <div className="mb-4">
               <button
                 onClick={() => handleSelectTeams(algorithmIndex)}
-                className={styles.selectButton}
+                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
               >
                 Select These Teams
               </button>
             </div>
-            <div className={styles.teamsLists}>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {teams.map((team, teamIndex) => (
-                <div key={teamIndex}>
-                  <h3>Team {teamIndex + 1}</h3>
-                  <ul>
+                <div key={teamIndex} className="bg-gray-100 p-4 rounded-lg shadow-md">
+                  <h3 className="text-lg font-semibold mb-2">Team {teamIndex + 1}</h3>
+                  <ul className="list-disc pl-5">
                     {team.map((player) => (
                       <li key={player.name}>{player.name}</li>
                     ))}
