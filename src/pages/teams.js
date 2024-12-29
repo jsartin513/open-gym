@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../components/(layout)/layout";
-import styles from "../styles/Home.module.css";
 
 const TeamsPage = () => {
   const [selectedTeams, setSelectedTeams] = useState([]);
@@ -77,26 +76,32 @@ const TeamsPage = () => {
 
   return (
     <Layout>
-      <div className={styles.container}>
-        <h1>Open Gym Teams</h1>
-        <button onClick={handleEditToggle}>
+      <div className="container mx-auto p-4" style={{ paddingLeft: 'calc(20% + 1rem)' }}> {/* Adjusted padding */}
+        <h1 className="text-2xl font-bold mb-4">Open Gym Teams</h1>
+        <button
+          onClick={handleEditToggle}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mb-4"
+        >
           {isEditMode ? "Save" : "Edit"}
         </button>
         {isEditMode && (
-          <button onClick={handleCancelEdit}>
+          <button
+            onClick={handleCancelEdit}
+            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 mb-4 ml-2"
+          >
             Cancel
           </button>
         )}
-        <div className={styles.teamsLists}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> {/* Adjusted grid layout */}
           {selectedTeams.length === 0 ? (
             <p>No teams selected.</p>
           ) : (
             selectedTeams.map((team, teamIndex) => (
-              <div key={teamIndex} className={styles.team}>
-                Team {teamIndex + 1}
-                <ul>
+              <div key={teamIndex} className="bg-white shadow-md rounded-lg p-4">
+                <h2 className="text-xl font-semibold mb-2">Team {teamIndex + 1}</h2>
+                <ul className="list-disc pl-5">
                   {team.map((member, memberIndex) => (
-                    <li key={memberIndex}>
+                    <li key={memberIndex} className="mb-2">
                       {isEditMode ? (
                         <>
                           <input
@@ -109,6 +114,7 @@ const TeamsPage = () => {
                                 e.target.value
                               )
                             }
+                            className="border rounded p-1 mr-2"
                           />
                           <select
                             value={
@@ -123,6 +129,7 @@ const TeamsPage = () => {
                                 e.target.value
                               )
                             }
+                            className="border rounded p-1 mr-2"
                           >
                             <option value="">Move to...</option>
                             {selectedTeams.map(
@@ -141,6 +148,7 @@ const TeamsPage = () => {
                             onClick={() =>
                               handleRemovePlayer(teamIndex, memberIndex)
                             }
+                            className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700"
                           >
                             Remove
                           </button>
@@ -152,7 +160,10 @@ const TeamsPage = () => {
                   ))}
                 </ul>
                 {isEditMode && (
-                  <button onClick={() => handleAddPlayer(teamIndex)}>
+                  <button
+                    onClick={() => handleAddPlayer(teamIndex)}
+                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 mt-2"
+                  >
                     Add Player
                   </button>
                 )}
