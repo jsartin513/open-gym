@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/(layout)/layout";
 import PrintableSchedule from "../components/PrintableSchedule";
 import Timer from "../components/Timer";
-import styles from "../styles/GamesPage.module.css";
 import {
   generateRotatingSchedule,
   generateRoundRobinSchedule,
@@ -133,38 +132,49 @@ const GamesPage = () => {
 
   return (
     <Layout>
-      <div className={styles.container}>
-        <div className={styles.gamesSchedulePanel}>
-          <div className={styles.gamesHeader}>
-            <h1>Game Schedule</h1>
-            <button className={styles.button} onClick={handleAddGamesRound}>
-              Add Round
-            </button>
-            <button className={styles.button} onClick={handleClearWins}>
-              Clear Wins
-            </button>
-            <button
-              className={styles.button}
-              onClick={() => setIsPrintableView(!isPrintableView)}
-            >
-              {isPrintableView ? "Back to Schedule" : "Printable View"}
-            </button>
-            <button className={styles.button} onClick={handleModeToggle}>
-              Toggle to {mode === "foam" ? "Cloth" : "Foam"} Mode
-            </button>
+      <div className="container mx-auto p-4 pl-20">
+        <div className="bg-white shadow-md rounded-lg p-6 mb-4">
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-2xl font-bold">Game Schedule</h1>
+            <div className="space-x-2">
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+                onClick={handleAddGamesRound}
+              >
+                Add Round
+              </button>
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
+                onClick={handleClearWins}
+              >
+                Clear Wins
+              </button>
+              <button
+                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
+                onClick={() => setIsPrintableView(!isPrintableView)}
+              >
+                {isPrintableView ? "Back to Schedule" : "Printable View"}
+              </button>
+              <button
+                className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-700"
+                onClick={handleModeToggle}
+              >
+                Toggle to {mode === "foam" ? "Cloth" : "Foam"} Mode
+              </button>
+            </div>
           </div>
           {isPrintableView ? (
             <PrintableSchedule schedule={schedule} />
           ) : (
             <>
               {currentGame && (
-                <div className={styles.currentGame}>
-                  <h2>Current Game</h2>
-                  <p>
+                <div className="mb-4">
+                  <h2 className="text-xl font-semibold">Current Game</h2>
+                  <p className="mb-2">
                     {currentGame.homeTeam} vs {currentGame.awayTeam}
                   </p>
                   <select
-                    className={styles.select}
+                    className="select"
                     value={winners[currentGameIndex] || ""}
                     onChange={(e) =>
                       handleWinnerChange(currentGameIndex, e.target.value)
@@ -179,22 +189,22 @@ const GamesPage = () => {
                     </option>
                     {mode === "cloth" && <option value="tie">Tie</option>}
                   </select>
-                  <button onClick={() => handleSkipGame(currentGameIndex)}>
+                  <button className="btn mt-2" onClick={() => handleSkipGame(currentGameIndex)}>
                     Skip
                   </button>
                 </div>
               )}
               {nextGame && (
-                <div className={styles.nextGame}>
-                  <h2>Next Game</h2>
+                <div className="mb-4">
+                  <h2 className="text-xl font-semibold">Next Game</h2>
                   <p>
                     {nextGame.homeTeam} vs {nextGame.awayTeam}
                   </p>
                 </div>
               )}
               <div>
-                <h2>After that...</h2>
-                <ul className={styles.gamesList}>
+                <h2 className="text-xl font-semibold">After that...</h2>
+                <ul className="list-disc pl-5">
                   {upcomingGames.slice(2).map((game, index) => (
                     <li key={index}>
                       {game.homeTeam} vs {game.awayTeam}
@@ -206,11 +216,11 @@ const GamesPage = () => {
           )}
         </div>
         {!isPrintableView && (
-          <div className={styles.gamesWonPanel}>
+          <div className="bg-white shadow-md rounded-lg p-6">
             {mode === "foam" && (
               <div>
-                <h2>Games Won</h2>
-                <ul>
+                <h2 className="text-xl font-semibold">Games Won</h2>
+                <ul className="list-disc pl-5">
                   {Object.keys(gamesWonByTeam).map((team, index) => (
                     <li key={index}>
                       {team}: {gamesWonByTeam[team]}
@@ -221,8 +231,8 @@ const GamesPage = () => {
             )}
             {mode === "cloth" && (
               <div>
-                <h2>Points</h2>
-                <ul>
+                <h2 className="text-xl font-semibold">Points</h2>
+                <ul className="list-disc pl-5">
                   {Object.keys(calculateClothPoints()).map((team, index) => (
                     <li key={index}>
                       {team}: {calculateClothPoints()[team]}
@@ -232,13 +242,11 @@ const GamesPage = () => {
               </div>
             )}
               
-            <Timer
-              mode={mode}
-            />
+            <Timer mode={mode} />
 
             <div>
-              <h2>Finished Games</h2>
-              <ul className={styles.gamesList}>
+              <h2 className="text-xl font-semibold">Finished Games</h2>
+              <ul className="list-disc pl-5">
                 {pastGames.map((game, index) => (
                   <li key={index}>
                     {game.homeTeam} vs {game.awayTeam} - Winner:{" "}
