@@ -2,7 +2,6 @@ import Layout from "../components/(layout)/layout.js";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import CollapsiblePanel from "../components/CollapsiblePanel.jsx";
-import styles from "../styles/Home.module.css";
 import { parseCSV } from "../utils/csv.js";
 import NewPlayerModal from "../components/NewPlayerModal.jsx";
 import TeamsDisplay from "../components/TeamsDisplay.jsx";
@@ -48,13 +47,9 @@ export default function AttendancePage() {
     localStorage.setItem("attendance", JSON.stringify(attendance));
   }, [attendance]);
 
-
-  // People tell me that someone else is coming - so I want
-  // that person on a team, but we can't fill the team
-  // with players who aren't there yet
-  function addPlayerToExpectedPlayers(player){
+  function addPlayerToExpectedPlayers(player) {
     if (!expectedPlayers.some((p) => p.name === player.name)) {
-      setExpectedPlayers([...expectedPlayers, player])
+      setExpectedPlayers([...expectedPlayers, player]);
     }
   }
 
@@ -108,32 +103,30 @@ export default function AttendancePage() {
     player.name.toLowerCase().includes(query.toLowerCase())
   );
 
-
   return (
-    <div className={styles.container}>
+    <div className="container mx-auto p-4" style={{ paddingLeft: 'calc(20% + 1rem)' }}> {/* Adjusted padding */}
       <Layout>
         <main>
-          <h1>Open Gym Teammaker</h1>
-          <CollapsiblePanel
-            title="Add Player to Attendance"
-          >
+          <h1 className="text-2xl font-bold mb-4">Open Gym Teammaker</h1>
+          <CollapsiblePanel title="Add Player to Attendance">
             <input
               type="text"
               placeholder="Search or add players..."
               value={query}
               onChange={handleSearchChange}
+              className="border rounded p-2 mb-4 w-full"
             />
-            <div className={styles.grid}>
+            <div className="grid grid-cols-6 gap-2"> {/* Adjusted grid layout */}
               {filteredPlayers.map((player) => (
                 <button
                   key={player.name}
                   onClick={() => addPlayerToAttendance(player)}
                   disabled={attendance.some((p) => p.name === player.name)}
-                  className={
+                  className={`p-1 rounded text-sm w-full h-full ${ /* Adjusted button styles */
                     attendance.some((p) => p.name === player.name)
-                      ? styles.disabledButton
-                      : styles.playerButton
-                  }
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-blue-500 text-white hover:bg-blue-700"
+                  }`}
                 >
                   {player.name}
                 </button>
@@ -141,18 +134,17 @@ export default function AttendancePage() {
             </div>
           </CollapsiblePanel>
 
-          <ActivePlayers 
+          <ActivePlayers
             players={attendance}
             removePlayerFromAttendance={removePlayerFromAttendance}
-            clearAttendance={clearAttendance}/>
+            clearAttendance={clearAttendance}
+          />
 
-        
-        <TeamsDisplay 
-          attendance={attendance} 
-          setPlayers={setAttendance}
-          clearTeams={clearTeams}
-        />
-          
+          <TeamsDisplay
+            attendance={attendance}
+            setPlayers={setAttendance}
+            clearTeams={clearTeams}
+          />
         </main>
       </Layout>
 

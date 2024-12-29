@@ -13,7 +13,7 @@ export default function Layout({ children }) {
 
       <style jsx>{`
         main {
-          padding: 5rem 0;
+          padding: 20px;
           flex: 1;
           display: flex;
           flex-direction: column;

@@ -14,10 +14,18 @@ const Timer = ({ mode }) => {
     window.speechSynthesis.speak(utterance);
   }
 
+  function endGameText() {
+    if (mode === "cloth") {
+      return "Game over";
+    } else {
+      return "Reset blocking";
+    }
+  }
+
   function speakTimeIfRelevant(timerSeconds) {
     const seconds = timerSeconds - TIMER_OFFSET;
     if (seconds === 0) {
-      speak("Game over");
+      speak(endGameText());
     } else if (seconds === 60) {
       speak("One minute left");
     } else if (seconds % 60 === 0) {
@@ -26,8 +34,6 @@ const Timer = ({ mode }) => {
       speak(`${seconds} seconds left`);
     } else if (isTimerRunning && seconds > 0 && seconds < 10) {
       speak(seconds);
-    } else if (seconds === 0) {
-      speak("Game over");
     }
   }
 
@@ -88,11 +94,13 @@ const Timer = ({ mode }) => {
   };
 
   return (
-    <div className={styles.timerPanel}>
-      <h2>Game Timer</h2>
+    <div className="p-4 bg-white rounded-lg shadow-md"> 
+      <h2 className="text-xl font-bold mb-4">Game Timer</h2> 
 
       {mode === "cloth" && !isTimerRunning && (
-        <button onClick={toggleGameDuration}>
+        <button 
+          className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mb-4"
+          onClick={toggleGameDuration}>
           Toggle to {gameTimer === 180 ? "90 seconds" : "3 minutes"}
         </button>
       )}
@@ -100,19 +108,19 @@ const Timer = ({ mode }) => {
       {preGameCountdown !== null ? (
         <p>Starting in {preGameCountdown}...</p>
       ) : (
-        <p className={gameTimer <= 10 ? styles.flashingTimer : ""}>
+        <p className={`text-lg ${gameTimer <= 10 ? 'text-red-500 animate-pulse' : ''}`}> {/* Conditional styling */}
           {formatTime(gameTimer)}{" "}
           {gameTimer <= 0 && (mode === "cloth" ? "Game Over!" : "No Blocking!")}
         </p>
       )}
-      <button
-        onClick={handleStartGame}
-        disabled={isTimerRunning && preGameCountdown === null}
-      >
-        Start Game
+      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={handleStartGame}
+              disabled={isTimerRunning && preGameCountdown === null}>
+              Start Game
       </button>
-      <button onClick={handleEndGame} disabled={!isTimerRunning}>
-        End Game
+      <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2"
+              onClick={handleEndGame} disabled={!isTimerRunning}>
+              End Game
       </button>
     </div>
   );
