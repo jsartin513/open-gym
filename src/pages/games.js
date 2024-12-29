@@ -216,35 +216,35 @@ const GamesPage = () => {
           )}
         </div>
         {!isPrintableView && (
-          <div className="bg-white shadow-md rounded-lg p-6">
-            {mode === "foam" && (
-              <div>
-                <h2 className="text-xl font-semibold">Games Won</h2>
-                <ul className="list-disc pl-5">
-                  {Object.keys(gamesWonByTeam).map((team, index) => (
-                    <li key={index}>
-                      {team}: {gamesWonByTeam[team]}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {mode === "cloth" && (
-              <div>
-                <h2 className="text-xl font-semibold">Points</h2>
-                <ul className="list-disc pl-5">
-                  {Object.keys(calculateClothPoints()).map((team, index) => (
-                    <li key={index}>
-                      {team}: {calculateClothPoints()[team]}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-              
+          <>
+            <div className="bg-white shadow-md rounded-lg p-6 mb-4">
+              {mode === "foam" && (
+                <div>
+                  <h2 className="text-xl font-semibold">Games Won</h2>
+                  <ul className="list-disc pl-5">
+                    {Object.keys(gamesWonByTeam).map((team, index) => (
+                      <li key={index}>
+                        {team}: {gamesWonByTeam[team]}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {mode === "cloth" && (
+                <div>
+                  <h2 className="text-xl font-semibold">Points</h2>
+                  <ul className="list-disc pl-5">
+                    {Object.keys(calculateClothPoints()).map((team, index) => (
+                      <li key={index}>
+                        {team}: {calculateClothPoints()[team]}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
             <Timer mode={mode} />
-
-            <div>
+            <div className="bg-white shadow-md rounded-lg p-6">
               <h2 className="text-xl font-semibold">Finished Games</h2>
               <ul className="list-disc pl-5">
                 {pastGames.map((game, index) => (
@@ -255,7 +255,7 @@ const GamesPage = () => {
                 ))}
               </ul>
             </div>
-          </div>
+          </>
         )}
       </div>
     </Layout>
