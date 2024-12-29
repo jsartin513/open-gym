@@ -14,10 +14,18 @@ const Timer = ({ mode }) => {
     window.speechSynthesis.speak(utterance);
   }
 
+  function endGameText() {
+    if (mode === "cloth") {
+      return "Game over";
+    } else {
+      return "Reset blocking";
+    }
+  }
+
   function speakTimeIfRelevant(timerSeconds) {
     const seconds = timerSeconds - TIMER_OFFSET;
     if (seconds === 0) {
-      speak("Game over");
+      speak(endGameText());
     } else if (seconds === 60) {
       speak("One minute left");
     } else if (seconds % 60 === 0) {
@@ -26,8 +34,6 @@ const Timer = ({ mode }) => {
       speak(`${seconds} seconds left`);
     } else if (isTimerRunning && seconds > 0 && seconds < 10) {
       speak(seconds);
-    } else if (seconds === 0) {
-      speak("Game over");
     }
   }
 
