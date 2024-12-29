@@ -98,7 +98,7 @@ const Timer = ({ mode }) => {
       <h2>Game Timer</h2>
 
       {mode === "cloth" && !isTimerRunning && (
-        <button onClick={toggleGameDuration}>
+        <button onClick={toggleGameDuration} className="bg-blue-500 text-white px-4 py-2 rounded">
           Toggle to {gameTimer === 180 ? "90 seconds" : "3 minutes"}
         </button>
       )}
@@ -106,7 +106,7 @@ const Timer = ({ mode }) => {
       {preGameCountdown !== null ? (
         <p>Starting in {preGameCountdown}...</p>
       ) : (
-        <p className={gameTimer <= 10 ? styles.flashingTimer : ""}>
+        <p className={gameTimer <= 10 ? "text-red-500 animate-pulse" : ""}>
           {formatTime(gameTimer)}{" "}
           {gameTimer <= 0 && (mode === "cloth" ? "Game Over!" : "No Blocking!")}
         </p>
@@ -114,10 +114,11 @@ const Timer = ({ mode }) => {
       <button
         onClick={handleStartGame}
         disabled={isTimerRunning && preGameCountdown === null}
+        className="bg-green-500 text-white px-4 py-2 rounded disabled:opacity-50"
       >
         Start Game
       </button>
-      <button onClick={handleEndGame} disabled={!isTimerRunning}>
+      <button onClick={handleEndGame} disabled={!isTimerRunning} className="bg-red-500 text-white px-4 py-2 rounded disabled:opacity-50">
         End Game
       </button>
     </div>
