@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import styles from "../styles/GamesPage.module.css";
 
 const Timer = ({ mode }) => {
   const TIMER_OFFSET = 1; // seconds before the actual time to speak
@@ -94,11 +93,12 @@ const Timer = ({ mode }) => {
   };
 
   return (
-    <div className={styles.timerPanel}>
-      <h2>Game Timer</h2>
+    <div className="p-4 bg-white rounded-lg shadow-md"> 
+    <h2 className="text-xl font-bold mb-4">Game Timer</h2> 
+
 
       {mode === "cloth" && !isTimerRunning && (
-        <button onClick={toggleGameDuration} className="bg-blue-500 text-white px-4 py-2 rounded">
+        <button onClick={toggleGameDuration}>
           Toggle to {gameTimer === 180 ? "90 seconds" : "3 minutes"}
         </button>
       )}
@@ -106,21 +106,20 @@ const Timer = ({ mode }) => {
       {preGameCountdown !== null ? (
         <p>Starting in {preGameCountdown}...</p>
       ) : (
-        <p className={gameTimer <= 10 ? "text-red-500 animate-pulse" : ""}>
+        <p className={`text-lg ${gameTimer <= 10 ? 'text-red-500 animate-pulse' : ''}`}> {/* Conditional styling */}
           {formatTime(gameTimer)}{" "}
           {gameTimer <= 0 && (mode === "cloth" ? "Game Over!" : "No Blocking!")}
         </p>
       )}
-      <button
-        onClick={handleStartGame}
-        disabled={isTimerRunning && preGameCountdown === null}
-        className="bg-green-500 text-white px-4 py-2 rounded disabled:opacity-50"
-      >
-        Start Game
-      </button>
-      <button onClick={handleEndGame} disabled={!isTimerRunning} className="bg-red-500 text-white px-4 py-2 rounded disabled:opacity-50">
-        End Game
-      </button>
+      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                onClick={handleStartGame}
+                disabled={isTimerRunning && preGameCountdown === null}>
+                Start Game
+            </button>
+            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2"
+                onClick={handleEndGame} disabled={!isTimerRunning}>
+                End Game
+            </button>
     </div>
   );
 };
