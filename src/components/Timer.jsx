@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import styles from "../styles/GamesPage.module.css";
 
 const Timer = ({ mode }) => {
   const TIMER_OFFSET = 1; // seconds before the actual time to speak
@@ -94,11 +95,12 @@ const Timer = ({ mode }) => {
 
   return (
     <div className="p-4 bg-white rounded-lg shadow-md"> 
-    <h2 className="text-xl font-bold mb-4">Game Timer</h2> 
-
+      <h2 className="text-xl font-bold mb-4">Game Timer</h2> 
 
       {mode === "cloth" && !isTimerRunning && (
-        <button onClick={toggleGameDuration}>
+        <button 
+          className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mb-4"
+          onClick={toggleGameDuration}>
           Toggle to {gameTimer === 180 ? "90 seconds" : "3 minutes"}
         </button>
       )}
@@ -112,14 +114,14 @@ const Timer = ({ mode }) => {
         </p>
       )}
       <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                onClick={handleStartGame}
-                disabled={isTimerRunning && preGameCountdown === null}>
-                Start Game
-            </button>
-            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2"
-                onClick={handleEndGame} disabled={!isTimerRunning}>
-                End Game
-            </button>
+              onClick={handleStartGame}
+              disabled={isTimerRunning && preGameCountdown === null}>
+              Start Game
+      </button>
+      <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2"
+              onClick={handleEndGame} disabled={!isTimerRunning}>
+              End Game
+      </button>
     </div>
   );
 };
