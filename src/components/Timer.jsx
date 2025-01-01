@@ -114,7 +114,7 @@ const Timer = ({ mode }) => {
       )}
 
       {preGameCountdown !== null ? (
-        <p>Starting in {preGameCountdown}...</p>
+        <p className="text-4xl">Starting in {preGameCountdown}...</p>
       ) : (
         <p className={`${fontSize()} ${gameTimer <= 10 ? 'text-red-500 animate-pulse' : ''}`}> {/* Conditional styling */}
           {formatTime(gameTimer)}{" "}
