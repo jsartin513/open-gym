@@ -93,6 +93,14 @@ const Timer = ({ mode }) => {
     setGameTimer(gameLength);
   };
 
+  const fontSize = () => {
+    if (isTimerRunning || preGameCountdown !== null) {
+      return "text-8xl";
+      } else {
+      return "text-4xl";
+    }
+  }
+
   return (
     <div className="p-4 bg-white rounded-lg shadow-md"> 
       <h2 className="text-xl font-bold mb-4">Game Timer</h2> 
@@ -108,7 +116,7 @@ const Timer = ({ mode }) => {
       {preGameCountdown !== null ? (
         <p>Starting in {preGameCountdown}...</p>
       ) : (
-        <p className={`text-lg ${gameTimer <= 10 ? 'text-red-500 animate-pulse' : ''}`}> {/* Conditional styling */}
+        <p className={`${fontSize()} ${gameTimer <= 10 ? 'text-red-500 animate-pulse' : ''}`}> {/* Conditional styling */}
           {formatTime(gameTimer)}{" "}
           {gameTimer <= 0 && (mode === "cloth" ? "Game Over!" : "No Blocking!")}
         </p>
