@@ -63,4 +63,72 @@ function generateRotatingSchedule(teamNames) {
   return matches;
 }
 
-export { generateRoundRobinSchedule, generateRotatingSchedule };
+// Each game has a home team, away team, and a ref. 
+// Produce some games with refs
+function generateGamesWithRefs(teamNames){
+  const numTeams = teamNames.length;
+  const rounds = numTeams;
+  const games = [];
+
+  let teams = [...teamNames];
+  let sittingTeams = [];
+
+  for (let round = 0; round < rounds; round++) {
+    const roundGames = [];
+
+    // Rotate teams
+    const awayTeam = teams.shift();
+    const homeTeam = teams[0]
+    const reffingTeam = teams[1];
+    sittingTeams.push(awayTeam);
+
+    // Create game
+    roundGames.push({ homeTeam, awayTeam, ref: reffingTeam });
+
+    // Rotate sitting teams
+    if (sittingTeams.length > 1) {
+      const nextReffingTeam = sittingTeams.shift();
+      teams.push(nextReffingTeam);
+    }
+
+    // Add remaining teams back to the list
+    teams.push(awayTeam);
+    teams.push(homeTeam)
+
+    // Add round games to the schedule
+    games.push(...roundGames);
+  }
+
+  return games;
+
+
+}
+
+// A game has a home team, an away team, a reffing team, a court number, and a round number.
+// Each team will play numGamesPerTeam games.
+// We have numCourts courts available. 
+// We'll know how many rounds we need based on the fitting the number of 
+// games each plays onto courts
+// Each team can only play one game per round.
+// Each court can only hold one game per round
+function generateMultiCourtSchedule(numTeams, numCourts, numGamesPerTeam) {
+  const numGames = numTeams * numGamesPerTeam / 2;
+  const rounds = Math.ceil(numGames / numCourts);
+  const teamNames = Array.from({ length: numTeams }, (_, i) => `Team ${i + 1}`);
+  const schedule = [];
+
+  const allGames = generateRotatingSchedule(teamNames);
+  // fit games into rounds by court
+  // ensuring that no team can be in two games in the same round
+  for (let round = 0; round < rounds; round++) {
+    const roundGames = allGames.slice(round * numCourts, (round + 1) * numCourts);
+    for (let i = 0; i < roundGames.length; i++) {
+      const game = roundGames[i];
+      schedule.push({ ...game, court: i + 1, round });
+    }
+  }
+
+  return schedule;
+}
+
+export { generateRoundRobinSchedule, generateRotatingSchedule, generateGamesWithRefs, generateMultiCourtSchedule };
