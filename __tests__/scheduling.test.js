@@ -147,21 +147,11 @@ describe("generateRoundRobinSchedule", () => {
 
 describe("generateGamesWithRefs", () => {
   test("should generate the correct number of games for 4 teams", () => {
-    const games = generateGamesWithRefs([
-      "Team 1",
-      "Team 2",
-      "Team 3",
-      "Team 4",
-    ]);
+    const games = generateGamesWithRefs(FOUR_TEAMS);
     expect(games.length).toBe(4); // 4 teams * 2 game per team = 4 games
   });
   test("should generate the correct games for 4 teams", () => {
-    const games = generateGamesWithRefs([
-      "Team 1",
-      "Team 2",
-      "Team 3",
-      "Team 4",
-    ]);
+    const games = generateGamesWithRefs(FOUR_TEAMS);
     const expectedGames = [
       { homeTeam: "Team 2", awayTeam: "Team 1", ref: "Team 3" },
       { homeTeam: "Team 3", awayTeam: "Team 2", ref: "Team 4" },
@@ -172,25 +162,11 @@ describe("generateGamesWithRefs", () => {
   });
 
   test("should generate the correct number of games for 6 teams", () => {
-    const games = generateGamesWithRefs([
-      "Team 1",
-      "Team 2",
-      "Team 3",
-      "Team 4",
-      "Team 5",
-      "Team 6",
-    ]);
+    const games = generateGamesWithRefs(SIX_TEAMS);
     expect(games.length).toBe(6); // 6 teams * 2 game per team = 6 games
   });
   test("should generate the correct games for 6 teams", () => {
-    const games = generateGamesWithRefs([
-      "Team 1",
-      "Team 2",
-      "Team 3",
-      "Team 4",
-      "Team 5",
-      "Team 6",
-    ]);
+    const games = generateGamesWithRefs(SIX_TEAMS);
     const expectedGames = [
       { homeTeam: "Team 2", awayTeam: "Team 1", ref: "Team 3" },
       { homeTeam: "Team 3", awayTeam: "Team 2", ref: "Team 4" },
