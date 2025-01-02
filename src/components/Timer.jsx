@@ -24,7 +24,6 @@ const Timer = ({ mode }) => {
   }
 
   function speakTimeIfRelevant(timerSeconds) {
-    console.log("Timer seconds: " + timerSeconds);
     const seconds = timerSeconds + TIMER_OFFSET;
     if (SECONDS_TO_SPEAK.includes(timerSeconds)) {
       speak(timerSeconds);
