@@ -117,7 +117,7 @@ describe("generateRoundRobinSchedule", () => {
       { homeTeam: "Team 5", awayTeam: "Team 4" },
     ];
     expect(schedule).toEqual(expectedSchedule);
-  });
+  }); 
 
   test("should generate the correct number of rounds for 3 teams", () => {
     const teams = ["Team 1", "Team 2", "Team 3"];
