@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import styles from "../styles/GamesPage.module.css";
 
 const Timer = ({ mode }) => {
-  const TIMER_OFFSET = 1; // seconds before the actual time to speak
+  const TIMER_OFFSET = 2; // seconds before the actual time to speak
+  const SECONDS_TO_SPEAK = [60, 30, 20, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 
   const [gameTimer, setGameTimer] = useState(180);
   const [gameLength, setGameLength] = useState(180);
@@ -18,23 +19,28 @@ const Timer = ({ mode }) => {
     if (mode === "cloth") {
       return "Game over";
     } else {
-      return "Reset blocking";
+      return "Reset for no-blocking";
     }
   }
 
   function speakTimeIfRelevant(timerSeconds) {
-    const seconds = timerSeconds - TIMER_OFFSET;
-    if (seconds === 0) {
-      speak(endGameText());
-    } else if (seconds === 60) {
-      speak("One minute left");
-    } else if (seconds % 60 === 0) {
-      speak(`${seconds / 60} minutes left`);
-    } else if ([30, 20, 10].includes(seconds)) {
-      speak(`${seconds} seconds left`);
-    } else if (isTimerRunning && seconds > 0 && seconds < 10) {
-      speak(seconds);
+    console.log("Timer seconds: " + timerSeconds);
+    const seconds = timerSeconds + TIMER_OFFSET;
+    if (SECONDS_TO_SPEAK.includes(timerSeconds)) {
+      speak(timerSeconds);
     }
+    else if (SECONDS_TO_SPEAK.includes(seconds) && seconds > 10) {
+      speak("seconds");
+      if (mode === "cloth") {
+        speak("left");
+      } else {
+        speak("until no-block");
+      }
+    }
+    else if (timerSeconds === 0) {
+      speak("BEEEEEEEEEEP" + endGameText());
+    }
+    
   }
 
   const toggleGameDuration = () => {
