@@ -5,44 +5,49 @@ import {
   generateMultiCourtSchedule,
 } from "../src/utils/scheduling";
 
+const THREE_TEAMS = ["Team 1", "Team 2", "Team 3"];
+const FOUR_TEAMS = ["Team 1", "Team 2", "Team 3", "Team 4"];
+const FIVE_TEAMS = ["Team 1", "Team 2", "Team 3", "Team 4", "Team 5"];
+const SIX_TEAMS = ["Team 1", "Team 2", "Team 3", "Team 4", "Team 5", "Team 6"];
+
 describe("generateRotatingSchedule", () => {
   test("generates schedule for 4 teams", () => {
-    const teams = ["Team A", "Team B", "Team C", "Team D"];
+    const teams = FOUR_TEAMS;
     const schedule = generateRotatingSchedule(teams);
 
     const expectedSchedule = [
-      { homeTeam: "Team B", awayTeam: "Team A" },
-      { homeTeam: "Team C", awayTeam: "Team B" },
-      { homeTeam: "Team D", awayTeam: "Team C" },
-      { homeTeam: "Team A", awayTeam: "Team D" },
+      { homeTeam: "Team 2", awayTeam: "Team 1" },
+      { homeTeam: "Team 3", awayTeam: "Team 2" },
+      { homeTeam: "Team 4", awayTeam: "Team 3" },
+      { homeTeam: "Team 1", awayTeam: "Team 4" },
     ];
 
     expect(schedule).toEqual(expectedSchedule);
   });
 
   test("generates schedule for 3 teams", () => {
-    const teams = ["Team A", "Team B", "Team C"];
+    const teams = THREE_TEAMS;
     const schedule = generateRotatingSchedule(teams);
 
     const expectedSchedule = [
-      { homeTeam: "Team B", awayTeam: "Team A" },
-      { homeTeam: "Team C", awayTeam: "Team B" },
-      { homeTeam: "Team A", awayTeam: "Team C" },
+      { homeTeam: "Team 2", awayTeam: "Team 1" },
+      { homeTeam: "Team 3", awayTeam: "Team 2" },
+      { homeTeam: "Team 1", awayTeam: "Team 3" },
     ];
 
     expect(schedule).toEqual(expectedSchedule);
   });
 
   test("generates schedule for 5 teams", () => {
-    const teams = ["Team A", "Team B", "Team C", "Team D", "Team E"];
+    const teams = FIVE_TEAMS;
     const schedule = generateRotatingSchedule(teams);
 
     const expectedSchedule = [
-      { homeTeam: "Team B", awayTeam: "Team A" },
-      { homeTeam: "Team C", awayTeam: "Team B" },
-      { homeTeam: "Team D", awayTeam: "Team C" },
-      { homeTeam: "Team E", awayTeam: "Team D" },
-      { homeTeam: "Team A", awayTeam: "Team E" },
+      { homeTeam: "Team 2", awayTeam: "Team 1" },
+      { homeTeam: "Team 3", awayTeam: "Team 2" },
+      { homeTeam: "Team 4", awayTeam: "Team 3" },
+      { homeTeam: "Team 5", awayTeam: "Team 4" },
+      { homeTeam: "Team 1", awayTeam: "Team 5" },
     ];
 
     expect(schedule).toEqual(expectedSchedule);
@@ -50,13 +55,13 @@ describe("generateRotatingSchedule", () => {
 });
 describe("generateRoundRobinSchedule", () => {
   test("should generate the correct number of rounds for 4 teams", () => {
-    const teams = ["Team 1", "Team 2", "Team 3", "Team 4"];
+    const teams =FOUR_TEAMS;
     const schedule = generateRoundRobinSchedule(teams);
     expect(schedule.length).toBe(12); // 6 matches for 4 teams (3 rounds) + 6 reversed matches
   });
 
   test("should generate the correct matches for 4 teams", () => {
-    const teams = ["Team 1", "Team 2", "Team 3", "Team 4"];
+    const teams =FOUR_TEAMS;
     const schedule = generateRoundRobinSchedule(teams);
     const expectedSchedule = [
       { homeTeam: "Team 1", awayTeam: "Team 4" },
@@ -76,13 +81,13 @@ describe("generateRoundRobinSchedule", () => {
   });
 
   test("should generate the correct number of rounds for 6 teams", () => {
-    const teams = ["Team 1", "Team 2", "Team 3", "Team 4", "Team 5", "Team 6"];
+    const teams = SIX_TEAMS;
     const schedule = generateRoundRobinSchedule(teams);
     expect(schedule.length).toBe(30); // 15 matches for 6 teams (5 rounds) + 15 reversed matches
   });
 
   test("should generate the correct matches for 6 teams", () => {
-    const teams = ["Team 1", "Team 2", "Team 3", "Team 4", "Team 5", "Team 6"];
+    const teams = SIX_TEAMS;
     const schedule = generateRoundRobinSchedule(teams);
     const expectedSchedule = [
       { homeTeam: "Team 1", awayTeam: "Team 6" },
@@ -117,16 +122,16 @@ describe("generateRoundRobinSchedule", () => {
       { homeTeam: "Team 5", awayTeam: "Team 4" },
     ];
     expect(schedule).toEqual(expectedSchedule);
-  }); 
+  });
 
   test("should generate the correct number of rounds for 3 teams", () => {
-    const teams = ["Team 1", "Team 2", "Team 3"];
+    const teams = THREE_TEAMS;
     const schedule = generateRoundRobinSchedule(teams);
     expect(schedule.length).toBe(6); // 6 matches for 4 teams (3 rounds) + 6 reversed matches
   });
 
   test("should generate the correct matches 3 teams", () => {
-    const teams = ["Team 1", "Team 2", "Team 3"];
+    const teams = THREE_TEAMS;
     const schedule = generateRoundRobinSchedule(teams);
     const expectedSchedule = [
       { homeTeam: "Team 2", awayTeam: "Team 3" },
@@ -198,11 +203,11 @@ describe("generateGamesWithRefs", () => {
   });
 
   test("should generate the correct number of games for 3 teams", () => {
-    const games = generateGamesWithRefs(["Team 1", "Team 2", "Team 3"]);
+    const games = generateGamesWithRefs(THREE_TEAMS);
     expect(games.length).toBe(3); // 3 teams * 2 game per team = 3 games
   });
   test("should generate the correct games for 3 teams", () => {
-    const games = generateGamesWithRefs(["Team 1", "Team 2", "Team 3"]);
+    const games = generateGamesWithRefs(THREE_TEAMS);
     const expectedGames = [
       { homeTeam: "Team 2", awayTeam: "Team 1", ref: "Team 3" },
       { homeTeam: "Team 3", awayTeam: "Team 2", ref: "Team 1" },
@@ -214,12 +219,12 @@ describe("generateGamesWithRefs", () => {
 });
 describe("generateMultiCourtSchedule", () => {
   test("should generate the correct number of rounds for 3 teams, 1 courts, 2 games per team", () => {
-    const schedule = generateMultiCourtSchedule(["Team 1", "Team 2", "Team 3"], 1, 2);
+    const schedule = generateMultiCourtSchedule(THREE_TEAMS, 1, 2);
     expect(schedule.length).toBe(3); // 3 teams * 2 games per team / 2 teams per game = 3 games
   });
 
   test("should generate the correct matches for 3 teams, 1 courts, 2 games per team", () => {
-    const schedule = generateMultiCourtSchedule(["Team 1", "Team 2", "Team 3"], 1, 2);
+    const schedule = generateMultiCourtSchedule(THREE_TEAMS, 1, 2);
     const expectedSchedule = [
       { homeTeam: "Team 2", awayTeam: "Team 1", ref: "Team 3", court: 1, round: 1 },
       { homeTeam: "Team 3", awayTeam: "Team 2", ref: "Team 1", court: 1, round: 2 },
@@ -229,12 +234,12 @@ describe("generateMultiCourtSchedule", () => {
   });
 
   test("should generate the correct number of rounds for 6 teams, 2 courts, 2 games per team", () => {
-    const schedule = generateMultiCourtSchedule(["Team 1", "Team 2", "Team 3", "Team 4", "Team 5", "Team 6"], 2, 2);
+    const schedule = generateMultiCourtSchedule(SIX_TEAMS, 2, 2);
     expect(schedule.length).toBe(6); // 3 teams * 2 games per team / 2 teams per game = 3 games
   });
 
   test("should generate the correct matches for 6 teams, 2 courts, 2 games per team", () => {
-    const schedule = generateMultiCourtSchedule(["Team 1", "Team 2", "Team 3", "Team 4", "Team 5", "Team 6"], 2, 2);
+    const schedule = generateMultiCourtSchedule(SIX_TEAMS, 2, 2);
     const expectedSchedule = [
       { homeTeam: "Team 2", awayTeam: "Team 1", ref: "Team 3", court: 1, round: 1 },
       { homeTeam: "Team 5", awayTeam: "Team 4", ref: "Team 6", court: 2, round: 1 },
