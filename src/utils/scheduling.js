@@ -111,24 +111,46 @@ function generateGamesWithRefs(teamNames){
 // games each plays onto courts
 // Each team can only play one game per round.
 // Each court can only hold one game per round
-function generateMultiCourtSchedule(numTeams, numCourts, numGamesPerTeam) {
-  const numGames = numTeams * numGamesPerTeam / 2;
-  const rounds = Math.ceil(numGames / numCourts);
-  const teamNames = Array.from({ length: numTeams }, (_, i) => `Team ${i + 1}`);
-  const schedule = [];
-
-  const allGames = generateRotatingSchedule(teamNames);
-  // fit games into rounds by court
-  // ensuring that no team can be in two games in the same round
+function generateMultiCourtSchedule(teamNames, numCourts, numGamesPerTeam) {
+  const allGames = generateGamesWithRefs(teamNames);
+ 
+  const numTeams = teamNames.length;
+  const totalGamesNeeded = numTeams * numGamesPerTeam / 2;
+  const rounds = totalGamesNeeded / numCourts;
+  const games = [];
+  
+  let teams = [...teamNames];
+  let sittingTeams = [];
+  let oneRoundOfCourts = Array.from({ length: numCourts }, (_, i) => i + 1);
+  let courts = []
   for (let round = 0; round < rounds; round++) {
-    const roundGames = allGames.slice(round * numCourts, (round + 1) * numCourts);
-    for (let i = 0; i < roundGames.length; i++) {
-      const game = roundGames[i];
-      schedule.push({ ...game, court: i + 1, round });
-    }
+    courts = [...courts, ...oneRoundOfCourts];
   }
 
-  return schedule;
+
+  console.log(courts);
+  let round = 1;
+
+  while (games.length < totalGamesNeeded) {
+    const roundGames = [];
+    const court = courts.shift();
+    console.log("court", court);
+
+    for (let i = 0; i < numCourts; i++) {
+      const game = allGames.shift();
+      game.court = court;
+      game.round = round;
+      roundGames.push(game);
+    }
+
+    games.push(...roundGames);
+    round++;
+    courts.push(courts.shift());
+
+  }
+
+
+  return games;
 }
 
 export { generateRoundRobinSchedule, generateRotatingSchedule, generateGamesWithRefs, generateMultiCourtSchedule };
