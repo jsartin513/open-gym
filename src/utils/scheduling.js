@@ -128,7 +128,7 @@ function generateMultiCourtSchedule(teamNames, numCourts, numGamesPerTeam) {
       let attempts = 0;
 
       while (
-        attempts < allGames.length + 1 &&  // Prevent infinite loop if no valid game is found
+        attempts < numCourts + 1 &&  // Prevent infinite loop if no valid game is found
         (teamsPlayingThisRound.has(game.homeTeam) ||
           teamsPlayingThisRound.has(game.awayTeam) ||
           teamsPlayingThisRound.has(game.ref))

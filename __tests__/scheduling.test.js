@@ -9,6 +9,7 @@ const THREE_TEAMS = ["Team 1", "Team 2", "Team 3"];
 const FOUR_TEAMS = ["Team 1", "Team 2", "Team 3", "Team 4"];
 const FIVE_TEAMS = ["Team 1", "Team 2", "Team 3", "Team 4", "Team 5"];
 const SIX_TEAMS = ["Team 1", "Team 2", "Team 3", "Team 4", "Team 5", "Team 6"];
+const TWELVE_TEAMS = ["Team 1", "Team 2", "Team 3", "Team 4", "Team 5", "Team 6", "Team 7", "Team 8", "Team 9", "Team 10", "Team 11", "Team 12"];
 
 describe("generateRotatingSchedule", () => {
   test("generates schedule for 4 teams", () => {
@@ -224,7 +225,16 @@ describe("generateMultiCourtSchedule", () => {
       { homeTeam: "Team 4", awayTeam: "Team 3", ref: "Team 5", court: 1, round: 3 },
       { homeTeam: "Team 1", awayTeam: "Team 6", ref: "Team 2", court: 2, round: 3 },
     ];
-    console.log(schedule);
     expect(schedule).toEqual(expectedSchedule);
   });
+  test("should generate the correct number of rounds for 12 teams, 2 courts, 2 games per team", () => {
+    const schedule = generateMultiCourtSchedule(TWELVE_TEAMS, 2, 2);
+    expect(schedule.length).toBe(12); // 12 teams * 2 games per team / 2 teams per game = 12 games
+  });
+
+  test("should generate the correct number of rounds for 12 teams, 2 courts, 4 games per team", () => {
+    const schedule = generateMultiCourtSchedule(TWELVE_TEAMS, 2, 4);
+    expect(schedule.length).toBe(24); // 12 teams * 4 games per team / 2 teams per game = 24 games
+  });
+
 });
