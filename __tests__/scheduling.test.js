@@ -240,10 +240,16 @@ describe("generateGamesWithRefs", () => {
 // });
 
 describe.only("generateTournamentSchedule", () => {
-  test("should generate the correct number of games for 4 teams, 2 games per team, 3 court2", () => {
+  test("should generate the correct number of rounds for 4 teams, 2 games per team, 3 court2", () => {
     const roundsList = generateTournamentSchedule(TWELVE_TEAMS);
     expect(roundsList.length).toBe(4); // 4 rounds kinda hardcoded
   });
+
+  test("should generate the correct number of games per round (3)", () => {
+    const roundsList = generateTournamentSchedule(TWELVE_TEAMS);
+    expect(roundsList[0].length).toBe(3); // 3 courts
+  }
+  );
 
   test("should generate the correct games for 4 teams, 2 games per team, 3 courts", () => {
     const roundsList = generateTournamentSchedule(TWELVE_TEAMS);

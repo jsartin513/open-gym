@@ -107,60 +107,36 @@ function generateGamesWithRefs(teamNames) {
 // Each game has a home team, away team, and a ref. 
 // A court hosts one game per round.
 // In each round, a team can only be involved in one game.
-function generateTournamentSchedule(teamNames){
-  const numTeams = teamNames.length;
+function generateTournamentSchedule(teamNames) {
   const numCourtsAvailable = 3;
-  const numGamesPerTeam = 4;
-  // Groups of 4 rounds with 3 courts gives us enough combinations to play enough games without repeating teams
-  const numRoundsInBlock = 4;
+  const rounds = [];
 
-  // The first round has teams 1 and 2 through 5 and 6 playing
-  // The second round has teams 7 and 8 through 11 and 12 playing
-  // The third round has odd numbered teams matched up against each other
-  // 1 and 3, 5 and 7, 9 and 11
-  // The fourth round has even numbered teams matched up against each other
-  // 2 and 4, 6 and 8, 10 and 12
-
-  const firstRound = [];
-  const secondRound = [];
-  const thirdRound = [];
-  const fourthRound = [];
-
-  let startTeam = 0;
-  for (let i = startTeam; i < numCourtsAvailable * 2; i=i+2) {
-    const homeTeam = teamNames[i];
-    const awayTeam = teamNames[i + 1];
-    firstRound.push({ homeTeam, awayTeam });
-  }
-  console.log(firstRound);
-
-  startTeam = numCourtsAvailable * 2;
-  for (let i = startTeam; i < numCourtsAvailable * 4; i=i+2) {
-    const homeTeam = teamNames[i];
-    const awayTeam = teamNames[i + 1];
-    secondRound.push({ homeTeam, awayTeam });
-  }
-  console.log(secondRound);
-
-  startTeam = 0;
-  for (let i = startTeam; i < numCourtsAvailable * 3; i=i+4){
-    const homeTeam = teamNames[i];
-    const awayTeam = teamNames[i + 2];
-    thirdRound.push({ homeTeam, awayTeam });
-  }
-  console.log(thirdRound)
-
-  startTeam = 1;
-  for (let i = startTeam; i <= numCourtsAvailable * 3; i=i+4){
-    const homeTeam = teamNames[i];
-    const awayTeam = teamNames[i + 2];
-    fourthRound.push({ homeTeam, awayTeam });
+  // Helper function to generate rounds based on start team and increment
+  function generateRound(startTeam, increment) {
+    const numCourtsAvailable = 3;
+    const round = [];
+    for (let i = startTeam; round.length < numCourtsAvailable; i += increment) {
+        const homeTeam = teamNames[i];
+        const awayTeam = teamNames[i + (increment/2)];  // Calculate away team index based on increment
+        if (awayTeam) { // Check if awayTeam exists to avoid errors with odd number of teams in a round
+            round.push({ homeTeam, awayTeam });
+        }
+    }
+    console.log(round);
+    return round;
   }
 
-  console.log(fourthRound)
 
-  return [firstRound, secondRound, thirdRound, fourthRound];
+  rounds.push(generateRound(0, 2));
+  rounds.push(generateRound(6, 2));
+  rounds.push(generateRound(0, 4));
+  rounds.push(generateRound(1, 4));
 
+  console.log("rounds" );
+  console.log(rounds);
+  return rounds;
 }
+
+
 
 export { generateRoundRobinSchedule, generateRotatingSchedule, generateGamesWithRefs, generateTournamentSchedule };
