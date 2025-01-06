@@ -102,61 +102,69 @@ function generateGamesWithRefs(teamNames) {
   return games;
 }
 
-function canTeamPlayThisRound(teamName, gamesInRound)  {
-  return gamesInRound.every(game => game.homeTeam !== teamName && game.awayTeam !== teamName && game.ref !== teamName);
-}
-
-// A game has a home team, an away team, a reffing team, a court number, and a round number.
-// Each team will play numGamesPerTeam games.
-// We have numCourts courts available.
-// We'll know how many rounds we need based on the fitting the number of
-// games each plays onto courts
-// Each team can only play one game per round.
-// Each court can only hold one game per round
-function generateMultiCourtSchedule(teamNames, numCourts, numGamesPerTeam) {
-  const allGames = generateGamesWithRefs(teamNames);  // Your existing function
+// Generate a tournament schedule with a specified number of games per team
+// and a specified number of courts available
+// Each game has a home team, away team, and a ref. 
+// A court hosts one game per round.
+// In each round, a team can only be involved in one game.
+function generateTournamentSchedule(teamNames){
   const numTeams = teamNames.length;
-  const totalGamesNeeded = (numTeams * numGamesPerTeam) / 2;
-  const games = [];
+  const numCourtsAvailable = 3;
+  const numGamesPerTeam = 5;
+  // Groups of 4 rounds with 3 courts gives us enough combinations to play enough games without repeating teams
+  const numRoundsInBlock = 4;
 
-  for (let round = 1; games.length < totalGamesNeeded; round++) {
-    const roundGames = [];
-    const teamsPlayingThisRound = new Set();
+  // The first round has teams 1 and 2 through 5 and 6 playing
+  // The second round has teams 7 and 8 through 11 and 12 playing
+  // The third round has odd numbered teams matched up against each other
+  // 1 and 3, 5 and 7, 9 and 11
+  // The fourth round has even numbered teams matched up against each other
+  // 2 and 4, 6 and 8, 10 and 12
 
-    for (let court = 1; court <= numCourts && allGames.length > 0; court++) {
-      let game = allGames.shift();
-      let attempts = 0;
+  const firstRound = [];
+  const secondRound = [];
+  const thirdRound = [];
+  const fourthRound = [];
 
-      while (
-        attempts < numCourts + 1 &&  // Prevent infinite loop if no valid game is found
-        (teamsPlayingThisRound.has(game.homeTeam) ||
-          teamsPlayingThisRound.has(game.awayTeam) ||
-          teamsPlayingThisRound.has(game.ref))
-      ) {
-        allGames.push(game); // Put the game back at the end
-        game = allGames.shift();
-        attempts++;
-      }
+  let startTeam = 0;
+  for (let i = startTeam; i < numCourtsAvailable * 2; i=i+2) {
+    const homeTeam = teamNames[i];
+    const awayTeam = teamNames[i + 1];
+    firstRound.push({ homeTeam, awayTeam });
+  }
+  console.log(firstRound);
 
-      if (attempts < allGames.length + 1) { // A valid game was found
-        game.court = court;
-        game.round = round;
-        roundGames.push(game);
-        teamsPlayingThisRound.add(game.homeTeam);
-        teamsPlayingThisRound.add(game.awayTeam);
-        teamsPlayingThisRound.add(game.ref);
-      }
-    }
+  startTeam = numCourtsAvailable * 2;
+  for (let i = startTeam; i < numCourtsAvailable * 4; i=i+2) {
+    const homeTeam = teamNames[i];
+    const awayTeam = teamNames[i + 1];
+    secondRound.push({ homeTeam, awayTeam });
+  }
+  console.log(secondRound);
 
-    games.push(...roundGames);
+  startTeam = 0;
+  for (let i = startTeam; i < numCourtsAvailable * 3; i=i+4){
+    const homeTeam = teamNames[i];
+    const awayTeam = teamNames[i + 2];
+    thirdRound.push({ homeTeam, awayTeam });
+  }
+  console.log(thirdRound)
+
+  startTeam = 1;
+  for (let i = startTeam; i <= numCourtsAvailable * 3; i=i+4){
+    const homeTeam = teamNames[i];
+    const awayTeam = teamNames[i + 2];
+    fourthRound.push({ homeTeam, awayTeam });
   }
 
-  return games;
+  console.log(fourthRound)
+
+  // Fifth and sixth rounds
+
+
+
+  return [firstRound];
+
 }
 
-export {
-  generateRoundRobinSchedule,
-  generateRotatingSchedule,
-  generateGamesWithRefs,
-  generateMultiCourtSchedule,
-};
+export { generateRoundRobinSchedule, generateRotatingSchedule, generateGamesWithRefs, generateTournamentSchedule };
