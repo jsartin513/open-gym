@@ -110,7 +110,7 @@ function generateGamesWithRefs(teamNames) {
 function generateTournamentSchedule(teamNames){
   const numTeams = teamNames.length;
   const numCourtsAvailable = 3;
-  const numGamesPerTeam = 5;
+  const numGamesPerTeam = 4;
   // Groups of 4 rounds with 3 courts gives us enough combinations to play enough games without repeating teams
   const numRoundsInBlock = 4;
 
@@ -159,11 +159,7 @@ function generateTournamentSchedule(teamNames){
 
   console.log(fourthRound)
 
-  // Fifth and sixth rounds
-
-
-
-  return [firstRound];
+  return [firstRound, secondRound, thirdRound, fourthRound];
 
 }
 

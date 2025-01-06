@@ -239,10 +239,38 @@ describe("generateGamesWithRefs", () => {
 
 // });
 
-describe("generateTournamentSchedule", () => {
-  test.only("should generate the correct number of games for 4 teams, 2 games per team, 1 court", () => {
-    const schedule = generateTournamentSchedule(TWELVE_TEAMS, 2, 1);
-    expect(schedule.length).toBe(4); // 4 teams * 2 game per team = 4 games
+describe.only("generateTournamentSchedule", () => {
+  test("should generate the correct number of games for 4 teams, 2 games per team, 3 court2", () => {
+    const roundsList = generateTournamentSchedule(TWELVE_TEAMS);
+    expect(roundsList.length).toBe(4); // 4 rounds kinda hardcoded
   });
+
+  test("should generate the correct games for 4 teams, 2 games per team, 3 courts", () => {
+    const roundsList = generateTournamentSchedule(TWELVE_TEAMS);
+    const expectedRoundsList = [
+      [
+        { homeTeam: 'Team 1', awayTeam: 'Team 2' },
+        { homeTeam: 'Team 3', awayTeam: 'Team 4' },
+        { homeTeam: 'Team 5', awayTeam: 'Team 6' }
+      ],
+      [
+        { homeTeam: 'Team 7', awayTeam: 'Team 8' },
+        { homeTeam: 'Team 9', awayTeam: 'Team 10' },
+        { homeTeam: 'Team 11', awayTeam: 'Team 12' }
+      ],
+      [
+        { homeTeam: 'Team 1', awayTeam: 'Team 3' },
+        { homeTeam: 'Team 5', awayTeam: 'Team 7' },
+        { homeTeam: 'Team 9', awayTeam: 'Team 11' }
+      ],
+      [
+        { homeTeam: 'Team 2', awayTeam: 'Team 4' },
+        { homeTeam: 'Team 6', awayTeam: 'Team 8' },
+        { homeTeam: 'Team 10', awayTeam: 'Team 12' }
+      ]]
+    expect(roundsList).toEqual(expectedRoundsList);
+  });
+
+  
 
 });
