@@ -107,35 +107,52 @@ function generateGamesWithRefs(teamNames) {
 // Each game has a home team, away team, and a ref. 
 // A court hosts one game per round.
 // In each round, a team can only be involved in one game.
-function generateTournamentSchedule(teamNames) {
-  const numCourtsAvailable = 3;
-  const rounds = [];
-
-  // Helper function to generate rounds based on start team and increment
-  function generateRound(startTeam, increment) {
+function generateTournamentSchedule(teamNames, numberOfRounds) {
     const numCourtsAvailable = 3;
-    const round = [];
-    for (let i = startTeam; round.length < numCourtsAvailable; i += increment) {
-        const homeTeam = teamNames[i];
-        const awayTeam = teamNames[i + (increment/2)];  // Calculate away team index based on increment
-        if (awayTeam) { // Check if awayTeam exists to avoid errors with odd number of teams in a round
-            round.push({ homeTeam, awayTeam });
+    const initialRounds = [];
+
+    // Helper function to generate initial rounds (same as before)
+    function generateInitialRound(startTeam, increment) {
+        const round = [];
+        for (let i = startTeam; round.length < numCourtsAvailable; i += increment) {
+            const homeTeam = teamNames[i];
+            const awayTeam = teamNames[i + increment / 2];
+            if (awayTeam) {
+                round.push({ homeTeam, awayTeam });
+            }
         }
+        return round;
     }
-    console.log(round);
-    return round;
-  }
 
+    initialRounds.push(generateInitialRound(0, 2));
+    initialRounds.push(generateInitialRound(6, 2));
+    initialRounds.push(generateInitialRound(0, 4));
+    initialRounds.push(generateInitialRound(1, 4));
 
-  rounds.push(generateRound(0, 2));
-  rounds.push(generateRound(6, 2));
-  rounds.push(generateRound(0, 4));
-  rounds.push(generateRound(1, 4));
+    let rounds = [...initialRounds];
 
-  console.log("rounds" );
-  console.log(rounds);
-  return rounds;
+    function generateShiftedRound(round, increment) {
+        const shiftedRound = [];
+        for (let i = 0; i < round.length; i++) {
+            const homeTeamIndex = i;
+            const awayTeamIndex = (i + increment) % round.length;
+          
+            const homeTeam = round[homeTeamIndex].homeTeam;
+            const awayTeam = round[awayTeamIndex].awayTeam;
+            shiftedRound.push({ homeTeam, awayTeam });
+        }
+        return shiftedRound;
+    }
+
+    for (let i = 0; i < numberOfRounds - 4; i++) {
+        const round = rounds[i];
+        const shiftedRound = generateShiftedRound(round, 1);
+        rounds.push(shiftedRound);
+    }
+
+    return rounds.slice(0, numberOfRounds);
 }
+
 
 
 

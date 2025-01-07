@@ -241,42 +241,90 @@ describe("generateGamesWithRefs", () => {
 
 describe.only("generateTournamentSchedule", () => {
   test("should generate the correct number of rounds for 4 teams, 2 games per team, 3 court2", () => {
-    const roundsList = generateTournamentSchedule(TWELVE_TEAMS);
+    const roundsList = generateTournamentSchedule(TWELVE_TEAMS, 4);
     expect(roundsList.length).toBe(4); // 4 rounds kinda hardcoded
   });
 
   test("should generate the correct number of games per round (3)", () => {
-    const roundsList = generateTournamentSchedule(TWELVE_TEAMS);
+    const roundsList = generateTournamentSchedule(TWELVE_TEAMS, 4);
     expect(roundsList[0].length).toBe(3); // 3 courts
-  }
-  );
-
-  test("should generate the correct games for 4 teams, 2 games per team, 3 courts", () => {
-    const roundsList = generateTournamentSchedule(TWELVE_TEAMS);
-    const expectedRoundsList = [
-      [
-        { homeTeam: 'Team 1', awayTeam: 'Team 2' },
-        { homeTeam: 'Team 3', awayTeam: 'Team 4' },
-        { homeTeam: 'Team 5', awayTeam: 'Team 6' }
-      ],
-      [
-        { homeTeam: 'Team 7', awayTeam: 'Team 8' },
-        { homeTeam: 'Team 9', awayTeam: 'Team 10' },
-        { homeTeam: 'Team 11', awayTeam: 'Team 12' }
-      ],
-      [
-        { homeTeam: 'Team 1', awayTeam: 'Team 3' },
-        { homeTeam: 'Team 5', awayTeam: 'Team 7' },
-        { homeTeam: 'Team 9', awayTeam: 'Team 11' }
-      ],
-      [
-        { homeTeam: 'Team 2', awayTeam: 'Team 4' },
-        { homeTeam: 'Team 6', awayTeam: 'Team 8' },
-        { homeTeam: 'Team 10', awayTeam: 'Team 12' }
-      ]]
-    expect(roundsList).toEqual(expectedRoundsList);
   });
 
-  
+  const FOUR_EXPECTED_ROUNDS = [
+    [
+      { homeTeam: 'Team 1', awayTeam: 'Team 2' },
+      { homeTeam: 'Team 3', awayTeam: 'Team 4' },
+      { homeTeam: 'Team 5', awayTeam: 'Team 6' }
+    ],
+    [
+      { homeTeam: 'Team 7', awayTeam: 'Team 8' },
+      { homeTeam: 'Team 9', awayTeam: 'Team 10' },
+      { homeTeam: 'Team 11', awayTeam: 'Team 12' }
+    ],
+    [
+      { homeTeam: 'Team 1', awayTeam: 'Team 3' },
+      { homeTeam: 'Team 5', awayTeam: 'Team 7' },
+      { homeTeam: 'Team 9', awayTeam: 'Team 11' }
+    ],
+    [
+      { homeTeam: 'Team 2', awayTeam: 'Team 4' },
+      { homeTeam: 'Team 6', awayTeam: 'Team 8' },
+      { homeTeam: 'Team 10', awayTeam: 'Team 12' }
+    ]]
+  test("should generate the correct games for 4 teams, 2 games per team, 3 courts", () => {
+    const roundsList = generateTournamentSchedule(TWELVE_TEAMS, 4);
+    expect(roundsList).toEqual(FOUR_EXPECTED_ROUNDS);
+  });
+
+  test("should generate the correct number of rounds for 4 teams, 4 games per team, 3 courts", () => {
+    const roundsList = generateTournamentSchedule(TWELVE_TEAMS, 8);
+    expect(roundsList.length).toBe(8); // 8 rounds kinda hardcoded
+  });
+
+  test("should generate the correct number of games per round (3)", () => {
+    const roundsList = generateTournamentSchedule(TWELVE_TEAMS, 8);
+    expect(roundsList[0].length).toBe(3); // 3 courts
+  });
+
+  const NEXT_FOUR_ROUNDS = [      [
+    { homeTeam: 'Team 1', awayTeam: 'Team 4' },
+    { homeTeam: 'Team 3', awayTeam: 'Team 6' },
+    { homeTeam: 'Team 5', awayTeam: 'Team 2' },
+  ],
+  [
+    { homeTeam: 'Team 7', awayTeam: 'Team 10' },
+    { homeTeam: 'Team 9', awayTeam: 'Team 12' },
+    { homeTeam: 'Team 11', awayTeam: 'Team 8' },
+  ],
+  [
+    { homeTeam: 'Team 1', awayTeam: 'Team 7' },
+    { homeTeam: 'Team 5', awayTeam: 'Team 11' },
+    { homeTeam: 'Team 9', awayTeam: 'Team 3' },
+  ],
+  [
+    { homeTeam: 'Team 2', awayTeam: 'Team 8' },
+    { homeTeam: 'Team 6', awayTeam: 'Team 12' },
+    { homeTeam: 'Team 10', awayTeam: 'Team 4' },
+  ]]
+  test("should generate the correct games for 12 teams, 4 games per team, 3 courts", () => {
+    const roundsList = generateTournamentSchedule(TWELVE_TEAMS, 8);
+    const expectedRoundsList = [...FOUR_EXPECTED_ROUNDS, ...NEXT_FOUR_ROUNDS];
+    expect(roundsList).toEqual(expectedRoundsList);
+    });
+
+  test("should generate the correct number of rounds for 12 teams and 10 rounds", () => {
+    const roundsList = generateTournamentSchedule(TWELVE_TEAMS, 10);
+    expect(roundsList.length).toBe(10); // 3 rounds kinda hardcoded
+  });
+
+  test("should generate the correct number of games per round (3)", () => {
+    const roundsList = generateTournamentSchedule(TWELVE_TEAMS, 10);
+    expect(roundsList[0].length).toBe(3); // 3 courts
+  });
+  test("should generate the correct number of games per round (3)", () => {
+    const roundsList = generateTournamentSchedule(TWELVE_TEAMS, 10);
+    expect(roundsList[7].length).toBe(3); // 3 courts
+  });
+
 
 });
