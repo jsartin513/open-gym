@@ -14,6 +14,7 @@ export default function Layout({ children }) {
       <style jsx>{`
         main {
           padding: 20px;
+          margin-left: 200px;
           flex: 1;
           display: flex;
           flex-direction: column;

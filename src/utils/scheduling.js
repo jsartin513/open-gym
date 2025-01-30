@@ -107,8 +107,10 @@ function generateGamesWithRefs(teamNames) {
 // Each game has a home team, away team, and a ref. 
 // A court hosts one game per round.
 // In each round, a team can only be involved in one game.
-function generateTournamentSchedule(teamNames, numberOfRounds) {
-    const numCourtsAvailable = 3;
+function generateTournamentSchedule(teamNames, numberOfRounds, numCourtsAvailable) {
+    if (!numCourtsAvailable) {
+        numCourtsAvailable = 3;
+    }
     const initialRounds = [];
 
     // Helper function to generate initial rounds (same as before)
