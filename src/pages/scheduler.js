@@ -19,7 +19,7 @@ const SchedulerPage = () => {
     console.log("Creating default teams");
     const defaultTeams = [];
     for (let i = 0; i < numTeams; i++) {
-      defaultTeams.push({ name: "Team" + (i + 1) });
+      defaultTeams.push({ name: "Team " + (i + 1) });
     }
     setTeams(defaultTeams);
   };
