@@ -102,61 +102,60 @@ function generateGamesWithRefs(teamNames) {
   return games;
 }
 
-function canTeamPlayThisRound(teamName, gamesInRound)  {
-  return gamesInRound.every(game => game.homeTeam !== teamName && game.awayTeam !== teamName && game.ref !== teamName);
-}
+// Generate a tournament schedule with a specified number of games per team
+// and a specified number of courts available
+// Each game has a home team, away team, and a ref. 
+// A court hosts one game per round.
+// In each round, a team can only be involved in one game.
+function generateTournamentSchedule(teamNames, numberOfRounds, numCourtsAvailable) {
+    if (!numCourtsAvailable) {
+        numCourtsAvailable = 3;
+    }
+    const initialRounds = [];
 
-// A game has a home team, an away team, a reffing team, a court number, and a round number.
-// Each team will play numGamesPerTeam games.
-// We have numCourts courts available.
-// We'll know how many rounds we need based on the fitting the number of
-// games each plays onto courts
-// Each team can only play one game per round.
-// Each court can only hold one game per round
-function generateMultiCourtSchedule(teamNames, numCourts, numGamesPerTeam) {
-  const allGames = generateGamesWithRefs(teamNames);  // Your existing function
-  const numTeams = teamNames.length;
-  const totalGamesNeeded = (numTeams * numGamesPerTeam) / 2;
-  const games = [];
-
-  for (let round = 1; games.length < totalGamesNeeded; round++) {
-    const roundGames = [];
-    const teamsPlayingThisRound = new Set();
-
-    for (let court = 1; court <= numCourts && allGames.length > 0; court++) {
-      let game = allGames.shift();
-      let attempts = 0;
-
-      while (
-        attempts < allGames.length + 1 &&  // Prevent infinite loop if no valid game is found
-        (teamsPlayingThisRound.has(game.homeTeam) ||
-          teamsPlayingThisRound.has(game.awayTeam) ||
-          teamsPlayingThisRound.has(game.ref))
-      ) {
-        allGames.push(game); // Put the game back at the end
-        game = allGames.shift();
-        attempts++;
-      }
-
-      if (attempts < allGames.length + 1) { // A valid game was found
-        game.court = court;
-        game.round = round;
-        roundGames.push(game);
-        teamsPlayingThisRound.add(game.homeTeam);
-        teamsPlayingThisRound.add(game.awayTeam);
-        teamsPlayingThisRound.add(game.ref);
-      }
+    // Helper function to generate initial rounds (same as before)
+    function generateInitialRound(startTeam, increment) {
+        const round = [];
+        for (let i = startTeam; round.length < numCourtsAvailable; i += increment) {
+            const homeTeam = teamNames[i];
+            const awayTeam = teamNames[i + increment / 2];
+            if (awayTeam) {
+                round.push({ homeTeam, awayTeam });
+            }
+        }
+        return round;
     }
 
-    games.push(...roundGames);
-  }
+    initialRounds.push(generateInitialRound(0, 2));
+    initialRounds.push(generateInitialRound(6, 2));
+    initialRounds.push(generateInitialRound(0, 4));
+    initialRounds.push(generateInitialRound(1, 4));
 
-  return games;
+    let rounds = [...initialRounds];
+
+    function generateShiftedRound(round, increment) {
+        const shiftedRound = [];
+        for (let i = 0; i < round.length; i++) {
+            const homeTeamIndex = i;
+            const awayTeamIndex = (i + increment) % round.length;
+          
+            const homeTeam = round[homeTeamIndex].homeTeam;
+            const awayTeam = round[awayTeamIndex].awayTeam;
+            shiftedRound.push({ homeTeam, awayTeam });
+        }
+        return shiftedRound;
+    }
+
+    for (let i = 0; i < numberOfRounds - 4; i++) {
+        const round = rounds[i];
+        const shiftedRound = generateShiftedRound(round, 1);
+        rounds.push(shiftedRound);
+    }
+
+    return rounds.slice(0, numberOfRounds);
 }
 
-export {
-  generateRoundRobinSchedule,
-  generateRotatingSchedule,
-  generateGamesWithRefs,
-  generateMultiCourtSchedule,
-};
+
+
+
+export { generateRoundRobinSchedule, generateRotatingSchedule, generateGamesWithRefs, generateTournamentSchedule };
