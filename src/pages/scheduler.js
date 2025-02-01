@@ -12,11 +12,9 @@ const SchedulerPage = () => {
 
   useEffect(() => {
     createDefaultTeams();
-    console.log("Teams created");
   }, []);
 
   const createDefaultTeams = () => {
-    console.log("Creating default teams");
     const defaultTeams = [];
     for (let i = 0; i < numTeams; i++) {
       defaultTeams.push({ name: "Team " + (i + 1) });
@@ -57,13 +55,11 @@ const SchedulerPage = () => {
   };
 
   const generateSchedule = () => {
-    console.log("Generating schedule outer");
     if (
       numTeams >= 4 &&
       numCourts >= 1 &&
       numCourts <= Math.floor(numTeams / 3)
     ) {
-      console.log("Generating schedule");
       const teamNames = teams.map(
         (team) => team.name || "Team " + (teams.indexOf(team) + 1)
       );
@@ -72,7 +68,6 @@ const SchedulerPage = () => {
       // each game has 2 teams, and there are numCourts
         const totalGames = numTeams * numRounds;
         const gamesPerRound = numTeams / 2;
-        const gamesPerCourt = gamesPerRound / numCourts;
         const totalRounds = totalGames / gamesPerRound;
 
 
@@ -80,7 +75,6 @@ const SchedulerPage = () => {
         teamNames,
         totalRounds
       );
-      console.log("Generated schedule", generatedSchedule);
       setSchedule(generatedSchedule);
     }
   };
@@ -90,6 +84,7 @@ const SchedulerPage = () => {
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4">Tournament Scheduler</h1>
         <div className="mb-4">
+            <h2 className="text-lg font-bold mb-2">Details</h2>
           <label className="block mb-2">Number of Teams</label>
           <input
             type="number"
