@@ -162,6 +162,43 @@ const SchedulerPage = () => {
     );
   };
 
+  const renderScheduleByCourt = () => {
+    if (!schedule || schedule.length === 0) {
+      return <p>No schedule generated yet.</p>;
+    }
+
+    const courtsSchedule = {};
+    schedule.forEach((round, roundIndex) => {
+      round.forEach((match, matchIndex) => {
+        const courtNumber = matchIndex + 1;  // Court numbers are 1-indexed
+        if (!courtsSchedule[courtNumber]) {
+          courtsSchedule[courtNumber] = [];
+        }
+        courtsSchedule[courtNumber].push({
+          round: roundIndex + 1,
+          match: `${match.homeTeam} vs ${match.awayTeam}`,
+        });
+      });
+    });
+
+    return (
+      <div>
+        {Object.keys(courtsSchedule).map((courtNumber) => (
+          <div key={courtNumber} className="mb-4">
+            <h3 className="text-lg font-semibold mb-2">Court {courtNumber}</h3>
+            <ul>
+              {courtsSchedule[courtNumber].map((game, index) => (
+                <li key={index} className="border rounded p-2 mb-2">
+                  Round {game.round} - {game.match}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <Layout>
       <div className="container mx-auto p-4">
@@ -233,18 +270,27 @@ const SchedulerPage = () => {
           </button>
           <button
             onClick={() => setView("team")}
-            className={`px-4 py-2 rounded ${
+            className={`mx-4 px-4 py-2 rounded ${
               view === "team" ? "bg-blue-500 text-white" : "bg-gray-200"
             }`}
           >
             By Team
           </button>
+        <button  // New button for Court view
+          onClick={() => setView("court")}
+          className={`ml-4 px-4 py-2 rounded ${
+            view === "court" ? "bg-blue-500 text-white" : "bg-gray-200"
+          }`}
+        >
+          By Court
+        </button>
         </div>
         <div>
           <h2 className="text-lg font-bold mb-2">Generated Schedule</h2>
         {/* Schedule Display (Conditional) */}
         {view === "round" && renderScheduleByRound()} {/* Renamed function */}
         {view === "team" && renderScheduleByTeam()}
+        {view === "court" && renderScheduleByCourt()}
         </div>
       </div>
     </Layout>
