@@ -83,6 +83,25 @@ const SchedulerPage = () => {
     <Layout>
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4">Tournament Scheduler</h1>
+        
+        <div className="mb-4">
+          <h2 className="text-lg font-bold mb-2">Generated Schedule</h2>
+          {schedule.map((round, roundIndex) => (
+            <div key={roundIndex} className="mb-4">
+              <h3 className="text-md font-semibold mb-2">
+                Round {roundIndex + 1}
+              </h3>
+              {round.map((match, matchIndex) => (
+                <div key={matchIndex} className="mb-2">
+                  <p>Court: {matchIndex + 1}</p>
+                  <p>Home Team: {match.homeTeam}</p>
+                  <p>Away Team: {match.awayTeam}</p>
+                  <p>Ref: {match.ref}</p>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
         <div className="mb-4">
             <h2 className="text-lg font-bold mb-2">Details</h2>
           <label className="block mb-2">Number of Teams</label>
@@ -119,25 +138,8 @@ const SchedulerPage = () => {
         </button>
 
         {error && <div className="text-red-500 mb-4">{error}</div>}
-        <div className="mb-4">
-          <h2 className="text-lg font-bold mb-2">Generated Schedule</h2>
-          {schedule.map((round, roundIndex) => (
-            <div key={roundIndex} className="mb-4">
-              <h3 className="text-md font-semibold mb-2">
-                Round {roundIndex + 1}
-              </h3>
-              {round.map((match, matchIndex) => (
-                <div key={matchIndex} className="mb-2">
-                  <p>Court: {matchIndex + 1}</p>
-                  <p>Home Team: {match.homeTeam}</p>
-                  <p>Away Team: {match.awayTeam}</p>
-                  <p>Ref: {match.ref}</p>
-                </div>
-              ))}
-            </div>
-          ))}
         </div>
-      </div>
+
     </Layout>
   );
 };
