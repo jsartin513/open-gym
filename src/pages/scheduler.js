@@ -9,6 +9,8 @@ const SchedulerPage = () => {
   const [schedule, setSchedule] = useState([]);
   const [teams, setTeams] = useState([]);
   const [error, setError] = useState("");
+  const [view, setView] = useState("round"); // New state for view toggling
+
 
   useEffect(() => {
     createDefaultTeams();
@@ -85,7 +87,7 @@ const SchedulerPage = () => {
       setSchedule(generatedSchedule);
     }
   };
-  const renderSchedule = () => {
+  const renderScheduleByRound = () => {
     if (!schedule || schedule.length === 0) {
       return <p>No schedule generated yet.</p>;
     }
@@ -105,6 +107,59 @@ const SchedulerPage = () => {
         </div>
       </div>
     ));
+  };
+
+  const renderScheduleByTeam = () => {
+    if (!schedule || schedule.length === 0) {
+      return <p>No schedule generated yet.</p>;
+    }
+
+    const teamsSchedule = {};
+    schedule.forEach((round, roundIndex) => {
+      round.forEach((match, matchIndex) => {
+        const homeTeam = match.homeTeam;
+        const awayTeam = match.awayTeam;
+
+        if (!teamsSchedule[homeTeam]) {
+          teamsSchedule[homeTeam] = [];
+        }
+        if (!teamsSchedule[awayTeam]) {
+          teamsSchedule[awayTeam] = [];
+        }
+
+        teamsSchedule[homeTeam].push({
+          round: roundIndex + 1,
+          opponent: awayTeam,
+          court: matchIndex + 1,
+          home: true, // Indicate home game
+        });
+        teamsSchedule[awayTeam].push({
+          round: roundIndex + 1,
+          opponent: homeTeam,
+          court: matchIndex + 1,
+          home: false, // Indicate away game
+        });
+      });
+    });
+
+
+    return (
+      <div>
+        {Object.keys(teamsSchedule).map((teamName) => (
+          <div key={teamName} className="mb-4">
+            <h3 className="text-lg font-semibold mb-2">{teamName}</h3>
+            <ul>
+              {teamsSchedule[teamName].map((match, index) => (
+                <li key={index} className="border rounded p-2 mb-2">
+                  Round {match.round} - Court {match.court} -{" "}
+                  {match.home ? "vs" : "@"} {match.opponent}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -166,9 +221,30 @@ const SchedulerPage = () => {
         {error && <div className="text-red-500 mb-4">{error}</div>}
 
         {/* Schedule Display */}
+        {/* View Tabs */}
+        <div className="flex mb-4">
+          <button
+            onClick={() => setView("round")}
+            className={`mr-4 px-4 py-2 rounded ${
+              view === "round" ? "bg-blue-500 text-white" : "bg-gray-200"
+            }`}
+          >
+            By Round
+          </button>
+          <button
+            onClick={() => setView("team")}
+            className={`px-4 py-2 rounded ${
+              view === "team" ? "bg-blue-500 text-white" : "bg-gray-200"
+            }`}
+          >
+            By Team
+          </button>
+        </div>
         <div>
           <h2 className="text-lg font-bold mb-2">Generated Schedule</h2>
-          {renderSchedule()}
+        {/* Schedule Display (Conditional) */}
+        {view === "round" && renderScheduleByRound()} {/* Renamed function */}
+        {view === "team" && renderScheduleByTeam()}
         </div>
       </div>
     </Layout>
