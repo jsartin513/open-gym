@@ -78,69 +78,66 @@ const SchedulerPage = () => {
       setSchedule(generatedSchedule);
     }
   };
+  const renderSchedule = () => {
+    if (!schedule || schedule.length === 0) {
+        return <p>No schedule generated yet.</p>;
+    }
+
+    return schedule.map((round, roundIndex) => (
+        <div key={roundIndex} className="mb-4">
+          <h3 className="text-lg font-semibold mb-2">Round {roundIndex + 1}</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {round.map((match, matchIndex) => (
+              <div key={matchIndex} className="border rounded p-4">
+                  <p>Court {matchIndex+1}</p>
+                <p>
+                  {match.homeTeam} vs {match.awayTeam}
+                </p>
+               
+              </div>
+            ))}
+          </div>
+        </div>
+      ));
+  }
+
 
   return (
     <Layout>
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4">Tournament Scheduler</h1>
-        
-        <div className="mb-4">
-          <h2 className="text-lg font-bold mb-2">Generated Schedule</h2>
-          {schedule.map((round, roundIndex) => (
-            <div key={roundIndex} className="mb-4">
-              <h3 className="text-md font-semibold mb-2">
-                Round {roundIndex + 1}
-              </h3>
-              {round.map((match, matchIndex) => (
-                <div key={matchIndex} className="mb-2">
-                  <p>Court: {matchIndex + 1}</p>
-                  <p>Home Team: {match.homeTeam}</p>
-                  <p>Away Team: {match.awayTeam}</p>
-                  <p>Ref: {match.ref}</p>
-                </div>
-              ))}
-            </div>
-          ))}
+
+        {/* Input Controls */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4"> {/* Grid layout for better organization */}
+          <div>
+            <label htmlFor="numTeams" className="block mb-2">Number of Teams (Multiples of 4):</label>
+            <input type="number" id="numTeams" value={numTeams} onChange={handleNumTeamsChange} className="border rounded p-2 w-full" />
+          </div>
+          <div>
+            <label htmlFor="numRounds" className="block mb-2">Number of Rounds per Team:</label>
+            <input type="number" id="numRounds" value={numRounds} onChange={handleNumRoundsChange} className="border rounded p-2 w-full" />
+          </div>
+          <div>
+            <label htmlFor="numCourts" className="block mb-2">Number of Courts:</label>
+            <input type="number" id="numCourts" value={numCourts} onChange={handleNumCourtsChange} className="border rounded p-2 w-full" />
+          </div>
         </div>
-        <div className="mb-4">
-            <h2 className="text-lg font-bold mb-2">Details</h2>
-          <label className="block mb-2">Number of Teams</label>
-          <input
-            type="number"
-            value={numTeams}
-            onChange={handleNumTeamsChange}
-            className="w-16 p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2">Number of Rounds per Team</label>
-          <input
-            type="number"
-            value={numRounds}
-            onChange={handleNumRoundsChange}
-            className="w-16 p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2">Number of Courts</label>
-          <input
-            type="number"
-            value={numCourts}
-            onChange={handleNumCourtsChange}
-            className="w-16 p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-          onClick={() => generateSchedule()}
-        >
+
+        <button onClick={generateSchedule} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mb-4">
           Generate Schedule
         </button>
 
         {error && <div className="text-red-500 mb-4">{error}</div>}
+
+        {/* Schedule Display */}
+        <div>
+            <h2 className="text-lg font-bold mb-2">Generated Schedule</h2>
+          {renderSchedule()}
         </div>
 
+      </div>
     </Layout>
   );
 };
+
 export default SchedulerPage;
