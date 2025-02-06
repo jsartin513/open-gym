@@ -135,6 +135,8 @@ const GymSchedulerPage = () => {
     ));
   };
 
+  const hasWinners = Object.keys(winners).length > 0;
+
   return (
     <Layout>
       <div className="container mx-auto p-4">
@@ -148,6 +150,7 @@ const GymSchedulerPage = () => {
             className="w-16 p-2 border border-gray-300 rounded"
             min="2"
             max="4"
+            disabled={hasWinners} // Disable if winners have been selected
           />
         </div>
         {error && <div className="text-red-500 mb-4">{error}</div>}
