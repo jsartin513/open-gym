@@ -5,6 +5,7 @@ const GymSchedulerPage = () => {
   const [numTeams, setNumTeams] = useState(2);
   const [schedule, setSchedule] = useState([]);
   const [error, setError] = useState("");
+  const [winners, setWinners] = useState({}); // New state for winners
 
   useEffect(() => {
     generateSchedule();
@@ -18,6 +19,13 @@ const GymSchedulerPage = () => {
     } else {
       setError("Number of teams must be between 2 and 4.");
     }
+  };
+
+  const handleWinnerChange = (gameId, winner) => {
+    setWinners((prevWinners) => ({
+      ...prevWinners,
+      [gameId]: winner,
+    }));
   };
 
   const generateSchedule = () => {
@@ -93,13 +101,36 @@ const GymSchedulerPage = () => {
     return Object.keys(rounds).map((round) => (
       <div key={round} className="mb-4">
         <h3 className="text-lg font-semibold mb-2">Round {round}</h3>
-        <ul>
-          {rounds[round].map((game) => (
-            <li key={game.game} className="border rounded p-2 mb-2">
-              Game {game.game}: {game.home} vs {game.away}
-            </li>
-          ))}
-        </ul>
+        <table className="min-w-full bg-white border border-gray-300">
+          <thead>
+            <tr>
+              <th className="py-2 px-4 border-b">Game</th>
+              <th className="py-2 px-4 border-b">Home Team</th>
+              <th className="py-2 px-4 border-b">Away Team</th>
+              <th className="py-2 px-4 border-b">Winner</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rounds[round].map((game) => (
+              <tr key={game.game}>
+                <td className="py-2 px-4 border-b">{game.game}</td>
+                <td className="py-2 px-4 border-b">{game.home}</td>
+                <td className="py-2 px-4 border-b">{game.away}</td>
+                <td className="py-2 px-4 border-b">
+                  <select
+                    value={winners[game.game] || ""}
+                    onChange={(e) => handleWinnerChange(game.game, e.target.value)}
+                    className="border rounded p-2 w-full"
+                  >
+                    <option value="">Select Winner</option>
+                    <option value={game.home}>{game.home}</option>
+                    <option value={game.away}>{game.away}</option>
+                  </select>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     ));
   };
