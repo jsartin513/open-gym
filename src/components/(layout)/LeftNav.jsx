@@ -26,7 +26,10 @@ const LeftNav = () => {
             <Link href="/games">Games</Link>
           </li>
           <li>
-            <Link href="/scheduler">Scheduler</Link>
+            <Link href="/gym-scheduler">Open Gym Schedule</Link>
+          </li>
+          <li>
+            <Link href="/scheduler">Tournament Scheduler</Link>
           </li>
           <li>
             <Link href="/timer">Timer</Link>
