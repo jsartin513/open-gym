@@ -6,6 +6,7 @@ const GymSchedulerPage = () => {
   const [schedule, setSchedule] = useState([]);
   const [error, setError] = useState("");
   const [winners, setWinners] = useState({}); // New state for winners
+  const [printView, setPrintView] = useState(false); // New state for print view
 
   useEffect(() => {
     generateSchedule();
@@ -104,20 +105,20 @@ const GymSchedulerPage = () => {
         <table className="min-w-full bg-white border border-gray-300">
           <thead>
             <tr>
-              <th className="py-2 px-4 border-b">Game</th>
-              <th className="py-2 px-4 border-b">Home Team</th>
-              <th className="py-2 px-4 border-b">Away Team</th>
-              <th className="py-2 px-4 border-b">Winner</th>
+              <th className="py-2 px-2 border-b w-24 text-left">Game</th> {/* Added text-left */}
+              <th className="py-2 px-4 border-b text-left">Home Team</th> {/* Added text-left */}
+              <th className="py-2 px-4 border-b text-left">Away Team</th> {/* Added text-left */}
+              <th className="py-2 px-4 border-b text-left">Winner</th> {/* Added text-left */}
             </tr>
           </thead>
           <tbody>
             {rounds[round].map((game) => (
               <tr key={game.game}>
-                <td className="py-2 px-4 border-b">{game.game}</td>
-                <td className="py-2 px-4 border-b">{game.home}</td>
-                <td className="py-2 px-4 border-b">{game.away}</td>
-                <td className="py-2 px-4 border-b">
-                  <select
+                <td className="py-2 px-4 border-b w-24 text-left">{game.game}</td> {/* Added text-left */}
+                <td className="py-2 px-4 border-b text-left">{game.home}</td> {/* Added text-left */}
+                <td className="py-2 px-4 border-b text-left">{game.away}</td> {/* Added text-left */}
+                <td className="py-2 px-4 border-b text-left">
+                  {!printView && <select
                     value={winners[game.game] || ""}
                     onChange={(e) => handleWinnerChange(game.game, e.target.value)}
                     className="border rounded p-2 w-full"
@@ -125,7 +126,7 @@ const GymSchedulerPage = () => {
                     <option value="">Select Winner</option>
                     <option value={game.home}>{game.home}</option>
                     <option value={game.away}>{game.away}</option>
-                  </select>
+                  </select>}
                 </td>
               </tr>
             ))}
@@ -136,6 +137,15 @@ const GymSchedulerPage = () => {
   };
 
   const hasWinners = Object.keys(winners).length > 0;
+
+  const renderPrintView = () => {
+    return (
+      <div>
+        <h2 className="text-lg font-bold mb-2">Print View</h2>
+        {renderScheduleByRound()}
+      </div>
+    );
+  };
 
   return (
     <Layout>
@@ -156,8 +166,20 @@ const GymSchedulerPage = () => {
         {error && <div className="text-red-500 mb-4">{error}</div>}
         <div className="mb-4">
           <h2 className="text-lg font-bold mb-2">Generated Schedule</h2>
-          {renderScheduleByRound()}
+          {printView ? (
+            renderPrintView()
+          ) : (
+            renderScheduleByRound()
+          )}
         </div>
+        <button
+          onClick={() => setPrintView(!printView)}
+          className={`mt-4 px-4 py-2 rounded ${
+            printView ? "bg-blue-500 text-white" : "bg-gray-200"
+          }`}
+        >
+          {printView ? "Exit Print View" : "Print View"}
+        </button>
       </div>
     </Layout>
   );
