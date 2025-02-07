@@ -150,8 +150,8 @@ const GymSchedulerPage = () => {
   return (
     <Layout>
       <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4">Gym Scheduler</h1>
-        <div className="mb-4">
+        <h1 className="text-2xl font-bold mb-4 print-hidden">Gym Scheduler</h1>
+        <div className="mb-4 print-hidden">
           <label className="block mb-2">Number of Teams</label>
           <input
             type="number"
@@ -182,6 +182,7 @@ const GymSchedulerPage = () => {
         </button>
       </div>
     </Layout>
+    
   );
 };
 
