@@ -165,7 +165,7 @@ const GymSchedulerPage = () => {
         </div>
         {error && <div className="text-red-500 mb-4">{error}</div>}
         <div className="mb-4">
-          <h2 className="text-lg font-bold mb-2">Generated Schedule</h2>
+          <h2 className="text-lg font-bold mb-2">Generated Schedule for {numTeams} Teams</h2>
           {printView ? (
             renderPrintView()
           ) : (
