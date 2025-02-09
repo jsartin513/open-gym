@@ -166,7 +166,7 @@ const GymSchedulerPage = () => {
                 </tbody>
                 </table>
             </div>
-            {allGamesComplete && renderWinsPanel(round, roundWins)}
+            {(allGamesComplete || printView) && renderWinsPanel(round, roundWins)}
         </div>
       </div>
     );
