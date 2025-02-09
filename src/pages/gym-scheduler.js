@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../components/(layout)/layout";
 
+const renderWinsPanel = (round, roundWins) => {
+  return (
+    <div className="flex-auto mx-2 p-4 border border-gray-300 rounded">
+      <h4 className="text-md font-semibold">Wins for Round {round}:</h4>
+      <ul>
+        {Object.keys(roundWins).map((team) => (
+          <li key={team}>{team}: {roundWins[team]}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
 const GymSchedulerPage = () => {
   const [numTeams, setNumTeams] = useState(2);
   const [schedule, setSchedule] = useState([]);
@@ -153,16 +166,7 @@ const GymSchedulerPage = () => {
                 </tbody>
                 </table>
             </div>
-            {allGamesComplete && (
-            <div className="flex-auto mx-2 p-4 border border-gray-300 rounded">
-              <h4 className="text-md font-semibold">Wins for Round {round}:</h4>
-              <ul>
-                {Object.keys(roundWins).map((team) => (
-                <li key={team}>{team}: {roundWins[team]}</li>
-                ))}
-              </ul>
-            </div>
-            )}
+            {allGamesComplete && renderWinsPanel(round, roundWins)}
         </div>
       </div>
     );
